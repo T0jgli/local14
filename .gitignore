@@ -23,9 +23,5 @@ obj/
 packages/
 *.nupkg
 
-# Certificate files (placeholder certs — keep if real ones are added later)
-*.pfx
-*.p12
-
 # Logs
 *.log
