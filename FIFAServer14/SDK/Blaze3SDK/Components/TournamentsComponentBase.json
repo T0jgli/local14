@@ -1,0 +1,75 @@
+{
+  "Usings": [],
+  "Namespace": "Blaze3SDK.Components",
+  "Id": 23,
+  "Name": "TournamentsComponent",
+  "ShortName": "Tournaments",
+  "ErrorCodes": {
+    "1": "TOURN_ERR_TOURNAMENT_GENERIC",
+    "2": "TOURN_ERR_TOURNAMENT_NOT_FOUND",
+    "3": "TOURN_ERR_ALREADY_IN_TOURNAMENT",
+    "4": "TOURN_ERR_USER_NOT_IN_TOURNAMENT",
+    "5": "TOURN_ERR_USER_NOT_FOUND",
+    "6": "TOURN_ERR_TOURNAMENT_DISABLED",
+    "7": "TOURN_ERR_TIES_NOT_SUPPORTED"
+  },
+  "Methods": [
+    {
+      "Id": 1,
+      "Name": "getTournaments",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    },
+    {
+      "Id": 2,
+      "Name": "getMemberCounts",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    },
+    {
+      "Id": 4,
+      "Name": "getTrophies",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    },
+    {
+      "Id": 5,
+      "Name": "getMyTournamentId",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    },
+    {
+      "Id": 6,
+      "Name": "joinTournament",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    },
+    {
+      "Id": 7,
+      "Name": "leaveTournament",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    },
+    {
+      "Id": 8,
+      "Name": "resetMyTournament",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    },
+    {
+      "Id": 9,
+      "Name": "getMyTournamentDetails",
+      "RequestType": null,
+      "ResponseType": null,
+      "ErrorResponseType": null
+    }
+  ],
+  "Notifications": []
+}

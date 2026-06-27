@@ -1,0 +1,119 @@
+﻿using Blaze.Core.Internal;
+using EATDF;
+using EATDF.Serialization;
+using ProtoFire;
+using ProtoFire.Frames;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Blaze.Core;
+
+public class BlazeRpcConnection : IBlazeConnection
+{
+    private ProtoFireConnection _baseConnection { get; }
+    private ITdfSerializer _serializer { get; }
+    internal QueuedLock BusyLock { get; } = new QueuedLock();
+
+    public EndPoint? RemoteEndPoint { get; }
+    public EndPoint? LocalEndPoint { get; }
+    public bool Connected => _baseConnection.Connected;
+    public Guid Id => _baseConnection.Id;
+    public object? State { get; set; }
+    public DateTime LastActivityTime { get; set; } = DateTime.UtcNow;
+
+
+    public BlazeRpcConnection(ProtoFireConnection baseConnection, ITdfSerializer serializer)
+    {
+        _baseConnection = baseConnection;
+        _serializer = serializer;
+
+        // if socket is disposed, we will still be able to get the endpoints
+        RemoteEndPoint = _baseConnection.Socket.RemoteEndPoint;
+        LocalEndPoint = _baseConnection.Socket.LocalEndPoint;
+    }
+
+
+    public void EnqequeSend(Action<BlazePacket> configure)
+    {
+        ProtoFirePacket firePacket = createProtoFirePacket(configure);
+        EnqequeSend(firePacket);
+    }
+
+    public bool Send(Action<BlazePacket> configure)
+    {
+        ProtoFirePacket firePacket = createProtoFirePacket(configure);
+        return Send(firePacket);
+    }
+
+    public Task<bool> SendAsync(Action<BlazePacket> configure)
+    {
+        ProtoFirePacket firePacket = createProtoFirePacket(configure);
+        return SendAsync(firePacket);
+    }
+
+    public void EnqequeSend(ProtoFirePacket packet)
+    {
+        // fire and forget
+        _ = enqequeSend(packet);
+    }
+
+    public bool Send(ProtoFirePacket packet) => _baseConnection.Send(packet);
+    public Task<bool> SendAsync(ProtoFirePacket packet) => _baseConnection.SendAsync(packet);
+    public void Disconnect() => _baseConnection.Disconnect();
+
+    private async Task enqequeSend(ProtoFirePacket packet)
+    {
+        await BusyLock.EnterAsync().ConfigureAwait(false);
+        await SendAsync(packet).ConfigureAwait(false);
+        BusyLock.Exit();
+    }
+
+    private ProtoFirePacket createProtoFirePacket(Action<BlazePacket> configure)
+    {
+        IFireFrame frame = _baseConnection.FrameType switch
+        {
+            FrameType.FireFrame => new FireFrame(),
+            FrameType.Fire2Frame => new Fire2Frame(),
+            _ => throw new InvalidOperationException("Invalid frame type")
+        };
+
+        BlazePacket packet = new BlazePacket()
+        {
+            Frame = frame
+        };
+
+        configure(packet);
+
+        byte[] bytes;
+
+        if (packet.Data == null)
+            bytes = Array.Empty<byte>();
+        else
+            bytes = _serializer.Serialize(packet.Data);
+
+        if (frame is Fire2Frame fire2Frame)
+        {
+            byte[] metadataBytes = encodeFire2Metadata(fire2Frame);
+            return new ProtoFire2Packet(fire2Frame, metadataBytes, bytes);
+        }
+
+        return new ProtoFirePacket(frame, bytes);
+    }
+
+    private byte[] encodeFire2Metadata(Fire2Frame frame)
+    {
+        return Fire2MetadataHelper.Encode(frame.Context, frame.ErrorCode);
+    }
+
+    public override string ToString()
+    {
+        if (RemoteEndPoint != null)
+            return $"[Remote Ip: {RemoteEndPoint}]";
+
+        return $"[Conn Id: {Id}]";
+    }
+}
