@@ -1,6 +1,8 @@
 # FIFA Server 14
 
-A emulated backend server for FIFA 14 PC's online mode to access FUT.
+<img width="256" height="256" alt="c39712e5243e23372f53b2990ab42afe" src="https://github.com/user-attachments/assets/bcc9f83d-1865-4bb5-9967-5a0392f23c9d" />
+
+A backend server for FIFA 14 PC's online mode to access FUT.
 
 ## Features
 
@@ -39,7 +41,7 @@ This project is not affiliated with Electronic Arts Inc. or any properties menti
 
 ## Credits
  
-- MYorderlyHuman on discord (Help so much in understanding of the architecture)
+- MYorderlyHuman on discord (Helped soo much in understanding of the architecture)
 - Draz on discord (Cert Exploit, and authentication component)
 - [BlazeSDK](https://github.com/Aim4kill/BlazeSDK) By [@Aim4kill](https://github.com/Aim4kill)
 - [Zamboni3](https://github.com/ZamboniDevelopment/Zamboni3) By [@ZamboniDevelopment](https://github.com/ZamboniDevelopment)
