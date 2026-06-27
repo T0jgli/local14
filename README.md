@@ -1,4 +1,4 @@
-# FIFA Server 14
+# FIFAServer14
 
 <img width="256" height="256" alt="c39712e5243e23372f53b2990ab42afe" src="https://github.com/user-attachments/assets/bcc9f83d-1865-4bb5-9967-5a0392f23c9d" />
 
@@ -37,7 +37,11 @@ dotnet run --project FIFAServer14
 
 ## License
 
-This project is not affiliated with Electronic Arts Inc. or any properties mentioned in this project. This is an independent, community-driven project.
+Apache License Version 2.0
+
+## Disclaimer
+
+This project is an unofficial, community-developed backend. It is not affiliated with, endorsed by, or sponsored by Electronic Arts Inc. "FIFA" is a trademark of its respective owner and is used solely for identification and compatibility purposes.
 
 ## Credits
  
