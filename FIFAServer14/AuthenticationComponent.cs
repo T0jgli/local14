@@ -186,6 +186,9 @@ internal sealed class AuthenticationComponent : AuthenticationComponentBase.Serv
         Console.WriteLine($"[Auth] UpdateAccount Email='{request.Email}' Country='{request.Country}' " +
             $"DOB='{request.DOB}' Lang='{request.Language}' GlobalOptin={request.GlobalOptin} " +
             $"ThirdPartyOptin={request.ThirdPartyOptin}");
+        // Persist any non-empty fields (empty values from the game's sync are ignored).
+        AccountStore.Update(request.Email, request.Country, request.DOB, request.Language,
+            (byte)request.GlobalOptin, (byte)request.ThirdPartyOptin);
         return Task.FromResult(new UpdateAccountResponse { PCLoginToken = "fifa14token" });
     }
 
@@ -215,23 +218,23 @@ internal sealed class AuthenticationComponent : AuthenticationComponentBase.Serv
 
     public override Task<AccountInfo> GetAccountAsync(EmptyMessage request, BlazeRpcContext context)
     {
-        Console.WriteLine("[Auth] GetAccount");
-
+        var acct = AccountStore.Get();
+        Console.WriteLine($"[Auth] GetAccount -> Email='{acct.Email}' Country='{acct.Country}' DOB='{acct.Dob}' Lang='{acct.Language}'");
         return Task.FromResult(new AccountInfo
         {
             AnonymousUser = false,
             AuthenticationSource = "303107",
-            Country = "GB",
-            DOB = "1990-01-01",
+            Country = acct.Country,
+            DOB = acct.Dob,
             DateCreated = "2013-09-25",
-            GlobalOptin = 2,          // 2 = opted out
+            GlobalOptin = acct.GlobalOptin,
             LastAuth = "2014-01-01",
-            Language = "en",
-            Email = Email,
+            Language = acct.Language,
+            Email = acct.Email,
             Status = AccountStatus.ACTIVE,
             EmailStatus = EmailStatus.VERIFIED,
             TosVersion = "1",
-            ThirdPartyOptin = 2,      // 2 = opted out
+            ThirdPartyOptin = acct.ThirdPartyOptin,
             UnderageUser = false,
             UserId = UserId,
         });
@@ -292,7 +295,7 @@ internal sealed class AuthenticationComponent : AuthenticationComponentBase.Serv
         IsFirstLogin = false,
         SessionKey = SessionKey,
         LastLoginDateTime = 0,
-        Email = Email,
+        Email = AccountStore.Get().Email,
         PersonaDetails = MakePersona(),
         UserId = UserId,
     };
