@@ -58,10 +58,18 @@ internal sealed class UtilComponent : UtilComponentBase.Server
     public override Task<PingResponse> PingAsync(EmptyMessage request, BlazeRpcContext context)
         => Task.FromResult(new PingResponse { ServerTime = Now() });
 
-    // Client loads user settings on the main-menu screen; return empty (no saved settings).
-    public override Task<UserSettingsLoadAllResponse> UserSettingsLoadAllAsync(UserSettingsLoadAllRequest request, BlazeRpcContext context) => Task.FromResult(new UserSettingsLoadAllResponse { DataMap = new Dictionary<string, string>() });
+    public override Task<UserSettingsLoadAllResponse> UserSettingsLoadAllAsync(UserSettingsLoadAllRequest request, BlazeRpcContext context)
+        => Task.FromResult(new UserSettingsLoadAllResponse { DataMap = new Dictionary<string, string>(UserSettingsStore.All) });
 
-    public override Task<UserSettingsResponse> UserSettingsLoadAsync(UserSettingsLoadRequest request, BlazeRpcContext context) => Task.FromResult(new UserSettingsResponse { Key = request.Key, Data = "" });
+    public override Task<UserSettingsResponse> UserSettingsLoadAsync(UserSettingsLoadRequest request, BlazeRpcContext context)
+        => Task.FromResult(new UserSettingsResponse { Key = request.Key, Data = UserSettingsStore.Get(request.Key) });
+
+    public override Task<EmptyMessage> UserSettingsSaveAsync(UserSettingsSaveRequest request, BlazeRpcContext context)
+    {
+        _log.LogInformation("userSettingsSave key='{0}' data='{1}'", request.Key, request.Data);
+        UserSettingsStore.Set(request.Key, request.Data);
+        return Task.FromResult(new EmptyMessage());
+    }
 
     public override Task<EmptyMessage> SetClientMetricsAsync(ClientMetrics request, BlazeRpcContext context) => Task.FromResult(new EmptyMessage());
     public override Task<LocalizeStringsResponse> LocalizeStringsAsync(LocalizeStringsRequest request, BlazeRpcContext context)

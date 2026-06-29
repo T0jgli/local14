@@ -183,7 +183,9 @@ internal sealed class AuthenticationComponent : AuthenticationComponentBase.Serv
 
     public override Task<UpdateAccountResponse> UpdateAccountAsync(UpdateAccountRequest request, BlazeRpcContext context)
     {
-        Console.WriteLine("[Auth] UpdateAccount");
+        Console.WriteLine($"[Auth] UpdateAccount Email='{request.Email}' Country='{request.Country}' " +
+            $"DOB='{request.DOB}' Lang='{request.Language}' GlobalOptin={request.GlobalOptin} " +
+            $"ThirdPartyOptin={request.ThirdPartyOptin}");
         return Task.FromResult(new UpdateAccountResponse { PCLoginToken = "fifa14token" });
     }
 
@@ -214,13 +216,23 @@ internal sealed class AuthenticationComponent : AuthenticationComponentBase.Serv
     public override Task<AccountInfo> GetAccountAsync(EmptyMessage request, BlazeRpcContext context)
     {
         Console.WriteLine("[Auth] GetAccount");
+
         return Task.FromResult(new AccountInfo
         {
             AnonymousUser = false,
+            AuthenticationSource = "303107",
             Country = "GB",
+            DOB = "1990-01-01",
+            DateCreated = "2013-09-25",
+            GlobalOptin = 2,          // 2 = opted out
+            LastAuth = "2014-01-01",
+            Language = "en",
             Email = Email,
-            EmailStatus = EmailStatus.VERIFIED,
             Status = AccountStatus.ACTIVE,
+            EmailStatus = EmailStatus.VERIFIED,
+            TosVersion = "1",
+            ThirdPartyOptin = 2,      // 2 = opted out
+            UnderageUser = false,
             UserId = UserId,
         });
     }
@@ -246,7 +258,12 @@ internal sealed class AuthenticationComponent : AuthenticationComponentBase.Serv
     public override Task<GetLegalDocsInfoResponse> GetLegalDocsInfoAsync(GetLegalDocsInfoRequest request, BlazeRpcContext context)
     {
         Console.WriteLine("[Auth] GetLegalDocsInfo");
-        return Task.FromResult(new GetLegalDocsInfoResponse());
+
+        return Task.FromResult(new GetLegalDocsInfoResponse
+        {
+            EaMayContact = 1,
+            PartnersMayContact = 1,
+        });
     }
 
     public override Task<EmptyMessage> CheckSinglePlayerLoginAsync(EmptyMessage request, BlazeRpcContext context)

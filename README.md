@@ -17,6 +17,7 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 - FUT boot config (futBoot.xml)
 - FUT/EASFC accountinfo
 - EASFC RS4 server redirect
+- Persistent user settings
 
 ## SDK
 
