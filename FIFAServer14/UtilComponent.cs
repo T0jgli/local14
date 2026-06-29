@@ -11,7 +11,11 @@ internal sealed class UtilComponent : UtilComponentBase.Server
 {
     private readonly ILogger _log;
     private const string GameIp = "127.0.0.1";
-    public UtilComponent(ILogger log) { _log = log; }
+    private readonly string _web; // base URL
+
+    // EA's real FIFA 14 asset CDN. Keep static content here until we mirror it locally.
+    private const string CdnBase = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
+    public UtilComponent(ILogger log, string webBaseUrl) { _log = log; _web = webBaseUrl.TrimEnd('/'); }
 
     private static uint Now() => (uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
@@ -73,27 +77,47 @@ internal sealed class UtilComponent : UtilComponentBase.Server
     public override Task<FetchConfigResponse> FetchClientConfigAsync(FetchClientConfigRequest request, BlazeRpcContext context)
     {
         _log.LogInformation("fetchClientConfig section='{0}'", request.ConfigSection);
+
         var cfg = new Dictionary<string, string>();
 
-        if (request.ConfigSection == "OSDK_CORE")
-        {
-            cfg["LIVE_CONTENT_HOST"]               = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014/";
-            cfg["ROSTERUPDATE_URL"]                = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014/rosterupdate";
-            cfg["OSDK_PEERBUFFERSIZE"]             = "16384";
-            cfg["OSDK_DISTBUFFERSIZE_IN"]          = "16384";
-            cfg["OSDK_DISTBUFFERSIZE_OUT"]         = "16384";
-            cfg["OSDK_MAXGAMES"]                   = "16";
-            cfg["OSDK_MAXROOMS"]                   = "16";
-            cfg["OSDK_USERROOM_PREFIX"]            = "room";
-            cfg["OSDK_MATCHUP_TIMEOUT"]            = "30";
-            cfg["OSDK_KEEPALIVEINTERVAL"]          = "30";
-            cfg["OSDK_STATS_EMPTY_CELL"]           = "-1";
-            cfg["OSDK_TICKER_COUNT"]               = "10";
-            cfg["JOIN_GAME_TIMEOUT"]               = "30";
-            cfg["OSDK_USERLIST_REQUEST_MAX_USERS"] = "50";
-            cfg["POW_MDL_MAX_IMAGESIZE"]           = "1048576";
-            cfg["POW_MDL_DELAYNEWSDOWNLOAD"]       = "0";
-        }
+        cfg["OSDK_PEERBUFFERSIZE"]             = "16384";
+        cfg["OSDK_DISTBUFFERSIZE_IN"]          = "16384";
+        cfg["OSDK_DISTBUFFERSIZE_OUT"]         = "16384";
+        cfg["OSDK_MAXGAMES"]                   = "16";
+        cfg["OSDK_MAXROOMS"]                   = "16";
+        cfg["OSDK_USERROOM_PREFIX"]            = "room";
+        cfg["OSDK_MATCHUP_TIMEOUT"]            = "30";
+        cfg["OSDK_KEEPALIVEINTERVAL"]          = "30";
+        cfg["OSDK_STATS_EMPTY_CELL"]           = "-1";
+        cfg["OSDK_TICKER_COUNT"]               = "10";
+        cfg["JOIN_GAME_TIMEOUT"]               = "30";
+        cfg["OSDK_USERLIST_REQUEST_MAX_USERS"] = "50";
+        cfg["POW_MDL_MAX_IMAGESIZE"]           = "1048576";
+        cfg["POW_MDL_DELAYNEWSDOWNLOAD"]       = "0";
+        cfg["LIVE_CONTENT_HOST"]               = $"{CdnBase}/";
+        cfg["ROSTERUPDATE_URL"]                = $"{CdnBase}/rosterupdate";
+        cfg["ROSTER_URL"]                      = $"{CdnBase}/roster";
+        cfg["EASW/ENABLED"]                    = "1";
+        cfg["OSDK_EASW_REQ_URL"]               = $"{_web}/easw/req";
+        cfg["OSDK_EASW_AUTH_URL"]              = $"{_web}/easw/auth";
+        cfg["OSDK_EASW_EVENT_URL"]             = $"{_web}/easw/event";
+        cfg["OSDK_EASW_MEDIA_URL"]             = $"{_web}/easw/media";
+        cfg["OSDK_EASW_GF_FILE_URL"]           = $"{_web}/easw/gf";
+        cfg["OSDK_EASW_ALLOWED_LOCALES"]       = "en_US,en_GB,en_US.UTF-8,enUS,enGB,fr_FR,de_DE,es_ES,it_IT,pt_BR,nl_NL";
+        cfg["OSDK_EASW_CONNECT_RETRY_PERIOD"]  = "30";
+        cfg["CMS_BASE_URL"]                    = $"{_web}/cms";
+        cfg["CMS_APIKEY"]                      = "fifa14";
+        cfg["CMS_SKUID"]                       = "FFA14PCC";
+        cfg["FUT_URI"]                         = $"{_web}/fut";
+        cfg["FUT_RS4_BASE_URL"]                = $"{_web}/fut/rs4";
+        cfg["FUT/ROSTERUPDATE_URL"]            = $"{_web}/fut/rosterupdate";
+        cfg["FUTDYNAMICMESSAGES_URL_BASE"]     = $"{_web}/fut/dynamicmessages";
+        cfg["FUTBOOTCFGFILE_URL"]              = $"{_web}/fut/";
+        cfg["ONLINE/SERVER_RS4"]               = $"{_web}";
+        cfg["FIFA_RS4_URL"]                    = $"{_web}";
+        cfg["FIFA_RS4_TIMEOUT"]                = "30";
+        cfg["FIFALEADERBOARD_BASE_URL"]        = $"{_web}/leaderboard";
+        cfg["ROUTINGCFGFILE_URL"]              = $"{_web}/dime/dimerouting.xml";
 
         return Task.FromResult(new FetchConfigResponse { Config = cfg });
     }

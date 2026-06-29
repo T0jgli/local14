@@ -12,6 +12,11 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 - Post-login notifications (UserSessions, CensusData)
 - URL provisioning
 - OSDK Configs
+- OSDK web service (HTTP, port 9988) handling the game's web-service calls
+- DIME config routing (cfgrouting.xml / dimerouting.xml)
+- FUT boot config (futBoot.xml)
+- FUT/EASFC accountinfo
+- EASFC RS4 server redirect
 
 ## SDK
 

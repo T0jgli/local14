@@ -11,6 +11,7 @@ internal static class Program
 {
     private static int RedirPort => EnvInt("FIFA14_REDIR_PORT", 42127);
     private static int BlazePort => EnvInt("FIFA14_BLAZE_PORT", 10000);
+    private static int WebPort => EnvInt("FIFA14_WEB_PORT", 9988);
     private static bool Fire2 => Environment.GetEnvironmentVariable("FIFA14_FIRE2") == "1";
 
     // FIFA 14's wire = Fire (v1) framing but Heat2 TDF encoding (confirmed by capturing
@@ -39,9 +40,13 @@ internal static class Program
         var redirServer = new BlazeServer(MakeConfig(RedirPort, enc, serializer, redirRouter, protoCert, callbacks, secure: true),
             loggerFactory.CreateLogger<BlazeServer>());
 
+        // OSDK web service
+        var webBaseUrl = $"http://127.0.0.1:{WebPort}";
+        var webServer = new WebServer(WebPort, loggerFactory.CreateLogger("Web"));
+
         // Main Blaze server
         var blazeRouter = new BlazeRouter();
-        blazeRouter.AddComponent(new UtilComponent(loggerFactory.CreateLogger("Util")));
+        blazeRouter.AddComponent(new UtilComponent(loggerFactory.CreateLogger("Util"), webBaseUrl));
         blazeRouter.AddComponent<AuthenticationComponent>();
         blazeRouter.AddComponent<UserSessionsComponent>();
         blazeRouter.AddComponent<CensusDataComponent>();
@@ -55,8 +60,8 @@ internal static class Program
         var blazeServer = new BlazeServer(MakeConfig(BlazePort, enc, serializer, blazeRouter, protoCert, callbacks, secure: false),
             loggerFactory.CreateLogger<BlazeServer>());
 
-        log.LogInformation("FIFAServer14 starting: redirector :{0} -> blaze :{1}", RedirPort, BlazePort);
-        await Task.WhenAll(redirServer.StartAsync(), blazeServer.StartAsync());
+        log.LogInformation("FIFAServer14 starting: redirector :{0} -> blaze :{1}, web :{2}", RedirPort, BlazePort, WebPort);
+        await Task.WhenAll(redirServer.StartAsync(), blazeServer.StartAsync(), webServer.StartAsync());
         await Task.Delay(Timeout.Infinite);
     }
 

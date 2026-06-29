@@ -189,8 +189,26 @@ internal sealed class AuthenticationComponent : AuthenticationComponentBase.Serv
 
     public override Task<Entitlements> ListEntitlementsAsync(ListEntitlementsRequest request, BlazeRpcContext context)
     {
-        Console.WriteLine("[Auth] ListEntitlements");
-        return Task.FromResult(new Entitlements { mEntitlements = new List<Entitlement>() });
+        var groups = request.GroupNameList is { Count: > 0 }
+            ? request.GroupNameList
+            : new List<string> { "FIFA14PCBoxContent", "FIFA14PCFUTContentUnlocks" };
+        Console.WriteLine($"[Auth] ListEntitlements groups=[{string.Join(",", groups)}]");
+
+        var list = new List<Entitlement>();
+        foreach (var g in groups)
+            list.Add(new Entitlement
+            {
+                EntitlementTag = g,
+                EntitlementType = EntitlementType.DEFAULT,
+                GroupName = g,
+                IsConsumable = false,
+                ProductId = "FIFA14PC",
+                ProjectId = "FIFA14",
+                Status = EntitlementStatus.ACTIVE,
+                UseCount = 0,
+                Version = 0,
+            });
+        return Task.FromResult(new Entitlements { mEntitlements = list });
     }
 
     public override Task<AccountInfo> GetAccountAsync(EmptyMessage request, BlazeRpcContext context)
