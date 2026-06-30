@@ -1,0 +1,64 @@
+<SPEV>
+  <EventId>60102</EventId>
+  <EventName>bundesliga</EventName>
+  <AvailablePlatform>xbl2</AvailablePlatform>
+  <PeriodType>1</PeriodType>
+  <NeedRegistration>Yes</NeedRegistration>
+  <ExtraData>none</ExtraData>
+  <AllowedCountries>AT,DE,CH</AllowedCountries>
+  <StartDate>Jan 01 2013 09:00:00</StartDate>
+  <EndDate>Mar 31 2014 23:59:59</EndDate>
+  <ToS>/fifa/sponsoredevents/tos/60102/</ToS>
+</SPEV>
+
+<SPEV>
+  <EventId>60202</EventId>
+  <EventName>bundesliga</EventName>
+  <AvailablePlatform>ps3</AvailablePlatform>
+  <PeriodType>1</PeriodType>
+  <NeedRegistration>Yes</NeedRegistration>
+  <ExtraData>none</ExtraData>
+  <AllowedCountries>AT,DE,CH</AllowedCountries>
+  <StartDate>Jan 01 2013 09:00:00</StartDate>
+  <EndDate>Mar 31 2014 23:59:59</EndDate>
+  <ToS>/fifa/sponsoredevents/tos/60202/</ToS>
+</SPEV>
+
+<SPEV>
+  <EventId>60201</EventId>
+  <EventName>fiwc</EventName>
+  <AvailablePlatform>ps3</AvailablePlatform>
+  <PeriodType>1</PeriodType>
+  <NeedRegistration>Yes</NeedRegistration>
+  <ExtraData>none</ExtraData>
+  <AllowedCountries>AU,AT,BH,BE,BG,HR,CY,CZ,DK,FI,FR,DE,GR,HK,HU,IS,IN,IE,IL,IT,KP,KR,KW,LB,LU,MY,MT,NL,NZ,NO,OM,PL,PT,QA,RO,RU,SA,SG,SK,SI,ZA,ES,SE,CH,TW,TR,AE,GB,AR,BR,CL,CO,CA,US,MX,JP,PE</AllowedCountries>
+  <StartDate>Jan 01 2013 09:00:00</StartDate>
+  <EndDate>Mar 31 2014 23:59:59</EndDate>
+  <ToS>/fifa/sponsoredevents/tos/60201/</ToS>
+</SPEV>
+
+<SPEV>
+  <EventId>60103</EventId>
+  <EventName>ranked lobby</EventName>
+  <AvailablePlatform>xbl2</AvailablePlatform>
+  <PeriodType>1</PeriodType>
+  <NeedRegistration>No</NeedRegistration>
+  <ExtraData>none</ExtraData>
+  <AllowedCountries>AU,AT,BH,BE,BG,HR,CY,CZ,DK,FI,FR,DE,GR,HK,HU,IS,IN,IE,IL,IT,KP,KR,KW,LB,LU,MY,MT,NL,NZ,NO,OM,PL,PT,QA,RO,RU,SA,SG,SK,SI,ZA,ES,SE,CH,TW,TR,AE,GB,AR,BR,CL,CO,CA,US,MX,JP,PE</AllowedCountries>
+  <StartDate>Jan 01 2013 09:00:00</StartDate>
+  <EndDate>Dec 12 2015 09:00:00</EndDate>
+  <ToS>/fifa/sponsoredevents/tos/60201/</ToS>
+</SPEV>
+
+<SPEV>
+  <EventId>60203</EventId>
+  <EventName>ranked lobby</EventName>
+  <AvailablePlatform>ps3</AvailablePlatform>
+  <PeriodType>1</PeriodType>
+  <NeedRegistration>No</NeedRegistration>
+  <ExtraData>none</ExtraData>
+  <AllowedCountries>AU,AT,BH,BE,BG,HR,CY,CZ,DK,FI,FR,DE,GR,HK,HU,IS,IN,IE,IL,IT,KP,KR,KW,LB,LU,MY,MT,NL,NZ,NO,OM,PL,PT,QA,RO,RU,SA,SG,SK,SI,ZA,ES,SE,CH,TW,TR,AE,GB,AR,BR,CL,CO,CA,US,MX,JP,PE</AllowedCountries>
+  <StartDate>Jan 01 2013 09:00:00</StartDate>
+  <EndDate>Dec 12 2015 09:00:00</EndDate>
+  <ToS>/fifa/sponsoredevents/tos/60201/</ToS>
+</SPEV>

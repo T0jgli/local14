@@ -9,13 +9,29 @@ internal sealed class WebServer
     private readonly ILogger _log;
     private readonly HttpListener _listener = new();
     private readonly int _port;
+    private readonly string _contentRoot;
 
     public WebServer(int port, ILogger log)
     {
         _port = port;
         _log = log;
+        _contentRoot = FindContentRoot();
+        _log.LogInformation("OSDK web content root: {0}", _contentRoot);
         // Loopback + a literal IP prefix binds without an admin urlacl reservation.
         _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
+    }
+
+    private static string FindContentRoot()
+    {
+        var dir = AppContext.BaseDirectory;
+        for (int i = 0; i < 6; i++)
+        {
+            var web = Path.Combine(dir, "web");
+            if (Directory.Exists(web))
+                return web;
+            dir = Directory.GetParent(dir)?.FullName ?? dir;
+        }
+        return Path.Combine(AppContext.BaseDirectory, "web");
     }
 
     public async Task StartAsync()
@@ -94,7 +110,7 @@ internal sealed class WebServer
         }
     }
 
-    private static (string, string) Route(HttpListenerRequest req)
+    private (string, string) Route(HttpListenerRequest req)
     {
         string path = (req.Url?.AbsolutePath ?? "").ToLowerInvariant();
         bool wantsJson = (req.Headers["Accept"] ?? "").Contains("json", StringComparison.OrdinalIgnoreCase);
@@ -137,16 +153,26 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8", json);
         }
 
-        // DIME config-routing file. This is the game's own bundled cfgrouting.xml served
-        // back over the network (the game fetches it from ROUTINGCFGFILE_URL). The *local
-        // entries make DIME load the bundled dimecfg/storecfg from the game's data BIGs;
-        // the network entries are skipped because we don't set their osdkVars
-        // (DIME_FILES_PATH / FUTBOOTCFGFILE_URL) yet. Flip those later to serve our own.
         if (path.EndsWith("dimerouting.xml") || path.EndsWith("cfgrouting.xml"))
-            return ("text/xml; charset=utf-8", DimeRoutingXml);
+            return ServeFile("dimerouting.xml", "text/xml; charset=utf-8");
 
         if (path.EndsWith("futboot.xml"))
-            return ("text/xml; charset=utf-8", FutBootXml);
+            return ServeFile("futBoot.xml", "text/xml; charset=utf-8");
+
+        if (path.Contains("dimecfg.xml"))
+            return ServeFile("dimecfg.xml", "text/xml; charset=utf-8");
+
+        if (path.Contains("storecfg.xml"))
+            return ServeFile("storecfg.xml", "text/xml; charset=utf-8");
+
+        if (path.Contains("storedesc"))
+            return ServeFile("storedesc.xml", "text/xml; charset=utf-8");
+
+        if (path.Contains("sponsoredevents") || path.Contains("events_list.xml"))
+            return ServeFile("events_list.xml", "text/xml; charset=utf-8");
+
+        if (path.Contains("audiodnplist.csv"))
+            return ServeFile("audioDNPList.csv", "text/csv; charset=utf-8");
 
         // Default JSON endpoints
         if (wantsJson || path.StartsWith("/fut"))
@@ -155,25 +181,19 @@ internal sealed class WebServer
         return ("text/xml; charset=utf-8", "");
     }
 
-    // Verbatim from the game's bundled data7.big
-    private const string DimeRoutingXml =
-        """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <routing fileVersion="1" refresh="1800">
-        	<files>
-        		<file service="fut" type="network" osdkVar="FUTBOOTCFGFILE_URL" defaultFile="futBoot.xml"/>
-        		<file service="dimecfglocal" type="local" base="data/store/" defaultFile="dimecfg.xml"/>
-        		<file service="storedesclocal" type="local" base="data/store/" defaultFile="storedesc-%s.xml"  modifier="locale"/>
-        		<file service="storecfglocal" type="local" base="data/store/" defaultFile="storecfg.xml"/>
-        		<file service="dimecfg" type="network" osdkVar="DIME_FILES_PATH" defaultFile="dimecfg.xml"/>
-        		<file service="dimecfgbin" type="network" osdkVar="DIME_FILES_PATH" defaultFile="dimecfg.xml.bin"/>
-        		<file service="storecfg" type="network" osdkVar="DIME_FILES_PATH" defaultFile="storecfg.xml"/>
-        		<file service="storedesc" type="network" osdkVar="DIME_FILES_PATH" defaultFile="storedesc-%s.xml" modifier="locale"/>
-        		<file service="storeimage" type="network" osdkVar="DIME_IMG_FILES_PATH" defaultFile="item_%s.big" modifier="custom"/>
-        		<file service="audiodnp" type="network" osdkVar="DOWNLOADER_PATH" defaultFile="audioDNPList.csv"/>
-        	</files>
-        </routing>
-        """;
+    private (string, string) ServeFile(string fileName, string contentType)
+    {
+        var full = Path.Combine(_contentRoot, fileName);
+        try
+        {
+            return (contentType, File.ReadAllText(full));
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning("WebServer missing content file {0}: {1}", full, ex.Message);
+            return (contentType, "");
+        }
+    }
 
     // Keep these in sync with AuthenticationComponent (UserId / PersonaName) so the EASFC
     // web identity matches the Blaze-authenticated persona.
@@ -181,16 +201,6 @@ internal sealed class WebServer
     private const string BlazePersonaName = "FUT14";
 
     private const string SessionId = "FIFA14SERVERSESSION0000000000000";
-
-    private const string FutBootXml =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-        "<futData>\n" +
-        "  <bootString>FUT14</bootString>\n" +
-        "  <version>1</version>\n" +
-        "  <minorVersion>0</minorVersion>\n" +
-        "  <futNotAvailable>false</futNotAvailable>\n" +
-        "  <enabled>true</enabled>\n" +
-        "</futData>";
 
     private static long ParseLong(string s, long dflt) => long.TryParse(s, out var v) ? v : dflt;
 

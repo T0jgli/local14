@@ -14,6 +14,7 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 - OSDK Configs
 - OSDK web service (HTTP, port 9988) handling the game's web-service calls
 - DIME config routing (cfgrouting.xml / dimerouting.xml)
+- DIME store config (dimecfg / storecfg / storedesc) + sponsored events
 - FUT boot config (futBoot.xml)
 - FUT/EASFC accountinfo
 - EASFC RS4 server redirect
@@ -53,6 +54,6 @@ This project is an unofficial, community-developed backend. It is not affiliated
 ## Credits
  
 - MYorderlyHuman on discord (Helped soo much in understanding of the architecture)
-- Draz on discord (Cert Exploit, and authentication component)
+- Draztic on discord (Cert Exploit, authenticationcomponent, cfg xml)
 - [BlazeSDK](https://github.com/Aim4kill/BlazeSDK) By [@Aim4kill](https://github.com/Aim4kill)
 - [Zamboni3](https://github.com/ZamboniDevelopment/Zamboni3) By [@ZamboniDevelopment](https://github.com/ZamboniDevelopment)

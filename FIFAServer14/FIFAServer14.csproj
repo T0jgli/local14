@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <Content Include="Content\FIFAServer14.ico" />
+    <Content Include="web\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

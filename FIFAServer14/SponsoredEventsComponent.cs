@@ -28,7 +28,6 @@ public sealed class URLResponse : Tdf
 
 internal sealed class SponsoredEventsComponent : BlazeComponent
 {
-    private static readonly HttpClient _http = new();
     
     public override ushort Id => 2076;
     public override string Name => "SponsoredEventsComponent";
@@ -41,36 +40,10 @@ internal sealed class SponsoredEventsComponent : BlazeComponent
             Id = 3, // getEventsURL
             Name = "getEventsURL",
             IsSupported = true,
-            Func = async (req, ctx) =>
+            Func = (req, ctx) =>
             {
-                Console.WriteLine("[SponsoredEvents] getEventsURL -> returning events URL");
-                
-                // This is temp till we switch to a local cdn 
-                var url = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014/fifa/sponsoredevents/events_list.xml";
-                var localPath = Path.Combine("cached_content", "fifa", "sponsoredevents", "events_list.xml");
-                
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        if (!File.Exists(localPath))
-                        {
-                            Console.WriteLine($"[SponsoredEvents] Downloading {url}...");
-                            Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
-                            
-                            var content = await _http.GetStringAsync(url);
-                            await File.WriteAllTextAsync(localPath, content);
-                            
-                            Console.WriteLine($"[SponsoredEvents] Cached to {localPath}");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"[SponsoredEvents] Failed to cache: {ex.Message}");
-                    }
-                });
-                
-                return await Task.FromResult<Tdf>(new URLResponse
+                Console.WriteLine("[SponsoredEvents] getEventsURL -> fifa/sponsoredevents/events_list.xml");
+                return Task.FromResult<Tdf>(new URLResponse
                 {
                     URL = "fifa/sponsoredevents/events_list.xml"
                 });

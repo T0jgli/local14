@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <configFormatVersion>1</configFormatVersion>
+  <fileVersion>0</fileVersion>
+  <games>
+    <game>
+      <index>0</index>
+      <name>FIFA 14</name>
+      <pc>
+        <storeId>10335</storeId>
+        <groupName>FIFA14PCBoxContent</groupName>
+        <groupName>FIFA14PCFUTContentUnlocks</groupName>
+        <virtualCurrency>_FF</virtualCurrency>
+      </pc>
+    </game>
+    <primaryGameIndex>0</primaryGameIndex>
+  </games>
+  <content>
+    <consumables>
+      <consumable>
+        <uniqueId>0f14f000</uniqueId>
+        <name>100 Points</name>
+        <gameindex>0</gameindex>
+        <metaData>0</metaData>
+        <dimeVersion>2</dimeVersion>
+      </consumable>
+    </consumables>
+  </content>
+</dime>

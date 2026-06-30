@@ -126,6 +126,9 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         cfg["FIFA_RS4_TIMEOUT"]                = "30";
         cfg["FIFALEADERBOARD_BASE_URL"]        = $"{_web}/leaderboard";
         cfg["ROUTINGCFGFILE_URL"]              = $"{_web}/dime/dimerouting.xml";
+        cfg["DIME_FILES_PATH"]                 = $"{_web}/fifa/dime/gen4/";
+        cfg["DIME_IMG_FILES_PATH"]             = $"{_web}/fifa/dime/gen4/";
+        cfg["DOWNLOADER_PATH"]                 = $"{_web}/fifa/dl/gen4/";
 
         return Task.FromResult(new FetchConfigResponse { Config = cfg });
     }

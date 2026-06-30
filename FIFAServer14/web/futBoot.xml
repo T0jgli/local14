@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <VERSION>fifa14</VERSION>
+  <IS_OWNED>1</IS_OWNED>
+  <IS_ACQUIRED>1</IS_ACQUIRED>
+  <FREE_ENABLED>1</FREE_ENABLED>
+  <NEW_VERSION_AVAILABLE>0</NEW_VERSION_AVAILABLE>
+  <FUT_URI>http://127.0.0.1:9988</FUT_URI>
+</config>
