@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<squad>
+  <squadInfoSet>
+    <squadInfo platform="xbl2">
+      <dbMajor>193</dbMajor>
+      <dbMinor>1</dbMinor>
+      <dbMajorCRC>1351212707</dbMajorCRC>
+      <dbMinorCRC>-1851587132</dbMinorCRC>	              
+      <dbMajorLoc>fifa/fifalive/fulltitle/roster/xbl2/squads_20140919_193_1_1351212707.bin</dbMajorLoc>
+      <dbMinorLoc>fifa/fifalive/fulltitle/roster/xbl2/fixtures_20140919_193_1_n1851587132.bin</dbMinorLoc>
+      <dbSchemaCRC>fe978460155366c8c0d0e6c36ca710eb772868b8</dbSchemaCRC>
+      <dbFUTVer>5</dbFUTVer>
+      <dbFUTCRC>1100393063</dbFUTCRC>
+      <dbFUTLoc>fifa/fifalive/fulltitle/roster/xbl2/futsquads_20140310_4_1_1100393063.bin</dbFUTLoc>
+      <imagepathbase>fifa/fifalive/fulltitle/assets/xbl2</imagepathbase>
+      <assetSet>	    
+        <asset type="image">gotwimage_35984.png</asset>
+        <asset type="image">gotwimage_47195.png</asset>
+        <asset type="image">gotwimage_47196.png</asset>
+        <asset type="image">gotwimage_47201.png</asset>
+        <asset type="image">gotwimage_default.png</asset>
+        <asset type="json">gotw_strings.json</asset>
+      </assetSet>
+    </squadInfo>
+    <squadInfo platform="ps3">
+      <dbMajor>193</dbMajor>
+      <dbMinor>1</dbMinor>
+      <dbMajorCRC>1351212707</dbMajorCRC>
+      <dbMinorCRC>-1851587132</dbMinorCRC>
+      <dbMajorLoc>fifa/fifalive/fulltitle/roster/ps3/squads_20140919_193_1_1351212707.bin</dbMajorLoc>
+      <dbMinorLoc>fifa/fifalive/fulltitle/roster/ps3/fixtures_20140919_193_1_n1851587132.bin</dbMinorLoc>
+      <dbSchemaCRC>fe978460155366c8c0d0e6c36ca710eb772868b8</dbSchemaCRC>
+      <dbFUTVer>3</dbFUTVer>
+      <dbFUTCRC>-348735381</dbFUTCRC>
+      <dbFUTLoc>fifa/fifalive/fulltitle/roster/ps3/futsquads_20140310_3_1_n348735381.bin</dbFUTLoc>
+      <imagepathbase>fifa/fifalive/fulltitle/assets/ps3</imagepathbase>
+      <assetSet>	    
+        <asset type="image">gotwimage_35984.png</asset>
+        <asset type="image">gotwimage_47195.png</asset>
+        <asset type="image">gotwimage_47196.png</asset>
+        <asset type="image">gotwimage_47201.png</asset>
+        <asset type="image">gotwimage_default.png</asset>
+        <asset type="json">gotw_strings.json</asset>
+      </assetSet>
+    </squadInfo>
+    <squadInfo platform="pc">
+      <dbMajor>193</dbMajor>
+      <dbMinor>1</dbMinor>
+      <dbMajorCRC>-83346933</dbMajorCRC>
+      <dbMinorCRC>424339554</dbMinorCRC>
+      <dbMajorLoc>fifa/fifalive/fulltitle/roster/pc/squads_20140919_193_1_n83346933.bin</dbMajorLoc>
+      <dbMinorLoc>fifa/fifalive/fulltitle/roster/pc/fixtures_20140919_193_1_424339554.bin</dbMinorLoc>
+      <dbSchemaCRC>fe978460155366c8c0d0e6c36ca710eb772868b8</dbSchemaCRC>
+      <dbFUTVer>3</dbFUTVer>
+      <dbFUTCRC>1828444196</dbFUTCRC>
+      <dbFUTLoc>fifa/fifalive/fulltitle/roster/pc/futsquads_20140310_3_1_1828444196.bin</dbFUTLoc>
+      <imagepathbase>fifa/fifalive/fulltitle/assets/pc</imagepathbase>
+      <assetSet>	    
+        <asset type="image">gotwimage_35984.png</asset>
+        <asset type="image">gotwimage_47195.png</asset>
+        <asset type="image">gotwimage_47196.png</asset>
+        <asset type="image">gotwimage_47201.png</asset>
+        <asset type="image">gotwimage_default.png</asset>
+        <asset type="json">gotw_strings.json</asset>
+      </assetSet>
+    </squadInfo>
+    <squadInfo platform="iOS">
+      <dbMajor>0</dbMajor>
+      <dbMajorVer>4</dbMajorVer>
+      <dbMajorCRC>-14734789</dbMajorCRC>
+      <dbMajorLoc>http://cdn.content.easports.com/fifa/fltOnlineAssets/2014/fifa/fifalive/fulltitle/roster/ios</dbMajorLoc>
+      <dbSchemaCRC>7d47b5dc42f53fbcd846ee88bedcf7e0ef0dc232</dbSchemaCRC>
+      <dbFUTVer>1</dbFUTVer>
+      <dbFUTCRC>-1321134776</dbFUTCRC>
+      <dbFUTLoc>http://cdn.content.easports.com/fifa/fltOnlineAssets/2014/fifa/fifalive/fulltitle/roster/xbl2/futsquads_20111215_2_1_n1321134776.bin</dbFUTLoc>
+    </squadInfo>    
+  </squadInfoSet>
+</squad>  

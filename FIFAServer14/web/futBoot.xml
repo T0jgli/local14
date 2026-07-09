@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config>
-  <VERSION>fifa14</VERSION>
-  <IS_OWNED>1</IS_OWNED>
-  <IS_ACQUIRED>1</IS_ACQUIRED>
-  <FREE_ENABLED>1</FREE_ENABLED>
-  <NEW_VERSION_AVAILABLE>0</NEW_VERSION_AVAILABLE>
-  <FUT_URI>http://127.0.0.1:9988</FUT_URI>
-</config>
+<FutCfg>
+  <cfgVersion>2</cfgVersion> <!-- Incrementing version number everytime the configuration file is updated this is updated-->
+  <futDlc>
+    <fut11>  <!-- FUT Major version definiton -->
+		<minorVersion>2</minorVersion> <!-- the latest FUT Minor version available -->
+		<revision> <!--Each Minor version of FUT is identified -->
+			<futSubVersion>1</futSubVersion>  <!-- This would be the first version -->
+			<Language value="all">  <!--Each Language would get its own dime unique ID -->
+				<dimeUniqueId>0B11D001</dimeUniqueId>  <!-- The unique ID to pass to DIME to see if this is available: 1. For download, 2. On Disk -->
+				<size>1073741824</size>  <!-- Size of the local storage -->
+			</Language>
+		</revision>
+		<revision> <!--Each Minor version of FUT is identified -->
+			<futSubVersion>2</futSubVersion>  <!-- This would be the first version -->
+			<Language value="all">  <!--Each Language would get its own dime unique ID -->
+				<dimeUniqueId>0B11D002</dimeUniqueId>  <!-- The unique ID to pass to DIME to see if this is available: 1. For download, 2. On Disk -->
+				<size>1073741824</size>  <!-- Size of the local storage -->
+			</Language>
+		</revision>
+		<key>
+			<futKeyType>0</futKeyType>
+			<dimeUniqueId>0B11D000</dimeUniqueId>
+		</key>
+		<bootString>host=fut.ea.com,port=12345</bootString> <!-- this string is here to send an arbitary string to the FUT launch in case we need to change parameters. -->
+		<futNotAvailable>0</futNotAvailable>
+	</fut11>
+	<fut12>
+		<minorVersion>1</minorVersion>
+		<revision>
+			<futSubVersion>1</futSubVersion>
+			<Language value="all">  <!--Each Language would get its own dime unique ID -->
+				<dimeUniqueId>0B11D001</dimeUniqueId>  <!-- The unique ID to pass to DIME to see if this is available: 1. For download, 2. On Disk -->
+				<size>1073741824</size>  <!-- Size of the local storage -->
+			</Language>
+		</revision>			
+		<key>
+			<futKeyType>0</futKeyType>
+			<dimeUniqueId>0B11D000</dimeUniqueId>
+		</key>
+		<bootString>host=fut.ea.com,port=12345</bootString> <!-- this string is here to send an arbitary string to the FUT launch in case we need to change parameters. -->
+		<futNotAvailable>0</futNotAvailable>
+	</fut12>
+  </futDlc>
+</FutCfg>

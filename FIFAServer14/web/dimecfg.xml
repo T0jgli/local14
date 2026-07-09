@@ -1,29 +1,386 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <configFormatVersion>1</configFormatVersion>
-  <fileVersion>0</fileVersion>
-  <games>
-    <game>
-      <index>0</index>
-      <name>FIFA 14</name>
-      <pc>
-        <storeId>10335</storeId>
-        <groupName>FIFA14PCBoxContent</groupName>
-        <groupName>FIFA14PCFUTContentUnlocks</groupName>
-        <virtualCurrency>_FF</virtualCurrency>
-      </pc>
-    </game>
-    <primaryGameIndex>0</primaryGameIndex>
-  </games>
-  <content>
-    <consumables>
-      <consumable>
-        <uniqueId>0f14f000</uniqueId>
-        <name>100 Points</name>
-        <gameindex>0</gameindex>
-        <metaData>0</metaData>
-        <dimeVersion>2</dimeVersion>
-      </consumable>
-    </consumables>
-  </content>
+<dime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../dimecfg.xsd">
+	<!--Compatible with Microsoft XML Notepad 2007
+Can also use dime/dev/tools/xml.exe to validate:
+xml val -s ..\data\dimecfg.xsd -e ..\data\cmn\dimecfg.xml-->
+	<configFormatVersion>1</configFormatVersion>
+	<fileVersion>10</fileVersion>
+	<kettleRescanInterval>12000</kettleRescanInterval>
+	<games>
+		<game>
+			<index>0</index>
+			<name>FIFA 14</name>
+			<capilano>
+				<!--<titleId>6C15B8C5</titleId>-->
+				<titleProductId>f04f7029-01ea-4d65-988b-56f583fb7f6c</titleProductId>
+			</capilano>
+			<kettle>
+				<serviceLabels>
+					<store serviceLabel="0" />
+					<store name="CUSA00111_00" serviceLabel="1" />
+				</serviceLabels>
+			</kettle>
+		</game>
+		<primaryGameIndex>0</primaryGameIndex>
+	</games>
+	<content>
+		<pulcs>
+			<pulc>
+				<uniqueId>0f14aaab</uniqueId>
+				<name>Full Title</name>
+				<gameIndex>0</gameIndex>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>SAMPLEFIFA14GAME</productId>
+					<entitlementId>SAMPLEFIFA14GAME</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+			</pulc>
+		</pulcs>
+		<consumables>
+			<consumable serverId="600">
+				<uniqueId>0f14f000</uniqueId>
+				<name>FIFA Points 100</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06000000000000</productId>
+					<entitlementId>FP0600</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>4114840c-89c0-4782-b992-2736624f90d7</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="601">
+				<uniqueId>0f14f001</uniqueId>
+				<name>FIFA Points 250</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06010000000000</productId>
+					<entitlementId>FP0601</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>91cffcdc-5371-499a-82d3-82202851f6be</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="602">
+				<uniqueId>0f14f002</uniqueId>
+				<name>FIFA Points 500</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06020000000000</productId>
+					<entitlementId>FP0602</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>067f8cbb-b5a7-4810-a389-d2e3763e821d</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="603">
+				<uniqueId>0f14f003</uniqueId>
+				<name>FIFA Points 750</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06030000000000</productId>
+					<entitlementId>FP0603</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>f5499a91-9526-4079-a9c5-ffb321c4aa1e</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="604">
+				<uniqueId>0f14f004</uniqueId>
+				<name>FIFA Points 1050</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06040000000000</productId>
+					<entitlementId>FP0604</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>9a6e70f5-cace-4a14-9bda-5934e2f0a721</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="605">
+				<uniqueId>0f14f005</uniqueId>
+				<name>FIFA Points 1575</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06050000000000</productId>
+					<entitlementId>FP0605</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>d18f0bf9-b5ef-4218-be60-360ac5041483</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="606">
+				<uniqueId>0f14f006</uniqueId>
+				<name>FIFA Points 2200</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06060000000000</productId>
+					<entitlementId>FP0606</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>2cc68e5c-6a69-476a-acc0-eb21e920f24b</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="607">
+				<uniqueId>0f14f007</uniqueId>
+				<name>FIFA Points 4600</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06070000000000</productId>
+					<entitlementId>FP0607</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>5935c302-95a6-46a5-89f9-6e92823048c5</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="608">
+				<uniqueId>0f14f008</uniqueId>
+				<name>FIFA Points 12000</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP06080000000000</productId>
+					<entitlementId>FP0608</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>d8a7dd66-0c03-4ad0-9266-8a34b4c77f31</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3600">
+				<uniqueId>0f14f300</uniqueId>
+				<name>(Discounted) FIFA Points 100</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36000000000000</productId>
+					<entitlementId>FP3600</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>a0f82692-0eee-465c-a07b-a49ef4ed4185</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3601">
+				<uniqueId>0f14f301</uniqueId>
+				<name>(Discounted) FIFA Points 250</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36010000000000</productId>
+					<entitlementId>FP3601</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>c15b5af9-0f86-468a-baa3-e643d242fa14</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3602">
+				<uniqueId>0f14f302</uniqueId>
+				<name>(Discounted) FIFA Points 500</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36020000000000</productId>
+					<entitlementId>FP3602</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>1b2069a6-74dc-4b8f-9e3b-476bf2a590f3</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3603">
+				<uniqueId>0f14f303</uniqueId>
+				<name>(Discounted) FIFA Points 750</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36030000000000</productId>
+					<entitlementId>FP3603</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>428f3190-5c21-497b-9dc4-fcdcb29d8f14</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3604">
+				<uniqueId>0f14f304</uniqueId>
+				<name>(Discounted) FIFA Points 1050</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36040000000000</productId>
+					<entitlementId>FP3604</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>c4fd41c4-57d6-491a-a0d3-b5cd4050779d</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3605">
+				<uniqueId>0f14f305</uniqueId>
+				<name>(Discounted) FIFA Points 1575</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36050000000000</productId>
+					<entitlementId>FP3605</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>37cd62c6-2ba1-4a51-96e3-ac35f538498b</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3606">
+				<uniqueId>0f14f306</uniqueId>
+				<name>(Discounted) FIFA Points 2200</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36060000000000</productId>
+					<entitlementId>FP3606</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>89b8b717-2fb4-41bb-8d5a-b937bd51b41a</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3607">
+				<uniqueId>0f14f307</uniqueId>
+				<name>(Discounted) FIFA Points 4600</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36070000000000</productId>
+					<entitlementId>FP3607</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>8b5b667d-1bcb-4cb9-b49d-1a12ba4735b2</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+			<consumable serverId="3608">
+				<uniqueId>0f14f308</uniqueId>
+				<name>(Discounted) FIFA Points 12000</name>
+				<gameIndex>0</gameIndex>
+				<metaData>0</metaData>
+				<dimeVersion>0</dimeVersion>
+				<kettle>
+					<productId>FP36080000000000</productId>
+					<entitlementId>FP3608</entitlementId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</kettle>
+				<capilano>
+					<productId>947192a8-c204-463d-80fb-9c1be711b6a2</productId>
+					<availabilityId></availabilityId>
+					<purchaseable>true</purchaseable>
+					<advertise>true</advertise>
+				</capilano>
+			</consumable>
+		</consumables>
+	</content>
 </dime>
