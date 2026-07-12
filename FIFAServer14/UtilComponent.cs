@@ -129,6 +129,82 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         cfg["DIME_FILES_PATH"]                 = $"{_web}/fifa/dime/gen4/";
         cfg["DIME_IMG_FILES_PATH"]             = $"{_web}/fifa/dime/gen4/";
         cfg["DOWNLOADER_PATH"]                 = $"{_web}/fifa/dl/gen4/";
+        cfg["nucleusHost"]    = GameIp;
+        cfg["nucleusPort"]    = webPort.ToString();
+        cfg["nucleusPortSSL"] = "443";
+        cfg["nucleusBaseUri"] = "/";
+        cfg["environment"]    = "prod";
+        cfg["useNucleusSSL"]  = "0";
+        cfg["AUTH_TYPE"]           = "NUCLEUS";
+        cfg["CLIENT_TIMEOUT"]      = "90";
+        cfg["OSDK_AUTH_REQUIRED"]  = "1";
+        cfg["OSDK_ONLINE_ENABLED"] = "1";
+        cfg["OSDK_SERVER_VERSION"] = "3.15.08.0";
+        cfg["REQUEST_TIMEOUT"]     = "80";
+        cfg["USE_TOKEN_AUTH"]      = "1";
+        cfg["ALLOW_OFFLINE"]                = "1";
+        cfg["AUTOLOGIN"]                    = "1";
+        cfg["EMAIL_OPT_IN"]                 = "0";
+        cfg["FIFA_POW_CONTENT_SERVER_URL"]  = $"{_web}/pow/";
+        cfg["FIFA_POW_MMM_URI"]             = $"{_web}/pow/mm";
+        cfg["FIFA_POW_NUCLEUS_PROXY_URL"]   = $"{_web}/pow/";
+        cfg["FIFA_POW_URL"]                 = $"{_web}/pow/";
+        cfg["FUT/ALWAYS_SHOW_QUESTS_PANEL"]    = "0";
+        cfg["FUT/ALWAYS_SHOW_SMART_TUTORIALS"] = "0";
+        cfg["FUT/ALWAYS_SHOW_TUTORIALS"]       = "0";
+        cfg["FUT/DAY60_FIX_ENABLED"]           = "0";
+        cfg["FUT/ENABLED"]                     = "1";
+        cfg["FUT/FAKE_CARDS0_FAIL"]            = "0";
+        cfg["FUT/FUT_STAT_TUNING"]             = "";
+        cfg["FUT/HTTP_FRAME_DELAY"]            = "0";
+        cfg["FUT/LOG_RPUPS"]                   = "0";
+        cfg["FUT/OVERRIDE_VERSION"]            = "";
+        cfg["FUT/ROSTERUPDATE_URL"]            = "";
+        cfg["NUCLEUS_ADDED_URL"]             = $"{_web}/nucleus/added";
+        cfg["NUCLEUS_CREATE_INFO_URL"]       = $"{_web}/nucleus/create_info";
+        cfg["NUCLEUS_CREATE_URL"]            = $"{_web}/nucleus/create";
+        cfg["NUCLEUS_DEACTIVATED_INFO_URL"]  = $"{_web}/nucleus/deactivated_info";
+        cfg["NUCLEUS_DUPACCT_INFO_URL"]      = $"{_web}/nucleus/dupacct_info";
+        cfg["NUCLEUS_INCOMPLETE_URL"]        = $"{_web}/nucleus/incomplete";
+        cfg["NUCLEUS_LOGIN_ENABLED"]         = "1";
+        cfg["ONLINE/POW_CUSTOMCONTENTURL"]   = $"{GameIp}:{webPort}";
+        cfg["ONLINE/POW_CUSTOMURL"]          = $"{GameIp}:{webPort}";
+        cfg["ORIGIN_LOGIN_ENABLED"]          = "1";
+        cfg["POW/ASSERT_POW_ERROR"]              = "0";
+        cfg["POW/ENABLE_ALL_UNLOCKABLES"]        = "1";
+        cfg["POW/ENABLE_RPUPS"]                  = "0";
+        cfg["POW/ENABLE_USER_NEWS"]              = "0";
+        cfg["POW/FIRST_BOOT_ACTIVITY"]           = "0";
+        cfg["POW/FORCE_SCENARIO_COMPLETE"]       = "1";
+        cfg["POW/POW_DISABLE_ERROR_BACKOUT"]     = "1";
+        cfg["POW/POW_WIDGET"]                    = "1";
+        cfg["POW/SEND_ACTIVITIES"]               = "0";
+        cfg["POW/SKIP_SCENARIO_ROSTER_DOWNLOAD"] = "1";
+        cfg["POW/STORE_CUSTOM_CATALOG"]          = "0";
+        cfg["PRIVATE_BETA"]                = "0";
+        cfg["SKIP_LEGAL_DOC"]              = "1";
+
+        string futAssets = $"{_web}/onlineAssets/2014/fut/";
+        foreach (var m in new[] { "ACADEMY","AUCTIONS","BOOTSTRAP","CARDS","CLUB","DEFAULT",
+            "EVENTS","GAMEHUB","ITEMS","LEADERBOARDS","MAIN","PACKS","QUESTS","ROOT","RS4",
+            "SQUAD","STORE","TUTORIAL","WEBCONTENT","WEBSESSION" })
+        {
+            cfg[$"FUT/MODULE_BASEURL_{m}"] = futAssets;
+            cfg[$"FUT/SINGLE_BASEURL_{m}"] = futAssets;
+        }
+
+        cfg["WEBOFFER_BASE_URI"] = "/";
+        cfg["WEBOFFER_ENABLED"]  = "0";
+        cfg["WEBOFFER_HOST"]     = GameIp;
+        cfg["WEBOFFER_PORT"]     = webPort.ToString();
+        cfg["ABUSE_REPORTING_ENABLED"] = "0";
+        cfg["EVENTS_URL"]              = "fifa/sponsoredevents/events_list.xml";
+        cfg["SPONSORED_EVENT_ENABLED"] = "1";
+        cfg["SPONSORED_EVENT_URL"]     = "fifa/sponsoredevents/events_list.xml";
+        cfg["ROSTER_UPDATE_ENABLED"] = "1";
+        cfg["ROSTER_UPDATE_URL"]     = "fifa/fifalive/rosterupdate.xml";
+        cfg["BASE_URL"]         = $"{_web}/fifa/fltOnlineAssets/2013";
+        cfg["CONTENT_BASE_URL"] = $"{_web}/fifa/fltOnlineAssets/2013";
 
         return Task.FromResult(new FetchConfigResponse { Config = cfg });
     }

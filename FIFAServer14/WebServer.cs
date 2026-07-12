@@ -94,6 +94,14 @@ internal sealed class WebServer
                 ctx.Response.Headers["X-POW-SID"] = SessionId;
             }
 
+            if (lp.Contains("/pow/"))
+            {
+                ctx.Response.Headers["Access-Control-Allow-Origin"] = "*";
+                ctx.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS";
+                ctx.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-HTTP-Method-Override";
+                ctx.Response.Headers["X-Pow-Sid"] = PowSid;
+            }
+
             var payload = Encoding.UTF8.GetBytes(payloadStr);
             ctx.Response.ContentLength64 = payload.Length;
             await ctx.Response.OutputStream.WriteAsync(payload);
@@ -121,6 +129,10 @@ internal sealed class WebServer
         // "unable to connect". The client sends its id in Easw-Session-Data-Nucleus-Id.
         // Field names confirmed in fifa14.exe: userAccountInfo/personas/personaId/
         // personaName/userClubList. Empty userClubList = new FUT user (no club yet).
+        if (path.Contains("/pow/"))
+            return ("application/json; charset=utf-8", PowBody(path.Replace("/pow/pow/", "/pow/"), req));
+
+
         if (path.EndsWith("/accountinfo"))
         {
             long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
@@ -195,12 +207,42 @@ internal sealed class WebServer
         }
     }
 
+    // POW/EASFC hub endpoints. `path` is lowercased and normalized to a single /pow/.
+    // Shapes taken 1:1 from an impulsum FIFA17 capture; unknown /pow/* calls (activity,
+    // news, communication, chal, ...) get an empty object so the hub doesn't stall on them.
+    private string PowBody(string path, HttpListenerRequest req)
+    {
+        if (path.EndsWith("/auth"))
+        {
+            string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss") + "Z";
+            return $"{{\"lastOnlineTime\":\"{now}\",\"serverTime\":\"{now}\",\"sid\":\"{PowSid}\"}}";
+        }
+        if (path.Contains("/healthcheck"))                        return "{\"status\":\"ok\"}";
+        if (path.Contains("/lvl/weight"))                         return "{\"level\":1,\"xp_per_level\":100}";
+        if (path.Contains("/lvl/user"))                           return "{\"level\":1,\"xp\":0,\"tier_gp\":\"businessunit\",\"tier_tp\":\"fifa\"}";
+        if (path.Contains("/bank/user/account"))                  return "{\"currency\":\"COINS\",\"balance\":0}";
+        if (path.Contains("/bank/currency") && path.Contains("cap/info")) return "{\"currency\":\"pow_funds\",\"cap\":1000000}";
+        if (path.Contains("/store/") && path.Contains("catalog")) return "[]";
+        if (path.Contains("/inventory/item"))                     return "[]";
+        if (path.Contains("/mm/") && path.Contains("message/list"))
+            return "{\"messageList\":[],\"messagesAvailable\":0,\"messagesRead\":0,\"promoUpdate\":[]}";
+        if (path.Contains("/pfyc/user"))
+        {
+            long nuc = ParseLong(req.QueryString["friendtiertp"], BlazePersonaId);
+            return "{\"users\":[{\"nucId\":" + nuc + ",\"clubId\":1,\"pendingClubId\":0," +
+                   "\"numChangesAllowed\":0,\"leagueId\":0,\"globalLeagueId\":0}]}";
+        }
+        return "{}";
+    }
+
     // Keep these in sync with AuthenticationComponent (UserId / PersonaName) so the EASFC
     // web identity matches the Blaze-authenticated persona.
     private const long BlazePersonaId = 1000;
     private const string BlazePersonaName = "FUT14";
 
     private const string SessionId = "FIFA14SERVERSESSION0000000000000";
+
+    private const string PowSid = "f1fa14f1fa14f1fa14f1fa14f1fa14f1fa14f1fa14f1fa14f1fa14f1fa14beef";
 
     private static long ParseLong(string s, long dflt) => long.TryParse(s, out var v) ? v : dflt;
 
