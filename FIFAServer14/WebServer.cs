@@ -103,6 +103,18 @@ internal sealed class WebServer
             }
 
             var payload = Encoding.UTF8.GetBytes(payloadStr);
+
+            if (lp.Contains("/pow/") && payload.Length > 0 &&
+                (req.Headers["Accept-Encoding"] ?? "").Contains("gzip", StringComparison.OrdinalIgnoreCase))
+            {
+                using var ms = new MemoryStream();
+                using (var gz = new System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionLevel.Fastest, leaveOpen: true))
+                    gz.Write(payload, 0, payload.Length);
+                ctx.Response.Headers["X-Unzippedlength"] = payload.Length.ToString();
+                ctx.Response.Headers["Content-Encoding"] = "gzip";
+                payload = ms.ToArray();
+            }
+
             ctx.Response.ContentLength64 = payload.Length;
             await ctx.Response.OutputStream.WriteAsync(payload);
             if (payloadStr.Length > 0)
@@ -130,7 +142,7 @@ internal sealed class WebServer
         // Field names confirmed in fifa14.exe: userAccountInfo/personas/personaId/
         // personaName/userClubList. Empty userClubList = new FUT user (no club yet).
         if (path.Contains("/pow/"))
-            return ("application/json; charset=utf-8", PowBody(path.Replace("/pow/pow/", "/pow/"), req));
+            return ("application/json; charset=utf-8", PowBody("/pow/", req));
 
 
         if (path.EndsWith("/accountinfo"))
@@ -207,9 +219,6 @@ internal sealed class WebServer
         }
     }
 
-    // POW/EASFC hub endpoints. `path` is lowercased and normalized to a single /pow/.
-    // Shapes taken 1:1 from an impulsum FIFA17 capture; unknown /pow/* calls (activity,
-    // news, communication, chal, ...) get an empty object so the hub doesn't stall on them.
     private string PowBody(string path, HttpListenerRequest req)
     {
         if (path.EndsWith("/auth"))

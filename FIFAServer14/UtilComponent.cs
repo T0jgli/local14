@@ -84,6 +84,7 @@ internal sealed class UtilComponent : UtilComponentBase.Server
 
     public override Task<FetchConfigResponse> FetchClientConfigAsync(FetchClientConfigRequest request, BlazeRpcContext context)
     {
+        //some of these may be useless, ill keep them cause it works and i dont want to break anything
         _log.LogInformation("fetchClientConfig section='{0}'", request.ConfigSection);
 
         var cfg = new Dictionary<string, string>();
@@ -147,10 +148,10 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         cfg["ALLOW_OFFLINE"]                = "1";
         cfg["AUTOLOGIN"]                    = "1";
         cfg["EMAIL_OPT_IN"]                 = "0";
-        cfg["FIFA_POW_CONTENT_SERVER_URL"]  = $"{_web}/pow/";
-        cfg["FIFA_POW_MMM_URI"]             = $"{_web}/pow/mm";
-        cfg["FIFA_POW_NUCLEUS_PROXY_URL"]   = $"{_web}/pow/";
-        cfg["FIFA_POW_URL"]                 = $"{_web}/pow/";
+        cfg["FIFA_POW_CONTENT_SERVER_URL"]  = $"{_web}/";
+        cfg["FIFA_POW_MMM_URI"]             = $"{_web}/";
+        cfg["FIFA_POW_NUCLEUS_PROXY_URL"]   = $"{_web}/";
+        cfg["FIFA_POW_URL"]                 = $"{_web}/";
         cfg["FUT/ALWAYS_SHOW_QUESTS_PANEL"]    = "0";
         cfg["FUT/ALWAYS_SHOW_SMART_TUTORIALS"] = "0";
         cfg["FUT/ALWAYS_SHOW_TUTORIALS"]       = "0";
@@ -205,8 +206,8 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         cfg["SPONSORED_EVENT_URL"]     = "fifa/sponsoredevents/events_list.xml";
         cfg["ROSTER_UPDATE_ENABLED"] = "1";
         cfg["ROSTER_UPDATE_URL"]     = "fifa/fifalive/rosterupdate.xml";
-        cfg["BASE_URL"]         = $"{_web}/fifa/fltOnlineAssets/2013";
-        cfg["CONTENT_BASE_URL"] = $"{_web}/fifa/fltOnlineAssets/2013";
+        cfg["BASE_URL"]         = $"{_web}/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
+        cfg["CONTENT_BASE_URL"] = $"{_web}/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
 
         return Task.FromResult(new FetchConfigResponse { Config = cfg });
     }
