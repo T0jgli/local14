@@ -87,6 +87,8 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         _log.LogInformation("fetchClientConfig section='{0}'", request.ConfigSection);
 
         var cfg = new Dictionary<string, string>();
+        int webPort;
+        try { webPort = new Uri(_web).Port; } catch { webPort = 9988; }
 
         cfg["OSDK_PEERBUFFERSIZE"]             = "16384";
         cfg["OSDK_DISTBUFFERSIZE_IN"]          = "16384";
