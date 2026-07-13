@@ -142,7 +142,7 @@ internal sealed class WebServer
         // Field names confirmed in fifa14.exe: userAccountInfo/personas/personaId/
         // personaName/userClubList. Empty userClubList = new FUT user (no club yet).
         if (path.Contains("/pow/"))
-            return ("application/json; charset=utf-8", PowBody("/pow/", req));
+            return ("application/json; charset=utf-8", PowBody(path, req));
 
 
         if (path.EndsWith("/accountinfo"))
@@ -231,7 +231,8 @@ internal sealed class WebServer
         if (path.Contains("/lvl/user"))                           return "{\"level\":1,\"xp\":0,\"tier_gp\":\"businessunit\",\"tier_tp\":\"fifa\"}";
         if (path.Contains("/bank/user/account"))                  return "{\"currency\":\"COINS\",\"balance\":0}";
         if (path.Contains("/bank/currency") && path.Contains("cap/info")) return "{\"currency\":\"pow_funds\",\"cap\":1000000}";
-        if (path.Contains("/store/") && path.Contains("catalog")) return "[]";
+        if (path.Contains("/store/") && path.Contains("catalog"))
+            return "{\"catalogs\":[{\"catalogId\":1,\"name\":\"FIFA 14 Store\"}]}";
         if (path.Contains("/inventory/item"))                     return "[]";
         if (path.Contains("/mm/") && path.Contains("message/list"))
             return "{\"messageList\":[],\"messagesAvailable\":0,\"messagesRead\":0,\"promoUpdate\":[]}";
