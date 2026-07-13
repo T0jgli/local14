@@ -14,7 +14,6 @@ internal sealed class UtilComponent : UtilComponentBase.Server
     private readonly string _web; // base URL
 
     // EA's real FIFA 14 asset CDN. Keep static content here until we mirror it locally.
-    private const string CdnBase = "https://fifa17.content.easports.com/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
     public UtilComponent(ILogger log, string webBaseUrl) { _log = log; _web = webBaseUrl.TrimEnd('/'); }
 
     private static uint Now() => (uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -105,9 +104,10 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         cfg["OSDK_USERLIST_REQUEST_MAX_USERS"] = "50";
         cfg["POW_MDL_MAX_IMAGESIZE"]           = "1048576";
         cfg["POW_MDL_DELAYNEWSDOWNLOAD"]       = "0";
-        cfg["LIVE_CONTENT_HOST"]               = $"{CdnBase}/";
-        cfg["ROSTERUPDATE_URL"]                = $"{CdnBase}/rosterupdate";
-        cfg["ROSTER_URL"]                      = $"{CdnBase}/roster";
+        string liveContent = $"{_web}/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
+        cfg["LIVE_CONTENT_HOST"]               = $"{liveContent}/";
+        cfg["ROSTERUPDATE_URL"]                = $"{liveContent}/rosterupdate";
+        cfg["ROSTER_URL"]                      = $"{liveContent}/roster";
         cfg["EASW/ENABLED"]                    = "1";
         cfg["OSDK_EASW_REQ_URL"]               = $"{_web}/easw/req";
         cfg["OSDK_EASW_AUTH_URL"]              = $"{_web}/easw/auth";

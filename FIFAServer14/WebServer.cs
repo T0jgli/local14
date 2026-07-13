@@ -221,27 +221,58 @@ internal sealed class WebServer
 
     private string PowBody(string path, HttpListenerRequest req)
     {
+        string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss") + "Z";
+
         if (path.EndsWith("/auth"))
-        {
-            string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss") + "Z";
             return $"{{\"lastOnlineTime\":\"{now}\",\"serverTime\":\"{now}\",\"sid\":\"{PowSid}\"}}";
-        }
         if (path.Contains("/healthcheck"))                        return "{\"status\":\"ok\"}";
+
         if (path.Contains("/lvl/weight"))                         return "{\"level\":1,\"xp_per_level\":100}";
-        if (path.Contains("/lvl/user"))                           return "{\"level\":1,\"xp\":0,\"tier_gp\":\"businessunit\",\"tier_tp\":\"fifa\"}";
+        if (path.Contains("/lvl/user"))
+            return "{\"level\":1,\"leveledUp\":false,\"xp\":0,\"xpGained\":0,\"xpLoyalty\":0," +
+                   "\"challengesDone\":0,\"xpCapCurrLevel\":0,\"xpCapNextLevel\":100," +
+                   "\"funds\":[],\"notifications\":[],\"tier_gp\":\"businessunit\",\"tier_tp\":\"fifa\"}";
+
         if (path.Contains("/bank/user/account"))                  return "{\"currency\":\"COINS\",\"balance\":0}";
         if (path.Contains("/bank/currency") && path.Contains("cap/info")) return "{\"currency\":\"pow_funds\",\"cap\":1000000}";
-        if (path.Contains("/store/") && path.Contains("catalog"))
+        if (path.Contains("/bank/"))
+            return "{\"currencies\":[{\"currency\":\"pow_funds\",\"funds\":0," +
+                   "\"fundsCapInfo\":[{\"period\":\"daily\",\"fundsEarned\":0},{\"period\":\"weekly\",\"fundsEarned\":0}]}]}";
+
+        if (path.Contains("catalog/list"))
             return "{\"catalogs\":[{\"catalogId\":1,\"name\":\"FIFA 14 Store\"}]}";
+        if (path.Contains("/store/") && path.Contains("catalog"))
+            return "{\"catalogId\":1,\"name\":\"FIFA 14 Store\",\"items\":[]}";
+        if (path.Contains("/store/gift"))                         return "{\"gifts\":[]}";
+        if (path.Contains("/store/"))                             return "{\"items\":[]}";
+
         if (path.Contains("/inventory/item"))                     return "[]";
-        if (path.Contains("/mm/") && path.Contains("message/list"))
-            return "{\"messageList\":[],\"messagesAvailable\":0,\"messagesRead\":0,\"promoUpdate\":[]}";
+
+        if (path.Contains("/chal/"))                              return "{\"challenges\":[]}";
+
+        if (path.Contains("/pfyc/") && path.EndsWith("/info"))
+            return "{\"clubId\":1,\"clubName\":\"" + BlazePersonaName + "\",\"leagueId\":0," +
+                   "\"globalLeagueId\":0,\"division\":1,\"newDivision\":1,\"prevLeagueId\":0}";
+        if (path.Contains("/pfyc/schedule"))                      return "{\"schedule\":[]}";
+        if (path.Contains("/pfyc/user/club"))
+            return "{\"clubId\":1,\"clubName\":\"" + BlazePersonaName + "\",\"leagueId\":0,\"globalLeagueId\":0,\"division\":1}";
         if (path.Contains("/pfyc/user"))
         {
             long nuc = ParseLong(req.QueryString["friendtiertp"], BlazePersonaId);
             return "{\"users\":[{\"nucId\":" + nuc + ",\"clubId\":1,\"pendingClubId\":0," +
                    "\"numChangesAllowed\":0,\"leagueId\":0,\"globalLeagueId\":0}]}";
         }
+        if (path.Contains("/pfyc/"))                              return "{}";
+
+        if (path.Contains("/lb/"))                                return "{\"entries\":[]}";
+
+        if (path.Contains("/communication/"))                     return "{\"communications\":[]}";
+        if (path.Contains("/mm/") && path.Contains("message/list"))
+            return "{\"messageList\":[],\"messagesAvailable\":0,\"messagesRead\":0,\"promoUpdate\":[]}";
+        if (path.Contains("/news/"))                              return "{}";
+
+        if (path.Contains("/user/friends"))                       return "{\"friends\":[]}";
+
         return "{}";
     }
 
