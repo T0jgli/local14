@@ -233,11 +233,8 @@ internal sealed class WebServer
             return ServeFile("audioDNPList.csv", "text/csv; charset=utf-8");
 
         if (path.Contains("/trusteddevice"))
-        {
-            string dev = req.QueryString["deviceId"] ?? "";
             return ("application/json; charset=utf-8",
-                    "{\"uniqueId\":\"" + dev + "\",\"typeValue\":0,\"trusted\":\"true\"}");
-        }
+                    "{\"changed\":false,\"exists\":true,\"locked\":false,\"trusted\":true}");
 
         // Default JSON endpoints
         if (wantsJson || path.StartsWith("/fut"))
