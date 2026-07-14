@@ -20,7 +20,7 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 - EASFC RS4 server redirect
 - Persistent user settings
 - Persistent account profile (email/country/DOB/opt-ins)
-- POW/EASFC web service
+- POW/EASFC/EASW web service
 - EA CDN recreation
 
 ## SDK

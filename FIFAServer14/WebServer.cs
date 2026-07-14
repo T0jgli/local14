@@ -205,6 +205,9 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8", json);
         }
 
+        if (path.EndsWith("/auth") && (path.Contains("rs4") || path.Contains("/ut")))
+            return ("application/json; charset=utf-8", "{\"sid\":\"" + SessionId + "\"}");
+
         if (path.EndsWith("dimerouting.xml") || path.EndsWith("cfgrouting.xml"))
             return ServeFile("dimerouting.xml", "text/xml; charset=utf-8");
 
@@ -230,7 +233,11 @@ internal sealed class WebServer
             return ServeFile("audioDNPList.csv", "text/csv; charset=utf-8");
 
         if (path.Contains("/trusteddevice"))
-            return ("application/json; charset=utf-8", "[]");
+        {
+            string dev = req.QueryString["deviceId"] ?? "";
+            return ("application/json; charset=utf-8",
+                    "{\"uniqueId\":\"" + dev + "\",\"typeValue\":0,\"trusted\":\"true\"}");
+        }
 
         // Default JSON endpoints
         if (wantsJson || path.StartsWith("/fut"))
