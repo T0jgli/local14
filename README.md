@@ -21,6 +21,7 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 - Persistent user settings
 - Persistent account profile (email/country/DOB/opt-ins)
 - POW/EASFC web service
+- EA CDN recreation
 
 ## SDK
 

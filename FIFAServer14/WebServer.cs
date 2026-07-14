@@ -83,6 +83,32 @@ internal sealed class WebServer
             ctx.Response.ContentType = contentType;
 
             string lp = (req.Url?.AbsolutePath ?? "").ToLowerInvariant();
+
+            int i2014 = lp.IndexOf("/2014/", StringComparison.Ordinal);
+            if (i2014 >= 0)   // serve any real live-content file we have (roster .bin, metadata/fixtures .json, gotw assets)
+            {
+                string rel = (req.Url?.AbsolutePath ?? "").Substring(i2014 + 6).TrimStart('/');
+                string root = Path.GetFullPath(_contentRoot);
+                string file = Path.GetFullPath(Path.Combine(root, rel.Replace('/', Path.DirectorySeparatorChar)));
+                if (file.StartsWith(root, StringComparison.OrdinalIgnoreCase) && File.Exists(file))
+                {
+                    var fbytes = await File.ReadAllBytesAsync(file);
+                    string ct = Path.GetExtension(file).ToLowerInvariant() switch
+                    {
+                        ".json" => "application/json; charset=utf-8",
+                        ".xml"  => "text/xml; charset=utf-8",
+                        ".png"  => "image/png",
+                        _       => "application/octet-stream",
+                    };
+                    ctx.Response.StatusCode = 200;
+                    ctx.Response.ContentType = ct;
+                    ctx.Response.ContentLength64 = fbytes.Length;
+                    await ctx.Response.OutputStream.WriteAsync(fbytes);
+                    _log.LogInformation("      -> static {0} ({1} bytes)", rel, fbytes.Length);
+                    return;
+                }
+            }
+
             if (lp.Contains("/rs4") || lp.StartsWith("/fut") || lp.Contains("accountinfo") || lp.Contains("/ut/"))
             {
                 long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
@@ -149,7 +175,7 @@ internal sealed class WebServer
         {
             long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
 
-            bool returning = Environment.GetEnvironmentVariable("FIFA14_FUT_RETURNING") == "1";
+            bool returning = false;
 
             string persona;
             if (returning)
@@ -163,7 +189,9 @@ internal sealed class WebServer
                     "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
                 persona =
                     "{\"personaId\":" + nucleusId + ",\"personaName\":\"" + BlazePersonaName + "\"," +
-                    "\"returningUser\":true,\"trial\":false,\"userState\":\"\"," +
+                    "\"nucleusPersonaId\":" + nucleusId + ",\"nucleusPersonaDisplayName\":\"" + BlazePersonaName + "\"," +
+                    "\"nucleusPersonaPlatform\":\"pc\"," +
+                    "\"returningUser\":true,\"isReturningUser\":true,\"trial\":false,\"userState\":\"\"," +
                     "\"userClubList\":[" + club + "]}";
             }
             else
@@ -183,6 +211,9 @@ internal sealed class WebServer
         if (path.EndsWith("futboot.xml"))
             return ServeFile("futBoot.xml", "text/xml; charset=utf-8");
 
+        if (path.EndsWith("/rosterupdate") || path.Contains("rosterupdate.xml"))
+            return ServeFile("rosterupdate.xml", "text/xml; charset=utf-8");
+
         if (path.Contains("dimecfg.xml"))
             return ServeFile("dimecfg.xml", "text/xml; charset=utf-8");
 
@@ -197,6 +228,9 @@ internal sealed class WebServer
 
         if (path.Contains("audiodnplist.csv"))
             return ServeFile("audioDNPList.csv", "text/csv; charset=utf-8");
+
+        if (path.Contains("/trusteddevice"))
+            return ("application/json; charset=utf-8", "[]");
 
         // Default JSON endpoints
         if (wantsJson || path.StartsWith("/fut"))

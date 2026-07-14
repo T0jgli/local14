@@ -1,0 +1,93 @@
+{
+	"favouriteteaminfo": {
+		"leagueid": 13,
+		"leaguepos": 4,
+		"teamform": "WWWWW",
+		"informplayers": 0,
+		"outofformplayers": 0
+	},
+
+	"informplayers": {
+		"informplayer": [
+			{
+				"playerid": 155897,
+				"teamid": 111144,
+				"formdiff": 2,
+				"overall": 81
+			},
+			{
+				"playerid": 137494,
+				"teamid": 111144,
+				"formdiff": 3,
+				"overall": 77
+			},
+			{
+				"playerid": 1625,
+				"teamid": 689,
+				"formdiff": 1,
+				"overall": 79
+			}
+		]
+	},
+
+	"informteams": {
+		"informteam": [
+			{
+				"teamid": 697,
+				"leagueid": 39,
+				"leaguepos": 2,
+				"teamrating": 3.0,
+				"informplayers": 3,
+				"outofformplayers": 1,
+				"teamform": "WWWDD"
+			},
+			{
+				"teamid": 111651,
+				"leagueid": 39,
+				"leaguepos": 13,
+				"teamrating": 3.0,
+				"informplayers": 3,
+				"outofformplayers": 0,
+				"teamform": "DLLLD"
+			},
+			{
+				"teamid": 696,
+				"leagueid": 39,
+				"leaguepos": 6,
+				"teamrating": 3.0,
+				"informplayers": 7,
+				"outofformplayers": 0,
+				"teamform": "W"
+			}
+		]
+	},
+
+	"hotwfixtures": {
+		"hotwfixture": [
+			{
+				"fixtureid": 35984,
+				"compid": 83,
+				"hometeamid": 1477,
+				"awayteamid": 982
+			},
+			{
+				"fixtureid": 47195,
+				"compid": 365,
+				"hometeamid": 837,
+				"awayteamid": 306
+			},
+			{
+				"fixtureid": 47201,
+				"compid": 31,
+				"hometeamid": 47,
+				"awayteamid": 45
+			},
+			{
+				"fixtureid": 47196,
+				"compid": 13,
+				"hometeamid": 10,
+				"awayteamid": 5
+			}
+		]
+	}
+}

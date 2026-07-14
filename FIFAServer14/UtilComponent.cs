@@ -106,9 +106,9 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         cfg["POW_MDL_MAX_IMAGESIZE"]           = "1048576";
         cfg["POW_MDL_DELAYNEWSDOWNLOAD"]       = "0";
         string liveContent = $"{_web}/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
-        cfg["LIVE_CONTENT_HOST"]               = $"{CdnBase}/";
+        cfg["LIVE_CONTENT_HOST"]               = $"{liveContent}/";
         cfg["ROSTERUPDATE_URL"]                = $"{liveContent}/rosterupdate";
-        cfg["ROSTER_URL"]                      = $"{CdnBase}/roster";
+        cfg["ROSTER_URL"]                      = $"{liveContent}/roster";
         cfg["EASW/ENABLED"]                    = "1";
         cfg["OSDK_EASW_REQ_URL"]               = $"{_web}/easw/req";
         cfg["OSDK_EASW_AUTH_URL"]              = $"{_web}/easw/auth";
@@ -205,7 +205,7 @@ internal sealed class UtilComponent : UtilComponentBase.Server
         cfg["EVENTS_URL"]              = "fifa/sponsoredevents/events_list.xml";
         cfg["SPONSORED_EVENT_ENABLED"] = "1";
         cfg["SPONSORED_EVENT_URL"]     = "fifa/sponsoredevents/events_list.xml";
-        cfg["ROSTER_UPDATE_ENABLED"] = "1";
+        cfg["ROSTER_UPDATE_ENABLED"] = "0";
         cfg["ROSTER_UPDATE_URL"]     = "fifa/fifalive/rosterupdate.xml";
         cfg["BASE_URL"]         = $"{_web}/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
         cfg["CONTENT_BASE_URL"] = $"{_web}/fifa/fltOnlineAssets/C74DDF38-0B11-49b0-B199-2E2A11D1CC13/2014";
