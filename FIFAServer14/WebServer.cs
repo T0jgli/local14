@@ -1,4 +1,6 @@
+using System.Collections.Specialized;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using Microsoft.Extensions.Logging;
 
@@ -7,9 +9,9 @@ namespace FIFAServer14;
 internal sealed class WebServer
 {
     private readonly ILogger _log;
-    private readonly HttpListener _listener = new();
     private readonly int _port;
     private readonly string _contentRoot;
+    private TcpListener _listener = null!;
 
     public WebServer(int port, ILogger log)
     {
@@ -17,8 +19,6 @@ internal sealed class WebServer
         _log = log;
         _contentRoot = FindContentRoot();
         _log.LogInformation("OSDK web content root: {0}", _contentRoot);
-        // Loopback + a literal IP prefix binds without an admin urlacl reservation.
-        _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
     }
 
     private static string FindContentRoot()
@@ -36,127 +36,218 @@ internal sealed class WebServer
 
     public async Task StartAsync()
     {
-        try
-        {
-            _listener.Start();
-        }
-        catch (HttpListenerException ex)
-        {
-            _log.LogError("WebServer failed to bind :{Port} ({Error}). If access-denied, run once as admin:\n" +
-                          $"  netsh http add urlacl url=http://127.0.0.1:{_port}/ user=Everyone", _port, ex.Message);
-            return;
-        }
+        _listener = new TcpListener(IPAddress.Loopback, _port);
+        try { _listener.Start(); }
+        catch (SocketException ex) { _log.LogError("WebServer failed to bind :{Port} ({Error})", _port, ex.Message); return; }
 
         _log.LogInformation("OSDK web listener up on http://127.0.0.1:{0}/", _port);
 
-        while (_listener.IsListening)
+        while (true)
         {
-            HttpListenerContext ctx;
-            try { ctx = await _listener.GetContextAsync(); }
-            catch (Exception ex) when (ex is HttpListenerException or ObjectDisposedException) { break; }
-            _ = HandleAsync(ctx);
+            TcpClient client;
+            try { client = await _listener.AcceptTcpClientAsync(); }
+            catch (Exception ex) when (ex is SocketException or ObjectDisposedException) { break; }
+            _ = HandleClientAsync(client);
         }
     }
 
-    private async Task HandleAsync(HttpListenerContext ctx)
+    private async Task HandleClientAsync(TcpClient client)
     {
-        var req = ctx.Request;
-        try
+        using (client)
         {
-            string body = "";
-            if (req.HasEntityBody)
+            client.NoDelay = true;
+            using var stream = new BufferedStream(client.GetStream(), 16384);
+            try
             {
-                using var reader = new StreamReader(req.InputStream, req.ContentEncoding ?? Encoding.UTF8);
-                body = await reader.ReadToEndAsync();
-            }
-
-            var sb = new StringBuilder();
-            sb.AppendLine($"[WEB] {req.HttpMethod} {req.RawUrl}");
-            foreach (string h in req.Headers)
-                sb.AppendLine($"        {h}: {req.Headers[h]}");
-            if (body.Length > 0)
-                sb.AppendLine($"      body({body.Length}): {Trim(body, 2048)}");
-            _log.LogInformation(sb.ToString().TrimEnd());
-
-            var (contentType, payloadStr) = Route(req);
-            ctx.Response.StatusCode = 200;
-            ctx.Response.ContentType = contentType;
-
-            string lp = (req.Url?.AbsolutePath ?? "").ToLowerInvariant();
-
-            int i2014 = lp.IndexOf("/2014/", StringComparison.Ordinal);
-            if (i2014 >= 0)   // serve any real live-content file we have (roster .bin, metadata/fixtures .json, gotw assets)
-            {
-                string rel = (req.Url?.AbsolutePath ?? "").Substring(i2014 + 6).TrimStart('/');
-                string root = Path.GetFullPath(_contentRoot);
-                string file = Path.GetFullPath(Path.Combine(root, rel.Replace('/', Path.DirectorySeparatorChar)));
-                if (file.StartsWith(root, StringComparison.OrdinalIgnoreCase) && File.Exists(file))
+                while (true)
                 {
-                    var fbytes = await File.ReadAllBytesAsync(file);
-                    string ct = Path.GetExtension(file).ToLowerInvariant() switch
+                    WebReq req;
+                    try { req = await ReadRequestAsync(stream); }
+                    catch { break; }
+                    if (req is null) break;   // connection closed
+
+                    bool keepAlive = !string.Equals(req.Headers["Connection"], "close", StringComparison.OrdinalIgnoreCase);
+                    byte[] response;
+                    try { response = BuildResponse(req, keepAlive); }
+                    catch (Exception ex)
                     {
-                        ".json" => "application/json; charset=utf-8",
-                        ".xml"  => "text/xml; charset=utf-8",
-                        ".png"  => "image/png",
-                        _       => "application/octet-stream",
-                    };
-                    ctx.Response.StatusCode = 200;
-                    ctx.Response.ContentType = ct;
-                    ctx.Response.ContentLength64 = fbytes.Length;
-                    await ctx.Response.OutputStream.WriteAsync(fbytes);
-                    _log.LogInformation("      -> static {0} ({1} bytes)", rel, fbytes.Length);
-                    return;
+                        _log.LogWarning("WebServer handler error: {0}", ex.Message);
+                        response = BuildBytes("500 Internal Server Error", "text/plain", Array.Empty<byte>(), null, false);
+                        keepAlive = false;
+                    }
+
+                    await stream.WriteAsync(response);
+                    await stream.FlushAsync();
+                    if (!keepAlive) break;
                 }
             }
-
-            if (lp.Contains("/rs4") || lp.StartsWith("/fut") || lp.Contains("accountinfo") || lp.Contains("/ut/"))
-            {
-                long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
-                ctx.Response.Headers["sid"] = SessionId;
-                ctx.Response.Headers["EASW-Session"] = SessionId;
-                ctx.Response.Headers["EASW-Token"] = SessionId;
-                ctx.Response.Headers["EASW-Userid"] = nucleusId.ToString();
-                ctx.Response.Headers["X-UT-SID"] = SessionId;
-                ctx.Response.Headers["X-POW-SID"] = SessionId;
-            }
-
-            if (lp.Contains("/pow/"))
-            {
-                ctx.Response.Headers["Access-Control-Allow-Origin"] = "*";
-                ctx.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS";
-                ctx.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-HTTP-Method-Override";
-                ctx.Response.Headers["X-Pow-Sid"] = PowSid;
-            }
-
-            var payload = Encoding.UTF8.GetBytes(payloadStr);
-
-            if (lp.Contains("/pow/") && payload.Length > 0 &&
-                (req.Headers["Accept-Encoding"] ?? "").Contains("gzip", StringComparison.OrdinalIgnoreCase))
-            {
-                using var ms = new MemoryStream();
-                using (var gz = new System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionLevel.Fastest, leaveOpen: true))
-                    gz.Write(payload, 0, payload.Length);
-                ctx.Response.Headers["X-Unzippedlength"] = payload.Length.ToString();
-                ctx.Response.Headers["Content-Encoding"] = "gzip";
-                payload = ms.ToArray();
-            }
-
-            ctx.Response.ContentLength64 = payload.Length;
-            await ctx.Response.OutputStream.WriteAsync(payload);
-            if (payloadStr.Length > 0)
-                _log.LogInformation("      -> {0} resp({1}): {2}", contentType, payload.Length, Trim(payloadStr, 2048));
-        }
-        catch (Exception ex)
-        {
-            _log.LogWarning("WebServer handler error: {0}", ex.Message);
-        }
-        finally
-        {
-            try { ctx.Response.Close(); } catch { }
+            catch (Exception ex) { _log.LogWarning("WebServer connection error: {0}", ex.Message); }
         }
     }
 
-    private (string, string) Route(HttpListenerRequest req)
+    private static async Task<WebReq> ReadRequestAsync(Stream stream)
+    {
+        var header = new List<byte>(1024);
+        var one = new byte[1];
+        while (true)
+        {
+            int n = await stream.ReadAsync(one.AsMemory(0, 1));
+            if (n == 0) return null;
+            header.Add(one[0]);
+            int c = header.Count;
+            if (c >= 4 && header[c - 1] == 10 && header[c - 2] == 13 && header[c - 3] == 10 && header[c - 4] == 13) break;
+            if (c > 65536) return null;
+        }
+
+        var lines = Encoding.ASCII.GetString(header.ToArray()).Split("\r\n");
+        var parts = lines[0].Split(' ');
+        if (parts.Length < 2) return null;
+
+        var headers = new NameValueCollection(StringComparer.OrdinalIgnoreCase);
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (lines[i].Length == 0) continue;
+            int idx = lines[i].IndexOf(':');
+            if (idx > 0) headers[lines[i][..idx].Trim()] = lines[i][(idx + 1)..].Trim();
+        }
+
+        string body = "";
+        if (int.TryParse(headers["Content-Length"], out int len) && len > 0)
+        {
+            var buf = new byte[len];
+            int got = 0;
+            while (got < len)
+            {
+                int n = await stream.ReadAsync(buf.AsMemory(got, len - got));
+                if (n == 0) break;
+                got += n;
+            }
+            body = Encoding.UTF8.GetString(buf, 0, got);
+        }
+
+        return new WebReq(parts[0], parts[1], headers, body);
+    }
+
+    private byte[] BuildResponse(WebReq req, bool keepAlive)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"[WEB] {req.HttpMethod} {req.RawUrl}");
+        foreach (string h in req.Headers)
+            sb.AppendLine($"        {h}: {req.Headers[h]}");
+        if (req.Body.Length > 0)
+            sb.AppendLine($"      body({req.Body.Length}): {Trim(req.Body, 2048)}");
+        _log.LogInformation(sb.ToString().TrimEnd());
+
+        string lp = (req.Url?.AbsolutePath ?? "").ToLowerInvariant();
+        var extra = new NameValueCollection();
+
+        int i2014 = lp.IndexOf("/2014/", StringComparison.Ordinal);
+        if (i2014 >= 0)   // serve any real live-content file we have (roster .bin, metadata/fixtures .json, gotw assets)
+        {
+            string rel = (req.Url?.AbsolutePath ?? "").Substring(i2014 + 6).TrimStart('/');
+            string root = Path.GetFullPath(_contentRoot);
+            string file = Path.GetFullPath(Path.Combine(root, rel.Replace('/', Path.DirectorySeparatorChar)));
+            if (file.StartsWith(root, StringComparison.OrdinalIgnoreCase) && File.Exists(file))
+            {
+                var fbytes = File.ReadAllBytes(file);
+                string ct = Path.GetExtension(file).ToLowerInvariant() switch
+                {
+                    ".json" => "application/json; charset=utf-8",
+                    ".xml"  => "text/xml; charset=utf-8",
+                    ".png"  => "image/png",
+                    _       => "application/octet-stream",
+                };
+                _log.LogInformation("      -> static {0} ({1} bytes)", rel, fbytes.Length);
+                return BuildBytes("200 OK", ct, fbytes, extra, keepAlive);
+            }
+        }
+
+        var (contentType, payloadStr) = Route(req);
+
+        if (lp.Contains("/rs4") || lp.StartsWith("/fut") || lp.Contains("accountinfo") || lp.Contains("/ut/"))
+        {
+            long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
+            extra["sid"] = SessionId;
+            extra["EASW-Session"] = SessionId;
+            extra["EASW-Token"] = SessionId;
+            extra["EASW-Userid"] = nucleusId.ToString();
+            extra["X-UT-SID"] = SessionId;
+            extra["X-POW-SID"] = SessionId;
+        }
+
+        if (lp.Contains("/pow/"))
+        {
+            extra["Access-Control-Allow-Origin"] = "*";
+            extra["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS";
+            extra["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-HTTP-Method-Override";
+            extra["X-Pow-Sid"] = PowSid;
+        }
+
+        var payload = Encoding.UTF8.GetBytes(payloadStr);
+
+        if (lp.Contains("/pow/") && payload.Length > 0 &&
+            (req.Headers["Accept-Encoding"] ?? "").Contains("gzip", StringComparison.OrdinalIgnoreCase))
+        {
+            using var ms = new MemoryStream();
+            using (var gz = new System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionLevel.Fastest, leaveOpen: true))
+                gz.Write(payload, 0, payload.Length);
+            extra["X-Unzippedlength"] = payload.Length.ToString();
+            extra["Content-Encoding"] = "gzip";
+            payload = ms.ToArray();
+        }
+
+        if (payloadStr.Length > 0)
+            _log.LogInformation("      -> {0} resp({1}): {2}", contentType, payload.Length, Trim(payloadStr, 2048));
+
+        return BuildBytes("200 OK", contentType, payload, extra, keepAlive);
+    }
+
+    private static byte[] BuildBytes(string status, string contentType, byte[] body, NameValueCollection extra, bool keepAlive)
+    {
+        var sb = new StringBuilder();
+        sb.Append("HTTP/1.1 ").Append(status).Append("\r\n");
+        sb.Append("Date: ").Append(DateTime.UtcNow.ToString("r")).Append("\r\n");
+        sb.Append("Content-Type: ").Append(contentType).Append("\r\n");
+        sb.Append("Content-Length: ").Append(body.Length).Append("\r\n");
+        if (extra != null)
+            foreach (string k in extra.Keys)
+                if (k != null) sb.Append(k).Append(": ").Append(extra[k]).Append("\r\n");
+        sb.Append("Connection: ").Append(keepAlive ? "keep-alive" : "close").Append("\r\n\r\n");
+        var head = Encoding.ASCII.GetBytes(sb.ToString());
+        var result = new byte[head.Length + body.Length];
+        Buffer.BlockCopy(head, 0, result, 0, head.Length);
+        Buffer.BlockCopy(body, 0, result, head.Length, body.Length);
+        return result;
+    }
+
+    // Lightweight stand-in for HttpListenerRequest so the routing code below is unchanged.
+    private sealed class WebReq
+    {
+        public string HttpMethod { get; }
+        public string RawUrl { get; }
+        public Uri Url { get; }
+        public NameValueCollection Headers { get; }
+        public NameValueCollection QueryString { get; }
+        public string Body { get; }
+
+        public WebReq(string method, string rawUrl, NameValueCollection headers, string body)
+        {
+            HttpMethod = method;
+            RawUrl = rawUrl;
+            Headers = headers;
+            Body = body ?? "";
+            Url = new Uri("http://localhost" + (rawUrl.StartsWith('/') ? rawUrl : "/" + rawUrl), UriKind.Absolute);
+            QueryString = new NameValueCollection(StringComparer.OrdinalIgnoreCase);
+            foreach (var part in Url.Query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries))
+            {
+                int eq = part.IndexOf('=');
+                if (eq >= 0) QueryString[Uri.UnescapeDataString(part[..eq])] = Uri.UnescapeDataString(part[(eq + 1)..]);
+                else QueryString[Uri.UnescapeDataString(part)] = "";
+            }
+        }
+    }
+
+    private (string, string) Route(WebReq req)
     {
         string path = (req.Url?.AbsolutePath ?? "").ToLowerInvariant();
         bool wantsJson = (req.Headers["Accept"] ?? "").Contains("json", StringComparison.OrdinalIgnoreCase);
@@ -174,32 +265,25 @@ internal sealed class WebServer
         if (path.EndsWith("/accountinfo"))
         {
             long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
+            var prof = FutProfileStore.Get();
 
-            bool returning = false;
-
-            string persona;
-            if (returning)
+            string ret = prof.IsReturningUser ? "true" : "false";
+            string clubList = "";
+            if (prof.Club.Established)
             {
                 const string Sku = "FFA14PCC";
-                string club =
-                    "{\"year\":2014,\"teamId\":1,\"teamName\":\"FC Server\",\"clubName\":\"FC Server\"," +
-                    "\"clubAbbr\":\"SRV\",\"clubId\":1,\"platform\":\"pc\",\"assetId\":1,\"badgeId\":1," +
-                    "\"seasonId\":1,\"status\":1,\"established\":1,\"divisionOnline\":1," +
-                    "\"lastAccessTime\":1400000000," +
+                clubList =
+                    "{\"year\":2014,\"teamId\":" + prof.Club.TeamId +
+                    ",\"teamName\":\"" + Esc(prof.Club.Name) + "\",\"clubName\":\"" + Esc(prof.Club.Name) + "\"," +
+                    "\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\",\"clubId\":" + prof.Club.TeamId +
+                    ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
+                    ",\"seasonId\":1,\"status\":1,\"established\":1,\"divisionOnline\":1,\"lastAccessTime\":1400000000," +
                     "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
-                persona =
-                    "{\"personaId\":" + nucleusId + ",\"personaName\":\"" + BlazePersonaName + "\"," +
-                    "\"nucleusPersonaId\":" + nucleusId + ",\"nucleusPersonaDisplayName\":\"" + BlazePersonaName + "\"," +
-                    "\"nucleusPersonaPlatform\":\"pc\"," +
-                    "\"returningUser\":true,\"isReturningUser\":true,\"trial\":false,\"userState\":\"\"," +
-                    "\"userClubList\":[" + club + "]}";
             }
-            else
-            {
-                persona =
-                    "{\"personaId\":" + nucleusId + ",\"personaName\":\"" + BlazePersonaName + "\"," +
-                    "\"returningUser\":false,\"trial\":false,\"userState\":\"\",\"userClubList\":[]}";
-            }
+            string persona =
+                "{\"personaId\":" + nucleusId + ",\"personaName\":\"" + BlazePersonaName + "\"," +
+                "\"returningUser\":" + ret + ",\"isReturningUser\":" + ret + ",\"trial\":false,\"userState\":\"\"," +
+                "\"userClubList\":[" + clubList + "]}";
             string json =
                 "{\"userAccountInfo\":{\"personas\":[" + persona + "],\"userPersonaInfos\":[]}}";
             return ("application/json; charset=utf-8", json);
@@ -236,6 +320,32 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8",
                     "{\"changed\":false,\"exists\":true,\"locked\":false,\"trusted\":true}");
 
+        if (path.EndsWith("/settings"))
+            return ("application/json; charset=utf-8",
+                    "{\"configs\":[" +
+                    "{\"value\":1,\"type\":\"tokenRedemptionEnabled\"}," +
+                    "{\"value\":1,\"type\":\"fifaPointsCancelTransactionFix\"}," +
+                    "{\"value\":5,\"type\":\"clubCreateThreshold\"}," +
+                    "{\"value\":90,\"type\":\"getOperationTimeoutSec\"}," +
+                    "{\"value\":100,\"type\":\"maximumTradePileSize\"}]}");
+
+        if (path.EndsWith("/squad/list"))
+            return ("application/json; charset=utf-8",
+                    "{\"squad\":[{\"id\":1,\"squadName\":\"FUT14 FC\",\"formation\":\"f442\"," +
+                    "\"chemistry\":0,\"rating\":0}]}");
+
+        // FUT user profile (/fut/rs4/ut/game/fifa14/user, .../userdata). Data-driven from the
+        // profile: isReturningUser=false => NEW player (client state STATE_WELCOME, not
+        // WELCOMEBACK — field name confirmed in fifa14.exe @ 0x1019992c). The parser hashes
+        // field names and skips unknown ones, so extra fields are harmless.
+        if (path.EndsWith("/user") || path.EndsWith("/userdata"))
+        {
+            var prof = FutProfileStore.Get();
+            return ("application/json; charset=utf-8",
+                    "{\"isReturningUser\":" + (prof.IsReturningUser ? "true" : "false") +
+                    ",\"established\":" + (prof.Club.Established ? "true" : "false") + "}");
+        }
+
         // Default JSON endpoints
         if (wantsJson || path.StartsWith("/fut"))
             return ("application/json; charset=utf-8", "{}");
@@ -257,7 +367,7 @@ internal sealed class WebServer
         }
     }
 
-    private string PowBody(string path, HttpListenerRequest req)
+    private string PowBody(string path, WebReq req)
     {
         string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss") + "Z";
 
@@ -271,7 +381,7 @@ internal sealed class WebServer
                    "\"challengesDone\":0,\"xpCapCurrLevel\":0,\"xpCapNextLevel\":100," +
                    "\"funds\":[],\"notifications\":[],\"tier_gp\":\"businessunit\",\"tier_tp\":\"fifa\"}";
 
-        if (path.Contains("/bank/user/account"))                  return "{\"currency\":\"COINS\",\"balance\":0}";
+        if (path.Contains("/bank/user/account"))                  return "{\"currency\":\"COINS\",\"balance\":" + FutProfileStore.Get().Coins + "}";
         if (path.Contains("/bank/currency") && path.Contains("cap/info")) return "{\"currency\":\"pow_funds\",\"cap\":1000000}";
         if (path.Contains("/bank/"))
             return "{\"currencies\":[{\"currency\":\"pow_funds\",\"funds\":0," +
@@ -326,4 +436,7 @@ internal sealed class WebServer
     private static long ParseLong(string s, long dflt) => long.TryParse(s, out var v) ? v : dflt;
 
     private static string Trim(string s, int max) => s.Length <= max ? s : s[..max] + "...<truncated>";
+
+    private static string Esc(string s) => (s ?? "")
+        .Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
 }
