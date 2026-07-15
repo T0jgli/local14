@@ -58,16 +58,17 @@ internal sealed class UtilComponent : UtilComponentBase.Server
     public override Task<PingResponse> PingAsync(EmptyMessage request, BlazeRpcContext context)
         => Task.FromResult(new PingResponse { ServerTime = Now() });
 
+    private static readonly Dictionary<string, string> UserSettings = new() { ["FirstTimeFlag"] = "0" };
+
     public override Task<UserSettingsLoadAllResponse> UserSettingsLoadAllAsync(UserSettingsLoadAllRequest request, BlazeRpcContext context)
-        => Task.FromResult(new UserSettingsLoadAllResponse { DataMap = new Dictionary<string, string>(UserSettingsStore.All) });
+        => Task.FromResult(new UserSettingsLoadAllResponse { DataMap = new Dictionary<string, string>(UserSettings) });
 
     public override Task<UserSettingsResponse> UserSettingsLoadAsync(UserSettingsLoadRequest request, BlazeRpcContext context)
-        => Task.FromResult(new UserSettingsResponse { Key = request.Key, Data = UserSettingsStore.Get(request.Key) });
+        => Task.FromResult(new UserSettingsResponse { Key = request.Key, Data = UserSettings.TryGetValue(request.Key ?? "", out var v) ? v : "" });
 
     public override Task<EmptyMessage> UserSettingsSaveAsync(UserSettingsSaveRequest request, BlazeRpcContext context)
     {
-        _log.LogInformation("userSettingsSave key='{0}' data='{1}'", request.Key, request.Data);
-        UserSettingsStore.Set(request.Key, request.Data);
+        _log.LogInformation("userSettingsSave key='{0}' data='{1}' (ignored)", request.Key, request.Data);
         return Task.FromResult(new EmptyMessage());
     }
 
