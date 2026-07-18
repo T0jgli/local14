@@ -1,0 +1,2617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+  <file original="global" source-language="ENG_US" datatype="utf-8" date="2014-04-02T05:59:33Z">
+    <header />
+    <body>
+      <trans-unit resname="FUT_STORE_CAT_BRONZE_DESC">
+        <source>Great value for increasing club depth and building better chemistry.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_BRONZE_NAME">
+        <source>BRONZE PACKS</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_GOLD_DESC">
+        <source>The best pack to find the best players for building your ultimate squad.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_GOLD_NAME">
+        <source>GOLD PACKS</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_MYPACKS_DESC">
+        <source>This is where you can claim any packs that you've earned but not yet opened.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_MYPACKS_NAME">
+        <source>MY PACKS</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_POINTS_DESC">
+        <source>Acquire FIFA Points to accelerate your team building to buy packs in the store or on the web.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_POINTS_NAME">
+        <source>FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_SEASONTICKET_DESC">
+        <source>Get access to 24 Gold Premium Packs as well as 20% off future FIFA Points purchases when you subscribe to EA SPORTS Season Ticket.
+Conditions and restrictions apply.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_SEASONTICKET_NAME">
+        <source>EA SPORTS SEASON TICKET</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_SILVER_DESC">
+        <source>The best value for building squads for mid-tiered events.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_SILVER_NAME">
+        <source>SILVER PACKS</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_SPECIAL_DESC">
+        <source>Special Packs contain different contents to the regular pack offerings.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_SPECIAL_NAME">
+        <source>SPECIAL PACKS</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_TOKEN_DESC">
+        <source>Replenish your account to have more opportunities to win auctions.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_TOKEN_NAME">
+        <source>BID TOKENS</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_WORLDCUP_DESC">
+        <source>Packs to build your 2014 FIFA World Cup™ Squad.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_CAT_WORLDCUP_NAME">
+        <source>2014 FIFA World Cup™ Packs</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_1_DESC">
+        <source>Welcome back to FIFA Ultimate Team! This pack includes 12 players, 4 each of Bronze, Silver, and Gold, with at least 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_1_DESC_MOBILE">
+        <source>12 Players, Mixed Grades</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_1_NAME">
+        <source>ALL PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_1_NAME_MOBILE">
+        <source>ALL PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_100_DESC">
+        <source>Great value for increasing club depth. A mix of 12 items, including players, club items and consumables, at least 10 Bronze with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_100_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_100_NAME">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_100_NAME_MOBILE">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_101_DESC">
+        <source>Great Value for increasing club depth and building better chemistry.\nIncludes 12 items. Mostly Bronze &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_101_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_101_NAME">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_101_NAME_MOBILE">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_102_DESC">
+        <source>Double the size of a standard Bronze Pack with an extra Rare! A mix of 24 items, including players, club items and consumables, at least 20 Bronze with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_102_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_102_NAME">
+        <source>JUMBO BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_102_NAME_MOBILE">
+        <source>JUMBO BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_103_DESC">
+        <source>Triple the Rares of a standard Bronze Pack. A mix of 12 items, including players, club items and consumables, at least 10 Bronze with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_103_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_103_NAME">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_103_NAME_MOBILE">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_104_DESC">
+        <source>For those looking for the highest quality Bronze items, this is the clear choice.\nIncludes 12 items. Mostly Bronze &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_104_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_104_NAME">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_104_NAME_MOBILE">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_105_DESC">
+        <source>Double the size of a Premium Bronze Pack with an extra Rare! A mix of 24 items, including players, club items and consumables, at least 20 Bronze with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_105_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_105_NAME">
+        <source>JUMBO PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_105_NAME_MOBILE">
+        <source>PREMIUM BRONZE JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_106_DESC">
+        <source>More high quality items and double the size of a Premium Bronze Pack.\nIncludes 24 items. Mostly Bronze &amp; 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_106_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_106_NAME">
+        <source>PREMIUM BRONZE JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_106_NAME_MOBILE">
+        <source>PREMIUM BRONZE JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_20_DESC">
+        <source>Get access to 24 Gold Premium Packs as well as 20% off future FIFA Points purchases when you subscribe to EA SPORTS Season Ticket.
+Conditions and restrictions apply.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_20_NAME">
+        <source>EA SPORTS SEASON TICKET</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_20_NAME_MOBILE">
+        <source>EA SPORTS SEASON TICKET</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_200_DESC">
+        <source>Great value for building mid-tiered squads. A mix of 12 items, including players and consumables, at least 10 Silver with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_200_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_200_NAME">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_200_NAME_MOBILE">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_201_DESC">
+        <source>The best value for maintaining and building squads for mid-tiered events.\nIncludes 12 items. Mostly Silver &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_201_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_201_NAME">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_201_NAME_MOBILE">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_202_DESC">
+        <source>Double the size of a standard Silver Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_202_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_202_NAME">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_202_NAME_MOBILE">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_203_DESC">
+        <source>Triple the Rares of a standard Silver Pack! A mix of 12 items, including players and consumables, at least 10 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_203_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_203_NAME">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_203_NAME_MOBILE">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_204_DESC">
+        <source>Triple the Rares of a standard Silver Pack! A mix of 12 items, including players and consumables, at least 10 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_204_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_204_NAME">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_204_NAME_MOBILE">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_205_DESC">
+        <source>Double the size of a Premium Silver Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Silver with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_205_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_205_NAME">
+        <source>JUMBO PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_205_NAME_MOBILE">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_206_DESC">
+        <source>Double the size of a Premium Silver Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Silver with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_206_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_206_NAME">
+        <source>JUMBO PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_206_NAME_MOBILE">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_207_DESC">
+        <source>Better value and double the size of a standard Silver Pack.\nIncludes 24 items. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_207_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_207_NAME">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_207_NAME_MOBILE">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_208_DESC">
+        <source>For those looking for the highest quality Silver items, this is the clear choice.\nIncludes 12 items. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_208_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_208_NAME">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_208_NAME_MOBILE">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_209_DESC">
+        <source>More high quality items and double the size of a Premium Silver Pack.\nIncludes 24 items. Mostly Silver &amp; 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_209_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_209_NAME">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_209_NAME_MOBILE">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_300_DESC">
+        <source>Great value for finding top-rated players. A mix of 12 items, including players and consumables, at least 10 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_300_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_300_NAME">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_300_NAME_MOBILE">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_301_DESC">
+        <source>The best pack to find the best players for building your number one squad.\nIncludes 12 items. Mostly Gold &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_301_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_301_NAME">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_301_NAME_MOBILE">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_302_DESC">
+        <source>Double the size of a standard Gold Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_302_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_302_NAME">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_302_NAME_MOBILE">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_303_DESC">
+        <source>Double the size of a standard Gold Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_303_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_303_NAME">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_303_NAME_MOBILE">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_304_DESC">
+        <source>Triple the Rares of a standard Gold Pack! A mix of 12 items, including players and consumables, at least 10 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_304_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_304_NAME">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_304_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_305_DESC">
+        <source>Triple the Rares of a standard Gold Pack! A mix of 12 items, including players and consumables, at least 10 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_305_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_305_NAME">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_305_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_306_DESC">
+        <source>Double the size of a Premium Gold Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Gold with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_306_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_306_NAME">
+        <source>JUMBO PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_306_NAME_MOBILE">
+        <source>PREMIUM GOLD JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_307_DESC">
+        <source>The best pack to find the best players for building your number one squad.\nIncludes 12 items. Mostly Gold &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_307_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_307_NAME">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_307_NAME_MOBILE">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_308_DESC">
+        <source>Better value and double the size of a standard Gold Pack.\nIncludes 24 items. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_308_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_308_NAME">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_308_NAME_MOBILE">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_309_DESC">
+        <source>The best pack for finding those elite players to fill out your best squad.\nIncludes 12 items. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_309_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_309_NAME">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_309_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_310_DESC">
+        <source>More high quality items and double the size of a Premium Gold Pack.\nIncludes 24 items. Mostly Gold &amp; 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_310_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_310_NAME">
+        <source>PREMIUM GOLD JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_310_NAME_MOBILE">
+        <source>PREMIUM GOLD JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3100_DESC">
+        <source>Great value for increasing club depth. A mix of 12 items, including players, club items and consumables, at least 10 Bronze with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3100_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3100_NAME">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3100_NAME_MOBILE">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3101_DESC">
+        <source>Great Value for increasing club depth and building better chemistry.\nIncludes 12 items. Mostly Bronze &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3101_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3101_NAME">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3101_NAME_MOBILE">
+        <source>BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3102_DESC">
+        <source>Double the size of a standard Bronze Pack with an extra Rare! A mix of 24 items, including players, club items and consumables, at least 20 Bronze with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3102_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3102_NAME">
+        <source>JUMBO BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3102_NAME_MOBILE">
+        <source>JUMBO BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3103_DESC">
+        <source>Triple the Rares of a standard Bronze Pack. A mix of 12 items, including players, club items and consumables, at least 10 Bronze with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3103_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3103_NAME">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3103_NAME_MOBILE">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3104_DESC">
+        <source>For those looking for the highest quality Bronze items, this is the clear choice.\nIncludes 12 items. Mostly Bronze &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3104_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3104_NAME">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3104_NAME_MOBILE">
+        <source>PREMIUM BRONZE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3105_DESC">
+        <source>Double the size of a Premium Bronze Pack with an extra Rare! A mix of 24 items, including players, club items and consumables, at least 20 Bronze with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3105_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3105_NAME">
+        <source>PREMIUM BRONZE JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3105_NAME_MOBILE">
+        <source>PREMIUM BRONZE JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3106_DESC">
+        <source>More high quality items and double the size of a Premium Bronze Pack.\nIncludes 24 items. Mostly Bronze &amp; 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3106_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3106_NAME">
+        <source>PREMIUM BRONZE JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3106_NAME_MOBILE">
+        <source>PREMIUM BRONZE JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3200_DESC">
+        <source>Great value for building mid-tiered squads. A mix of 12 items, including players and consumables, at least 10 Silver with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3200_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3200_NAME">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3200_NAME_MOBILE">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3201_DESC">
+        <source>The best value for maintaining and building squads for mid-tiered events.\nIncludes 12 items. Mostly Silver &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3201_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3201_NAME">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3201_NAME_MOBILE">
+        <source>SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3202_DESC">
+        <source>Double the size of a standard Silver Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3202_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3202_NAME">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3202_NAME_MOBILE">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3203_DESC">
+        <source>Triple the Rares of a standard Silver Pack! A mix of 12 items, including players and consumables, at least 10 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3203_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3203_NAME">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3203_NAME_MOBILE">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3204_DESC">
+        <source>For those looking for the highest quality Silver items, this is the clear choice.\nIncludes 12 items. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3204_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3204_NAME">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3204_NAME_MOBILE">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3205_DESC">
+        <source>Double the size of a Premium Silver Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Silver with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3205_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3205_NAME">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3205_NAME_MOBILE">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3206_DESC">
+        <source>More high quality items and double the size of a Premium Silver Pack.\nIncludes 24 items. Mostly Silver &amp; 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3206_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3206_NAME">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3206_NAME_MOBILE">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3207_DESC">
+        <source>Better value and double the size of a standard Silver Pack.\nIncludes 24 items. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3207_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3207_NAME">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3207_NAME_MOBILE">
+        <source>JUMBO SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3208_DESC">
+        <source>For those looking for the highest quality Silver items, this is the clear choice.\nIncludes 12 items. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3208_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3208_NAME">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3208_NAME_MOBILE">
+        <source>PREMIUM SILVER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3209_DESC">
+        <source>More high quality items and double the size of a Premium Silver Pack.\nIncludes 24 items. Mostly Silver &amp; 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3209_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3209_NAME">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3209_NAME_MOBILE">
+        <source>PREMIUM SILVER JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3300_DESC">
+        <source>Great value for finding top-rated players. A mix of 12 items, including players and consumables, at least 10 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3300_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3300_NAME">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3300_NAME_MOBILE">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3301_DESC">
+        <source>The best pack to find the best players for building your number one squad.\nIncludes 12 items. Mostly Gold &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3301_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3301_NAME">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3301_NAME_MOBILE">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3302_DESC">
+        <source>Double the size of a standard Gold Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3302_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3302_NAME">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3302_NAME_MOBILE">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3303_DESC">
+        <source>Better value and double the size of a standard Gold Pack.\nIncludes 24 items. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3303_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3303_NAME">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3303_NAME_MOBILE">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3304_DESC">
+        <source>Triple the Rares of a standard Gold Pack! A mix of 12 items, including players and consumables, at least 10 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3304_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3304_NAME">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3304_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3305_DESC">
+        <source>The best pack for finding those elite players to fill out your best squad.\nIncludes 12 items. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3305_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3305_NAME">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3305_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3306_DESC">
+        <source>Double the size of a Premium Gold Pack with an extra Rare! A mix of 24 items, including players and consumables, at least 20 Gold with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3306_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3306_NAME">
+        <source>PREMIUM GOLD JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3306_NAME_MOBILE">
+        <source>PREMIUM GOLD JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3307_DESC">
+        <source>The best pack to find the best players for building your number one squad.\nIncludes 12 items. Mostly Gold &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3307_DESC_MOBILE">
+        <source>12 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3307_NAME">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3307_NAME_MOBILE">
+        <source>GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3308_DESC">
+        <source>Better value and double the size of a standard Gold Pack.\nIncludes 24 items. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3308_DESC_MOBILE">
+        <source>24 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3308_NAME">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3308_NAME_MOBILE">
+        <source>JUMBO GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3309_DESC">
+        <source>The best pack for finding those elite players to fill out your best squad.\nIncludes 12 items. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3309_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3309_NAME">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3309_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3310_DESC">
+        <source>More high quality items and double the size of a Premium Gold Pack.\nIncludes 24 items. Mostly Gold &amp; 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3310_DESC_MOBILE">
+        <source>24 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3310_NAME">
+        <source>PREMIUM GOLD JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3310_NAME_MOBILE">
+        <source>PREMIUM GOLD JUMBO</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3400_DESC">
+        <source>Great value for maintaining your squads. Includes 12 consumables, at least 8 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3400_DESC_MOBILE">
+        <source>12 Consumables, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3400_NAME">
+        <source>CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3400_NAME_MOBILE">
+        <source>CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3401_DESC">
+        <source>Your one-time chance to upgrade to a Silver team! Includes 12 common Silver items, with 11 players and 1 manager.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3401_DESC_MOBILE">
+        <source>11 Silver Players, 1 Manager</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3401_NAME">
+        <source>SILVER UPGRADE</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3401_NAME_MOBILE">
+        <source>SILVER UPGRADE</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3402_DESC">
+        <source>The most unique consumables, all in a single pack! Includes 12 consumables, all Gold, all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3402_DESC_MOBILE">
+        <source>12 Rare Gold Consumables</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3402_NAME">
+        <source>RARE CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3402_NAME_MOBILE">
+        <source>RARE CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3403_DESC">
+        <source>The most unique Gold items, all in a single pack! A mix of 12 items, including players and consumables, at least 10 Gold and all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3403_DESC_MOBILE">
+        <source>12 Rare Gold Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3403_NAME">
+        <source>RARE GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3403_NAME_MOBILE">
+        <source>RARE GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3404_DESC">
+        <source>The BIGGEST pack yet with a whopping 30, yes THIRTY, items! A mix of players and consumables, at least 26 Gold with 18 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3404_DESC_MOBILE">
+        <source>30 Items, 18 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3404_NAME">
+        <source>MEGA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3404_NAME_MOBILE">
+        <source>MEGA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3405_DESC">
+        <source>The most unique top-rated players, all in a single pack! Includes 12 items, all players, all Gold, all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3405_DESC_MOBILE">
+        <source>12 Rare Gold Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3405_NAME">
+        <source>RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3405_NAME_MOBILE">
+        <source>RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3406_DESC">
+        <source>The most unique top-rated players, all in a single pack! Includes 24 items, all players, all Gold, all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3406_DESC_MOBILE">
+        <source>24 Rare Gold Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3406_NAME">
+        <source>JUMBO RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3406_NAME_MOBILE">
+        <source>JUMBO RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3407_DESC">
+        <source>Your one-time chance to upgrade to a Gold team! Includes 12 common Gold items, with 11 players and 1 manager.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3407_DESC_MOBILE">
+        <source>11 Gold Players, 1 Manager</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3407_NAME">
+        <source>GOLD UPGRADE</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3407_NAME_MOBILE">
+        <source>GOLD UPGRADE</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3408_DESC">
+        <source>Consumables only, your best chance of getting that rare formation or training item.\nIncludes 12 consumables, all gold, all rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3408_DESC_MOBILE">
+        <source>12 Rare Gold Consumables</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3408_NAME">
+        <source>RARE CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3408_NAME_MOBILE">
+        <source>RARE CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3409_DESC">
+        <source>The best pack just got better!\nIncludes 12 items, mostly gold, all rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3409_DESC_MOBILE">
+        <source>12 Rare Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3409_NAME">
+        <source>RARE GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3409_NAME_MOBILE">
+        <source>RARE GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3410_DESC">
+        <source>The biggest pack yet!\n30, yes, THIRTY items, mostly gold, 18 rare items.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3410_DESC_MOBILE">
+        <source>30 Items, 18 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3410_NAME">
+        <source>MEGA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3410_NAME_MOBILE">
+        <source>MEGA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3411_DESC">
+        <source>The best of the best!\n12 players, all gold, all rare. It doesn't get any better than that.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3411_DESC_MOBILE">
+        <source>12 Rare Gold Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3411_NAME">
+        <source>RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3411_NAME_MOBILE">
+        <source>RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3500_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3500_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3500_NAME">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3500_NAME_MOBILE">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3501_DESC">
+        <source>Players only, perfect for building multiple squads.\nIncludes 12 players. Mostly Gold &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3501_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3501_NAME">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3501_NAME_MOBILE">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3502_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3502_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3502_NAME">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3502_NAME_MOBILE">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3503_DESC">
+        <source>Players only, better chance of getting rare or higher quality players.\nIncludes 12 players. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3503_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3503_NAME">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3503_NAME_MOBILE">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3504_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Silver with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3504_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3504_NAME">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3504_NAME_MOBILE">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3505_DESC">
+        <source>Players only, perfect for building multiple squads.\nIncludes 12 players. Mostly Silver &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3505_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3505_NAME">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3505_NAME_MOBILE">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3506_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3506_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3506_NAME">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3506_NAME_MOBILE">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3507_DESC">
+        <source>Players only, better chance of getting rare or higher quality players.\nIncludes 12 players. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3507_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3507_NAME">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3507_NAME_MOBILE">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3508_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Bronze with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3508_DESC_MOBILE">
+        <source>24 Rare Gold Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3508_NAME">
+        <source>JUMBO RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3508_NAME_MOBILE">
+        <source>JUMBO RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3509_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Bronze with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3509_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3509_NAME">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3509_NAME_MOBILE">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3510_DESC">
+        <source>Players only, better chance of getting rare or higher quality players.\nIncludes 12 players. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3510_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3510_NAME">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3510_NAME_MOBILE">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3511_DESC">
+        <source>Players only, perfect for building multiple squads.\nIncludes 12 players. Mostly Silver &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3511_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3511_NAME">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3511_NAME_MOBILE">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3512_DESC">
+        <source>Players only, better chance of getting rare or higher quality players.\nIncludes 12 players. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3512_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3512_NAME">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3512_NAME_MOBILE">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3800_DESC">
+        <source>Smaller and cheaper than a standard Bronze Pack, and going fast! A mix of 4 items, all Bronze with at least 1 player.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3800_DESC_MOBILE">
+        <source>4 Bronze Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3800_NAME">
+        <source> BRONZE GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3800_NAME_MOBILE">
+        <source> BRONZE GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3801_DESC">
+        <source>Smaller and cheaper than a standard Silver Pack, and going fast! A mix of 4 items, all Silver with at least 1 player.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3801_DESC_MOBILE">
+        <source>4 Silver Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3801_NAME">
+        <source> SILVER GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3801_NAME_MOBILE">
+        <source> SILVER GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3802_DESC">
+        <source>Smaller and cheaper than a standard Gold Pack, and going fast! A mix of 4 items, all Gold with at least 1 player.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3802_DESC_MOBILE">
+        <source>4 Gold Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3802_NAME">
+        <source> GOLD GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3802_NAME_MOBILE">
+        <source> GOLD GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3803_DESC">
+        <source>Maintain your squads for a rock bottom price. Includes 4 Bronze contracts.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3803_DESC_MOBILE">
+        <source>Includes 4 Bronze Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3803_NAME">
+        <source>BRONZE CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3803_NAME_MOBILE">
+        <source>BRONZE CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3804_DESC">
+        <source>Maintain your squads for a rock bottom price. Includes 4 Silver contracts.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3804_DESC_MOBILE">
+        <source>Includes 4 Silver Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3804_NAME">
+        <source>SILVER CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3804_NAME_MOBILE">
+        <source>SILVER CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3805_DESC">
+        <source>Maintain your top-rated squad for a rock bottom price. Includes 4 Gold contracts.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3805_DESC_MOBILE">
+        <source>Includes 4 Gold Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3805_NAME">
+        <source>GOLD CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3805_NAME_MOBILE">
+        <source>GOLD CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3806_DESC">
+        <source>Maintain your squads for a rock bottom price. Includes 4 contracts of mixed quality.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3806_DESC_MOBILE">
+        <source>Includes 4 Mixed Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3806_NAME">
+        <source>MIXED CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3806_NAME_MOBILE">
+        <source>MIXED CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3900_DESC">
+        <source>A Gold Pack with a bonus item! A mix of 13 items, including players and consumables, at least 11 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3900_DESC_MOBILE">
+        <source>13 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3900_NAME">
+        <source>GOLD PACK 13</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3900_NAME_MOBILE">
+        <source>GOLD PACK 13</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3901_DESC">
+        <source>A Premium Gold Pack with a bonus item! A mix of 13 items, including players and consumables, at least 11 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3901_DESC_MOBILE">
+        <source>13 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3901_NAME">
+        <source>PREMIUM GOLD PACK 13</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3901_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK 13</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3902_DESC">
+        <source>A Jumbo Gold Pack with 2 bonus items! A mix of 26 items, including players and consumables, at least 20 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3902_DESC_MOBILE">
+        <source>26 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3902_NAME">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3902_NAME_MOBILE">
+        <source>JUMBO GOLD PACK 26</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3903_DESC">
+        <source>A Premium Jumbo Gold Pack with 2 bonus items! A mix of 26 items, including players and consumables, at least 20 Gold with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3903_DESC_MOBILE">
+        <source>26 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3903_NAME">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3903_NAME_MOBILE">
+        <source>PREMIUM JUMBO GOLD PACK 26</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3904_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3904_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3904_NAME">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3904_NAME_MOBILE">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3905_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3905_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3905_NAME">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3905_NAME_MOBILE">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3906_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3906_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3906_NAME">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3906_NAME_MOBILE">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3907_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3907_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3907_NAME">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3907_NAME_MOBILE">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3908_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3908_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3908_NAME">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3908_NAME_MOBILE">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3909_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3909_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3909_NAME">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3909_NAME_MOBILE">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3910_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3910_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3910_NAME">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3910_NAME_MOBILE">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3911_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3911_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3911_NAME">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3911_NAME_MOBILE">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3912_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3912_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3912_NAME">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3912_NAME_MOBILE">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3913_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3913_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3913_NAME">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3913_NAME_MOBILE">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3914_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3914_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3914_NAME">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3914_NAME_MOBILE">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3915_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3915_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3915_NAME">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3915_NAME_MOBILE">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3916_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3916_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3916_NAME">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3916_NAME_MOBILE">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3917_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3917_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3917_NAME">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3917_NAME_MOBILE">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3918_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3918_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3918_NAME">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3918_NAME_MOBILE">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3919_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3919_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3919_NAME">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3919_NAME_MOBILE">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3920_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3920_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3920_NAME">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3920_NAME_MOBILE">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3921_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3921_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3921_NAME">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3921_NAME_MOBILE">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3922_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3922_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3922_NAME">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3922_NAME_MOBILE">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3923_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3923_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3923_NAME">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3923_NAME_MOBILE">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3924_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3924_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3924_NAME">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3924_NAME_MOBILE">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3925_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3925_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3925_NAME">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3925_NAME_MOBILE">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3926_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3926_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3926_NAME">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3926_NAME_MOBILE">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3927_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3927_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3927_NAME">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3927_NAME_MOBILE">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3928_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3928_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3928_NAME">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3928_NAME_MOBILE">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3929_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3929_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3929_NAME">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_3929_NAME_MOBILE">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_400_DESC">
+        <source>Great value for maintaining your squads. Includes 12 consumables, at least 8 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_400_DESC_MOBILE">
+        <source>12 Consumables, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_400_NAME">
+        <source>CONSUMABLES PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_400_NAME_MOBILE">
+        <source>CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_401_DESC">
+        <source>Your one-time chance to upgrade to a Silver team! Includes 12 common Silver items, with 11 players and 1 manager.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_401_DESC_MOBILE">
+        <source>11 Silver Players, 1 Manager</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_401_NAME">
+        <source>SILVER UPGRADE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_401_NAME_MOBILE">
+        <source>SILVER UPGRADE</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_402_DESC">
+        <source>The most unique consumables, all in a single pack! Includes 12 consumables, all Gold, all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_402_DESC_MOBILE">
+        <source>12 Rare Gold Consumables</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_402_NAME">
+        <source>RARE CONSUMABLES PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_402_NAME_MOBILE">
+        <source>RARE CONSUMABLE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_403_DESC">
+        <source>The most unique Gold items, all in a single pack! A mix of 12 items, including players and consumables, at least 10 Gold and all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_403_DESC_MOBILE">
+        <source>12 Rare Gold Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_403_NAME">
+        <source>RARE GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_403_NAME_MOBILE">
+        <source>RARE GOLD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_404_DESC">
+        <source>The BIGGEST pack yet with a whopping 30, yes THIRTY, items! A mix of players and consumables, at least 26 Gold with 18 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_404_DESC_MOBILE">
+        <source>30 Items, 18 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_404_NAME">
+        <source>MEGA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_404_NAME_MOBILE">
+        <source>MEGA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_405_DESC">
+        <source>The most unique top-rated players, all in a single pack! Includes 12 items, all players, all Gold, all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_405_DESC_MOBILE">
+        <source>12 Rare Gold Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_405_NAME">
+        <source>RARE PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_405_NAME_MOBILE">
+        <source>RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_406_DESC">
+        <source>The most unique top-rated players, all in a single pack! Includes 24 items, all players, all Gold, all Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_406_DESC_MOBILE">
+        <source>24 Rare Gold Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_406_NAME">
+        <source>JUMBO RARE PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_406_NAME_MOBILE">
+        <source>JUMBO RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_407_DESC">
+        <source>Your one-time chance to upgrade to a Gold team! Includes 12 common Gold items, with 11 players and 1 manager.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_407_DESC_MOBILE">
+        <source>11 Gold Players, 1 Manager</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_407_NAME">
+        <source>GOLD UPGRADE PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_407_NAME_MOBILE">
+        <source>GOLD UPGRADE</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_408_DESC">
+        <source>Great value for finding top-rated players. A mix of 12 items, including players and consumables, at least 10 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_408_DESC_MOBILE">
+        <source>pre-order redemption award</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_408_NAME">
+        <source>PRE-ORDER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_408_NAME_MOBILE">
+        <source>PRE-ORDER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_409_DESC">
+        <source>This is your reward pack for purchasing Season Ticket.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_409_DESC_MOBILE">
+        <source>Season Ticket Purchase award</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_409_NAME">
+        <source>SEASON TICKET PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_409_NAME_MOBILE">
+        <source>SEASON TICKET PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_410_DESC">
+        <source>A Free Reward!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_410_DESC_MOBILE">
+        <source>A Free Reward!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_410_NAME">
+        <source>REWARD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_410_NAME_MOBILE">
+        <source>REWARD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_411_DESC">
+        <source>The best of the best!\n12 players, all gold, all rare. It doesn't get any better than that.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_411_DESC_MOBILE">
+        <source>12 Rare Gold Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_411_NAME">
+        <source>RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_411_NAME_MOBILE">
+        <source>RARE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_43_DESC">
+        <source>Get your ultimate team started! Includes 34 items with 22 players, 1 manager, 5 club items and 6 consumables. 29 Bronze, 2 Silver and 3 Gold.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_43_DESC_MOBILE">
+        <source>Get your team started!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_43_NAME">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_43_NAME_MOBILE">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_44_DESC">
+        <source>Get your ultimate team started! Includes 34 items with 22 players, 1 manager, 5 club items and 6 consumables. 29 Bronze, 2 Silver and 3 Gold.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_44_DESC_MOBILE">
+        <source>Get your team started!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_44_NAME">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_44_NAME_MOBILE">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_45_DESC">
+        <source>Get your ultimate team started! Includes 34 items with 22 players, 1 manager, 5 club items and 6 consumables. 29 Bronze, 2 Silver and 3 Gold.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_45_DESC_MOBILE">
+        <source>Get your team started!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_45_NAME">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_45_NAME_MOBILE">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_46_DESC">
+        <source>Get your ultimate team started! Includes 34 items with 22 players, 1 manager, 5 club items and 6 consumables. 29 Bronze, 2 Silver and 3 Gold.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_46_DESC_MOBILE">
+        <source>Get your team started!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_46_NAME">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_46_NAME_MOBILE">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_47_DESC">
+        <source>Get your ultimate team started! Includes 34 items with 22 players, 1 manager, 5 club items and 6 consumables. 29 Bronze, 2 Silver and 3 Gold.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_47_DESC_MOBILE">
+        <source>Get your team started!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_47_NAME">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_47_NAME_MOBILE">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_48_DESC">
+        <source>Get your ultimate team started! Includes 34 items with 22 players, 1 manager, 5 club items and 6 consumables. 29 Bronze, 2 Silver and 3 Gold.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_48_DESC_MOBILE">
+        <source>Get your team started!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_48_NAME">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_48_NAME_MOBILE">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_49_DESC">
+        <source>Get your ultimate team started! Includes 34 items with 22 players, 1 manager, 5 club items and 6 consumables. 29 Bronze, 2 Silver and 3 Gold.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_49_DESC_MOBILE">
+        <source>Get your team started!</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_49_NAME">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_49_NAME_MOBILE">
+        <source>STARTER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_500_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_500_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_500_NAME">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_500_NAME_MOBILE">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_501_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_501_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_501_NAME">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_501_NAME_MOBILE">
+        <source>GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_502_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_502_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_502_NAME">
+        <source>PREMIUM GOLD PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_502_NAME_MOBILE">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_503_DESC">
+        <source>Players only, better chance of getting rare or higher quality players.\nIncludes 12 players. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_503_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_503_NAME">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_503_NAME_MOBILE">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_504_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Silver with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_504_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_504_NAME">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_504_NAME_MOBILE">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_505_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Silver with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_505_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_505_NAME">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_505_NAME_MOBILE">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_506_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_506_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_506_NAME">
+        <source>PREMIUM SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_506_NAME_MOBILE">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_507_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Silver with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_507_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_507_NAME">
+        <source>PREMIUM SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_507_NAME_MOBILE">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_508_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Bronze with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_508_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_508_NAME">
+        <source>BRONZE PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_508_NAME_MOBILE">
+        <source>BRONZE PLAYER PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_509_DESC">
+        <source>Nothing but players to build out your ultimate squads! Includes 12 players, at least 10 Bronze with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_509_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_509_NAME">
+        <source>PREMIUM BRONZE PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_509_NAME_MOBILE">
+        <source>BRONZE PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_510_DESC">
+        <source>Players only, better chance of getting rare or higher quality players.\nIncludes 12 players. Mostly Gold &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_510_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_510_NAME">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_510_NAME_MOBILE">
+        <source>GOLD PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_511_DESC">
+        <source>Players only, perfect for building multiple squads.\nIncludes 12 players. Mostly Silver &amp; 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_511_DESC_MOBILE">
+        <source>12 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_511_NAME">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_511_NAME_MOBILE">
+        <source>SILVER PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_512_DESC">
+        <source>Players only, better chance of getting rare or higher quality players.\nIncludes 12 players. Mostly Silver &amp; 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_512_DESC_MOBILE">
+        <source>12 Players, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_512_NAME">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_512_NAME_MOBILE">
+        <source>SILVER PLAYERS PREMIUM</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_70_DESC">
+        <source>This pack gives you a small amount of Bid Tokens so you will never miss out on a bid.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_70_DESC_MOBILE">
+        <source>25 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_70_NAME">
+        <source>25 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_70_NAME_MOBILE">
+        <source>25 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_71_DESC_MOBILE">
+        <source>50 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_71_NAME">
+        <source>50 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_71_NAME_MOBILE">
+        <source>50 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_72_DESC_MOBILE">
+        <source>100 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_72_NAME">
+        <source>100 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_72_NAME_MOBILE">
+        <source>100 Bid Tokens</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_7300_DESC">
+        <source>Contains 13 items including at least 5 Untradeable FIFA World Cup™ Players and a guaranteed FUT Standard Gold Pack Consumable. </source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_7300_NAME">
+        <source>2014 FIFA World Cup™ Standard Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_7400_DESC">
+        <source>Contains 12 items including at least 5 Untradeable FIFA World Cup™ Players.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_7400_NAME">
+        <source>2014 FIFA World Cup™ Standard Gift Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_7900_DESC">
+        <source>Contains 1 guaranteed FIFA World Cup™ Player.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_7900_NAME">
+        <source>2014 FIFA World Cup™ Match Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_800_DESC">
+        <source>Smaller and cheaper than a standard Bronze Pack, and going fast! A mix of 4 items, all Bronze with at least 1 player.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_800_DESC_MOBILE">
+        <source>4 Bronze Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_800_NAME">
+        <source> BRONZE GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_800_NAME_MOBILE">
+        <source> BRONZE GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_801_DESC">
+        <source>Smaller and cheaper than a standard Silver Pack, and going fast! A mix of 4 items, all Silver with at least 1 player.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_801_DESC_MOBILE">
+        <source>4 Silver Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_801_NAME">
+        <source> SILVER GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_801_NAME_MOBILE">
+        <source> SILVER GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_802_DESC">
+        <source>Smaller and cheaper than a standard Gold Pack, and going fast! A mix of 4 items, all Gold with at least 1 player.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_802_DESC_MOBILE">
+        <source>4 Gold Items</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_802_NAME">
+        <source> GOLD GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_802_NAME_MOBILE">
+        <source> GOLD GIFT PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_803_DESC">
+        <source>Maintain your squads for a rock bottom price. Includes 4 Bronze contracts.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_803_DESC_MOBILE">
+        <source>4 Bronze Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_803_NAME">
+        <source>BRONZE CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_803_NAME_MOBILE">
+        <source>BRONZE CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_804_DESC">
+        <source>Maintain your squads for a rock bottom price. Includes 4 Silver contracts.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_804_DESC_MOBILE">
+        <source>4 Silver Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_804_NAME">
+        <source>SILVER CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_804_NAME_MOBILE">
+        <source>SILVER CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_805_DESC">
+        <source>Maintain your top-rated squad for a rock bottom price. Includes 4 Gold contracts.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_805_DESC_MOBILE">
+        <source>4 Gold Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_805_NAME">
+        <source>GOLD CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_805_NAME_MOBILE">
+        <source>GOLD CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_806_DESC">
+        <source>Maintain your squads for a rock bottom price. Includes 4 contracts of mixed quality.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_806_DESC_MOBILE">
+        <source>4 Mixed Value Contracts</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_806_NAME">
+        <source>MIXED CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_806_NAME_MOBILE">
+        <source>MIXED CONTRACTS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_807_DESC">
+        <source>2 Players 1 of them Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_807_DESC_MOBILE">
+        <source>2 Players, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_807_NAME">
+        <source>TOURNAMENT REWARD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_807_NAME_MOBILE">
+        <source>TOURNAMENT REWARD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_808_DESC">
+        <source>2 Gold Rare Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_808_DESC_MOBILE">
+        <source>2 Gold Rare Players</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_808_NAME">
+        <source>TOURNAMENT REWARD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_808_NAME_MOBILE">
+        <source>TOURNAMENT REWARD PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_900_DESC">
+        <source>A Gold Pack with a bonus item! A mix of 13 items, including players and consumables, at least 11 Gold with 1 Rare.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_900_DESC_MOBILE">
+        <source>13 Items, 1 Rare</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_900_NAME">
+        <source>GOLD 13 PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_900_NAME_MOBILE">
+        <source>GOLD PACK 13</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_901_DESC">
+        <source>A Premium Gold Pack with a bonus item! A mix of 13 items, including players and consumables, at least 11 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_901_DESC_MOBILE">
+        <source>13 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_901_NAME">
+        <source>PREMIUM GOLD 13 PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_901_NAME_MOBILE">
+        <source>PREMIUM GOLD PACK 13</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_902_DESC">
+        <source>A Jumbo Gold Pack with 2 bonus items! A mix of 26 items, including players and consumables, at least 20 Gold with 3 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_902_DESC_MOBILE">
+        <source>26 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_902_NAME">
+        <source>JUMBO GOLD 26 PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_902_NAME_MOBILE">
+        <source>JUMBO GOLD PACK 26</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_903_DESC">
+        <source>A Premium Jumbo Gold Pack with 2 bonus items! A mix of 26 items, including players and consumables, at least 20 Gold with 7 Rares.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_903_DESC_MOBILE">
+        <source>26 Items, 7 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_903_NAME">
+        <source>JUMBO PREMIUM GOLD 26 PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_903_NAME_MOBILE">
+        <source>PREMIUM JUMBO GOLD PACK 26</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_904_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_904_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_904_NAME">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_904_NAME_MOBILE">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_905_DESC">
+        <source>Contains 12 items to customize your club look. 4 Bronze, 4 Silver, 4 gold with 1 rare. </source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_905_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_905_NAME">
+        <source>CLUB CUSTOMISATION PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_905_NAME_MOBILE">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_906_DESC">
+        <source>Beta Players Pack 12 Players mixed quality</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_906_DESC_MOBILE">
+        <source>Beta players pack 12 players mixed quality</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_906_NAME">
+        <source>BETA PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_906_NAME_MOBILE">
+        <source>BETA PLAYERS PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_907_DESC">
+        <source>Beta consumables pack 12 consumables of mixed quality.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_907_DESC_MOBILE">
+        <source>Beta consumables pack 12 consumables of mixed quality.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_907_NAME">
+        <source>BETA CONSUMABLES PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_907_NAME_MOBILE">
+        <source>BETA CONSUMABLES PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_908_DESC">
+        <source>A standard pack for the Beta. 12 items mixed quality.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_908_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_908_NAME">
+        <source>BETA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_908_NAME_MOBILE">
+        <source>BETA PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_909_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_909_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_909_NAME">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_909_NAME_MOBILE">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_910_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_910_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_910_NAME">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_910_NAME_MOBILE">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_911_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_911_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_911_NAME">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_911_NAME_MOBILE">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_912_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_912_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_912_NAME">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_912_NAME_MOBILE">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_913_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_913_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_913_NAME">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_913_NAME_MOBILE">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_914_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_914_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_914_NAME">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_914_NAME_MOBILE">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_915_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_915_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_915_NAME">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_915_NAME_MOBILE">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_916_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_916_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_916_NAME">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_916_NAME_MOBILE">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_917_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_917_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_917_NAME">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_917_NAME_MOBILE">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_918_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_918_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_918_NAME">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_918_NAME_MOBILE">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_919_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_919_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_919_NAME">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_919_NAME_MOBILE">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_920_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_920_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_920_NAME">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_920_NAME_MOBILE">
+        <source>VALUE PACK 1</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_921_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_921_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_921_NAME">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_921_NAME_MOBILE">
+        <source>VALUE PACK 2</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_922_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_922_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_922_NAME">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_922_NAME_MOBILE">
+        <source>VALUE PACK 3</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_923_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_923_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_923_NAME">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_923_NAME_MOBILE">
+        <source>VALUE PACK 4</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_924_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_924_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_924_NAME">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_924_NAME_MOBILE">
+        <source>VALUE PACK 5</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_925_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_925_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_925_NAME">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_925_NAME_MOBILE">
+        <source>VALUE PACK 6</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_926_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_926_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_926_NAME">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_926_NAME_MOBILE">
+        <source>VALUE PACK 7</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_927_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_927_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_927_NAME">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_927_NAME_MOBILE">
+        <source>VALUE PACK 8</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_928_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_928_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_928_NAME">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_928_NAME_MOBILE">
+        <source>VALUE PACK 9</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_929_DESC">
+        <source>Get this limited edition FUT Pack while supplies last</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_929_DESC_MOBILE">
+        <source>Limited Edition FUT Pack</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_929_NAME">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_929_NAME_MOBILE">
+        <source>VALUE PACK 10</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_999_DESC">
+        <source>Exclusive pack for Xbox One and FIFA 14 players. Includes 12 items, mostly Gold with 3 Rares and a higher chance at a Legend item.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_999_DESC_MOBILE">
+        <source>12 Items, 3 Rares</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_999_NAME">
+        <source>XBOX ONE LAUNCH PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_PACK_999_NAME_MOBILE">
+        <source>XBOX ONE LAUNCH PACK</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3600_DESC">
+        <source>100 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3600_DESC_MOBILE">
+        <source>100 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3600_NAME">
+        <source>100 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3600_NAME_MOBILE">
+        <source>100 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3601_DESC">
+        <source>250 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3601_DESC_MOBILE">
+        <source>250 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3601_NAME">
+        <source>250 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3601_NAME_MOBILE">
+        <source>250 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3602_DESC">
+        <source>500 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3602_DESC_MOBILE">
+        <source>500 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3602_NAME">
+        <source>500 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3602_NAME_MOBILE">
+        <source>500 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3603_DESC">
+        <source>750 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3603_DESC_MOBILE">
+        <source>750 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3603_NAME">
+        <source>750 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3603_NAME_MOBILE">
+        <source>750 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3604_DESC">
+        <source>1050 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3604_DESC_MOBILE">
+        <source>1050 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3604_NAME">
+        <source>1050 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3604_NAME_MOBILE">
+        <source>1050 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3605_DESC">
+        <source>1575 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3605_DESC_MOBILE">
+        <source>1575 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3605_NAME">
+        <source>1575 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3605_NAME_MOBILE">
+        <source>1575 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3606_DESC">
+        <source>2200 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3606_DESC_MOBILE">
+        <source>2200 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3606_NAME">
+        <source>2200 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3606_NAME_MOBILE">
+        <source>2200 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3607_DESC">
+        <source>4600 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3607_DESC_MOBILE">
+        <source>4600 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3607_NAME">
+        <source>4600 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3607_NAME_MOBILE">
+        <source>4600 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3608_DESC">
+        <source>12000 FIFA Points to acquire new packs in FIFA Ultimate Team</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_3608_NAME">
+        <source>12000 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_600_DESC">
+        <source>100 FIFA Points to redeem for FUT Packs.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_600_DESC_MOBILE">
+        <source>100 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_600_NAME">
+        <source>FIFA Points 100</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_600_NAME_MOBILE">
+        <source>FIFA Points 100</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_601_DESC">
+        <source>250 FIFA Points to redeem for FUT Packs.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_601_DESC_MOBILE">
+        <source>250 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_601_NAME">
+        <source>FIFA Points 250</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_601_NAME_MOBILE">
+        <source>FIFA Points 250</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_602_DESC">
+        <source>500 FIFA Points to redeem for FUT Packs.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_602_DESC_MOBILE">
+        <source>500 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_602_NAME">
+        <source>FIFA Points 500</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_602_NAME_MOBILE">
+        <source>FIFA Points 500</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_603_DESC">
+        <source>750 FIFA Points to redeem for FUT Packs.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_603_DESC_MOBILE">
+        <source>750 FIFA Points</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_603_NAME">
+        <source>FIFA Points 750</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_603_NAME_MOBILE">
+        <source>FIFA Points 750</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_604_DESC">
+        <source>1050 FIFA Points to redeem for FUT Packs - Bonus 50 FIFA Points.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_604_DESC_MOBILE">
+        <source>1050 FIFA Points, Bonus of 50</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_604_NAME">
+        <source>FIFA Points 1050</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_604_NAME_MOBILE">
+        <source>FIFA Points 1050</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_605_DESC">
+        <source>1575 FIFA Points to redeem for FUT Packs - Bonus 75 FIFA Points.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_605_DESC_MOBILE">
+        <source>1575 FIFA Points, Bonus of 75</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_605_NAME">
+        <source>FIFA Points 1575</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_605_NAME_MOBILE">
+        <source>FIFA Points 1575</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_606_DESC">
+        <source>2200 FIFA Points to redeem for FUT Packs - Bonus 200 FIFA Points.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_606_DESC_MOBILE">
+        <source>2200 FIFA Points, Bonus of 200</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_606_NAME">
+        <source>FIFA Points 2200</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_606_NAME_MOBILE">
+        <source>FIFA Points 2200</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_607_DESC">
+        <source>Best value! 4600 FIFA Points to redeem for FUT Packs - Bonus 600 FIFA Points.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_607_DESC_MOBILE">
+        <source>4600 FIFA Points, Bonus of 600</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_607_NAME">
+        <source>FIFA Points 4600</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_607_NAME_MOBILE">
+        <source>FIFA Points 4600</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_608_DESC">
+        <source>12000 FIFA Points to redeem for FUT Packs - Bonus 2000 FIFA Points.</source>
+      </trans-unit>
+      <trans-unit resname="FUT_STORE_POINTS_608_NAME">
+        <source>12000 FIFA Points</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -162,6 +162,29 @@ internal sealed class WebServer
             }
         }
 
+        const string dmPrefix = "/fut/dynamicmessages/";
+        int idm = lp.IndexOf(dmPrefix, StringComparison.Ordinal);
+        if (idm >= 0)
+        {
+            string rel = (req.Url?.AbsolutePath ?? "").Substring(idm + dmPrefix.Length).TrimStart('/');
+            string root = Path.GetFullPath(Path.Combine(_contentRoot, "dynamicmessages"));
+            string file = Path.GetFullPath(Path.Combine(root, rel.Replace('/', Path.DirectorySeparatorChar)));
+            if (file.StartsWith(root, StringComparison.OrdinalIgnoreCase) && File.Exists(file))
+            {
+                var fbytes = File.ReadAllBytes(file);
+                string ct = Path.GetExtension(file).ToLowerInvariant() switch
+                {
+                    ".json" => "application/json; charset=utf-8",
+                    ".xml"  => "text/xml; charset=utf-8",
+                    ".png"  => "image/png",
+                    _       => "application/octet-stream",
+                };
+                _log.LogInformation("      -> dynamicmessages {0} ({1} bytes)", rel, fbytes.Length);
+                return BuildBytes("200 OK", ct, fbytes, extra, keepAlive);
+            }
+            _log.LogWarning("      -> dynamicmessages MISS (no mirror for {0})", rel);
+        }
+
         var (contentType, payloadStr) = Route(req);
 
         if (lp.Contains("/rs4") || lp.StartsWith("/fut") || lp.Contains("accountinfo") || lp.Contains("/ut/"))
@@ -261,6 +284,8 @@ internal sealed class WebServer
         if (path.Contains("/pow/"))
             return ("application/json; charset=utf-8", PowBody(path, req));
 
+        if (path.Contains("purchasegroup"))
+            return ("application/json; charset=utf-8", StorePurchaseGroupBody());
 
         if (path.EndsWith("/accountinfo"))
         {
@@ -268,18 +293,15 @@ internal sealed class WebServer
             var prof = FutProfileStore.Get();
 
             string ret = prof.IsReturningUser ? "true" : "false";
-            string clubList = "";
-            if (prof.Club.Established)
-            {
-                const string Sku = "FFA14PCC";
-                clubList =
-                    "{\"year\":2014,\"teamId\":" + prof.Club.TeamId +
-                    ",\"teamName\":\"" + Esc(prof.Club.Name) + "\",\"clubName\":\"" + Esc(prof.Club.Name) + "\"," +
-                    "\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\",\"clubId\":" + prof.Club.TeamId +
-                    ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
-                    ",\"seasonId\":1,\"status\":1,\"established\":1,\"divisionOnline\":1,\"lastAccessTime\":1400000000," +
-                    "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
-            }
+            int est = prof.Club.Established ? 1 : 0;
+            const string Sku = "FFA14PCC";
+            string clubList =
+                "{\"year\":2014,\"teamId\":" + prof.Club.TeamId +
+                ",\"teamName\":\"" + Esc(prof.Club.Name) + "\",\"clubName\":\"" + Esc(prof.Club.Name) + "\"," +
+                "\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\",\"clubId\":" + prof.Club.TeamId +
+                ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
+                ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + est + ",\"divisionOnline\":1,\"lastAccessTime\":1400000000," +
+                "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
             string persona =
                 "{\"personaId\":" + nucleusId + ",\"personaName\":\"" + BlazePersonaName + "\"," +
                 "\"returningUser\":" + ret + ",\"isReturningUser\":" + ret + ",\"trial\":false,\"userState\":\"\"," +
@@ -422,6 +444,57 @@ internal sealed class WebServer
         if (path.Contains("/user/friends"))                       return "{\"friends\":[]}";
 
         return "{}";
+    }
+
+    private static readonly (int Id, string Group, string Content, int Coins, bool Premium)[] StorePacks =
+    {
+        (100, "bronze",  "bronze",   400, false),  // Bronze Pack
+        (103, "bronze",  "bronze",   750, true),   // Premium Bronze Pack
+        (200, "silver",  "silver",  2500, false),  // Silver Pack
+        (203, "silver",  "silver",  3750, true),   // Premium Silver Pack
+        (300, "gold",    "gold",    5000, false),  // Gold Pack
+        (304, "gold",    "gold",    7500, true),   // Premium Gold Pack
+        (502, "gold",    "gold",   15000, true),   // Premium Gold Players Pack
+        (405, "special", "gold",   35000, true),   // Rare Players Pack (promo -> Special tab)
+    };
+
+    private static string StorePurchaseGroupBody()
+    {
+        var sb = new StringBuilder();
+        sb.Append("{\"id\":\"cardpack\",\"timestamp\":").Append(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        sb.Append(",\"purchase\":[");
+        for (int i = 0; i < StorePacks.Length; i++)
+        {
+            var p = StorePacks[i];
+            // Category tabs order left->right by ascending displayGroup.priority: bronze -> special.
+            int prio   = p.Group switch { "bronze" => 0, "silver" => 1, "gold" => 2, "special" => 3, _ => 2 };
+            // Pack tier (bronze/silver/gold art) is carried by packContentInfo's *Quantity fields.
+            int gold   = p.Content == "gold"   ? 10 : 0;
+            int silver = p.Content == "silver" ? 10 : 0;
+            int bronze = p.Content == "bronze" ? 10 : 0;
+            int rare   = p.Premium ? 3 : 1;
+            int art    = p.Content == "gold" ? 3 : p.Content == "silver" ? 2 : 1;
+            if (i > 0) sb.Append(',');
+            sb.Append("{\"id\":").Append(p.Id)
+              .Append(",\"state\":\"active\",\"type\":\"cardpack\",\"description\":\"\"")
+              .Append(",\"assetId\":").Append(art).Append(",\"coins\":").Append(p.Coins)
+              .Append(",\"actionType\":\"CREATEPACK\",\"productId\":\"0\",\"quantity\":-1")
+              .Append(",\"currencies\":[{\"name\":\"COINS\",\"funds\":").Append(p.Coins)
+              .Append(",\"finalFunds\":").Append(p.Coins).Append("}]")
+              .Append(",\"saleType\":\"NONE\",\"dealType\":\"CARDPACK\",\"saleId\":0")
+              .Append(",\"displayGroup\":{\"value\":\"").Append(p.Group).Append("\",\"priority\":").Append(prio).Append('}')
+              .Append(",\"sortPriority\":").Append(i)
+              .Append(",\"limited\":false,\"purchaseLimit\":0,\"purchaseCount\":0")
+              .Append(",\"isPremium\":").Append(p.Premium ? "true" : "false")
+              .Append(",\"isSeasonTicketDiscount\":false,\"useDefaultImage\":true")
+              .Append(",\"purchaseMethod\":\"COIN\",\"displayGroupAssetId\":").Append(art).Append(",\"lastPurchasedTime\":0")
+              .Append(",\"displayGroupUseDefaultImage\":true,\"unopened\":false,\"packType\":\"CARDPACK\"")
+              .Append(",\"packContentInfo\":{\"itemQuantity\":12,\"goldQuantity\":").Append(gold)
+              .Append(",\"silverQuantity\":").Append(silver).Append(",\"bronzeQuantity\":").Append(bronze)
+              .Append(",\"rareQuantity\":").Append(rare).Append("}}");
+        }
+        sb.Append("]}");
+        return sb.ToString();
     }
 
     // Keep these in sync with AuthenticationComponent (UserId / PersonaName) so the EASFC
