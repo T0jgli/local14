@@ -364,6 +364,9 @@ internal sealed class WebServer
                     ",\"unassignedPileSize\":0,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0}}}");
         }
 
+        if (path.EndsWith("/pilesize"))
+            return ("application/json; charset=utf-8", "{}");
+
         if (path.Contains("/user/credits"))
         {
             long coinsCredits = FutProfileStore.Get().Coins;
@@ -482,11 +485,11 @@ internal sealed class WebServer
 
                 itemIds.Append(']');
                 items.Append(']');
-                string purchaseBody = "{\"duplicateItemIdList\":[],\"itemIdList\":" + itemIds +
+                string purchasedBody = "{\"duplicateItemIdList\":[],\"itemIdList\":" + itemIds +
                     ",\"itemList\":" + items + ",\"numberItems\":12,\"purchasedPackId\":" + packId + "," +
                     "\"entitlementQuantities\":null,\"awardSetIds\":[]}";
-                _lastPurchaseResponseBody = purchaseBody;
-                return ("application/json; charset=utf-8", purchaseBody);
+                _lastPurchaseResponseBody = purchasedBody;
+                return ("application/json; charset=utf-8", purchasedBody);
             }
             string body = _lastPurchaseResponseBody.Length > 0 ? _lastPurchaseResponseBody : "{\"purchase\":[]}";
             return ("application/json; charset=utf-8", body);
