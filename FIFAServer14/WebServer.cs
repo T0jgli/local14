@@ -13,6 +13,14 @@ internal sealed class WebServer
     private readonly string _contentRoot;
     private TcpListener _listener = null!;
 
+    private string _lastPurchaseResponseBody = "";
+
+    private static readonly Dictionary<int, int> PackCoinPrices = new()
+    {
+        { 100, 400 }, { 103, 750 }, { 200, 2500 }, { 203, 3750 },
+        { 300, 5000 }, { 304, 7500 }, { 502, 25000 },
+    };
+
     public WebServer(int port, ILogger log)
     {
         _port = port;
@@ -351,10 +359,249 @@ internal sealed class WebServer
                     "{\"value\":90,\"type\":\"getOperationTimeoutSec\"}," +
                     "{\"value\":100,\"type\":\"maximumTradePileSize\"}]}");
 
-        if (path.EndsWith("/squad/list"))
+        if (path.EndsWith("/hub"))
+        {
+            long coinsHub = FutProfileStore.Get().Coins;
+            string currenciesHub = CurrenciesJson(coinsHub);
             return ("application/json; charset=utf-8",
-                    "{\"squad\":[{\"id\":1,\"squadName\":\"FUT14 FC\",\"formation\":\"f442\"," +
-                    "\"chemistry\":0,\"rating\":0}]}");
+                    "{\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
+                    ",\"userInfo\":{\"personaId\":" + BlazePersonaId + ",\"clubName\":\"" + Esc(FutProfileStore.Get().Club.Name) +
+                    "\",\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
+                    ",\"unassignedPileSize\":0,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0}}}");
+        }
+
+        if (path.Contains("/user/credits"))
+        {
+            long coinsCredits = FutProfileStore.Get().Coins;
+            return ("application/json; charset=utf-8",
+                    "{\"credits\":" + coinsCredits + ",\"bidTokens\":{},\"currencies\":" + CurrenciesJson(coinsCredits) +
+                    ",\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0},\"futCashBalance\":0}");
+        }
+
+        if (path.EndsWith("/tradepile"))
+        {
+            long coinsTrade = FutProfileStore.Get().Coins;
+            return ("application/json; charset=utf-8",
+                    "{\"errorState\":null,\"credits\":" + coinsTrade + ",\"auctionInfo\":[],\"currencies\":" + CurrenciesJson(coinsTrade) +
+                    ",\"duplicateItemIdList\":[],\"bidTokens\":null,\"maxAuctionsAllowed\":30," +
+                    "\"maximumTradePileSize\":100,\"total\":0}");
+        }
+
+        if (path.EndsWith("/club"))
+        {
+            string posFilter = req.QueryString["position"] ?? "any";
+            int nationFilter = int.TryParse(req.QueryString["nation"], out int nf) ? nf : -1;
+            int teamFilter = int.TryParse(req.QueryString["team"], out int tf) ? tf : -1;
+            int countLimit = int.TryParse(req.QueryString["count"], out int cl) ? cl : 50;
+            int offset = int.TryParse(req.QueryString["start"], out int off) ? off : 0;
+
+            var inventory = ClubStore.Get().Inventory;
+            var matches = inventory
+                .Where(c => (posFilter == "any" || posFilter == "" || c.Player.Position == posFilter)
+                    && (nationFilter == -1 || c.Player.NationId == nationFilter)
+                    && (teamFilter == -1 || c.Player.TeamId == teamFilter))
+                .DistinctBy(c => c.Player.Id)
+                .OrderByDescending(c => c.Player.Rating)
+                .Skip(offset).Take(countLimit)
+                .ToArray();
+
+            var clubRnd = new Random();
+            long clubNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var itemsSb = new StringBuilder("[");
+            for (int i = 0; i < matches.Length; i++)
+            {
+                if (i > 0) itemsSb.Append(',');
+                itemsSb.Append(BuildRealPlayerItem(clubRnd, matches[i].Player, matches[i].ItemId, clubNow, matches[i].Pile));
+            }
+            itemsSb.Append(']');
+            return ("application/json; charset=utf-8", "{\"itemData\":" + itemsSb + "}");
+        }
+
+        if (path.EndsWith("/transfermarket"))
+        {
+            int tmStart = int.TryParse(req.QueryString["start"], out int ts) ? ts : 0;
+            int tmCount = int.TryParse(req.QueryString["num"], out int tc) ? tc : 12;
+
+            var tmListings = RealPlayers.All.Skip(tmStart % RealPlayers.All.Length).Take(tmCount).ToArray();
+            var tmRnd = new Random();
+            long tmNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var auctionSb = new StringBuilder("[");
+            for (int i = 0; i < tmListings.Length; i++)
+            {
+                var p = tmListings[i];
+                long tradeId = 700000000L + tmStart + i;
+                long itemId = 750000000L + tmStart + i;
+                int basePrice = p.Rating * p.Rating * 2;
+                int startingBid = Math.Max(150, basePrice / 10);
+                int buyNowPrice = Math.Max(startingBid * 3, basePrice);
+                string itemJson = BuildRealPlayerItem(tmRnd, p, itemId, tmNow, 6);
+                if (i > 0) auctionSb.Append(',');
+                auctionSb.Append("{\"tradeId\":" + tradeId + ",\"itemData\":" + itemJson +
+                    ",\"startingBid\":" + startingBid + ",\"buyNowPrice\":" + buyNowPrice +
+                    ",\"currentBid\":" + startingBid + ",\"expires\":" + (300 + tmRnd.Next(0, 3300)) +
+                    ",\"watched\":false,\"bidState\":\"active\",\"tradeState\":\"active\"," +
+                    "\"offers\":0,\"tradeOwner\":false}");
+            }
+            auctionSb.Append(']');
+            return ("application/json; charset=utf-8",
+                    "{\"auctionInfo\":" + auctionSb + ",\"credits\":" + FutProfileStore.Get().Coins + "}");
+        }
+
+        if (path.Contains("/purchased/items"))
+        {
+            if (req.HttpMethod == "POST")
+            {
+                var rnd = new Random();
+                long nowUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                long idBase = nowUnix % 100000 * 100;
+                var itemIds = new StringBuilder("[");
+                var items = new StringBuilder("[");
+
+                int packId = 0;
+                var packIdMatch = System.Text.RegularExpressions.Regex.Match(req.Body, "\"packId\"\\s*:\\s*(\\d+)");
+                if (packIdMatch.Success) int.TryParse(packIdMatch.Groups[1].Value, out packId);
+                var currencyMatch = System.Text.RegularExpressions.Regex.Match(req.Body, "\"currency\"\\s*:\\s*\"(\\w+)\"");
+                string currency = currencyMatch.Success ? currencyMatch.Groups[1].Value : "";
+
+                ClubStore.Mutate(data =>
+                {
+                    var packUsedIds = new HashSet<int>(data.Inventory.Select(c => c.Player.Id));
+                    for (int i = 0; i < 12; i++)
+                    {
+                        long itemId = idBase + i;
+                        var pool = RealPlayers.All.Where(p => !packUsedIds.Contains(p.Id)).ToArray();
+                        if (pool.Length == 0) pool = RealPlayers.All;
+                        RealPlayer chosen = pool[rnd.Next(pool.Length)];
+                        packUsedIds.Add(chosen.Id);
+                        if (i > 0) { itemIds.Append(','); items.Append(','); }
+                        itemIds.Append(itemId);
+                        items.Append(BuildRealPlayerItem(rnd, chosen, itemId, nowUnix, 6));
+                        data.Inventory.Add(new ClubItem(itemId, chosen, 6));
+                    }
+                    if (currency == "COINS" && PackCoinPrices.TryGetValue(packId, out int price))
+                        FutProfileStore.Mutate(p => p.Coins = Math.Max(0, p.Coins - price));
+                });
+
+                itemIds.Append(']');
+                items.Append(']');
+                string purchaseBody = "{\"duplicateItemIdList\":[],\"itemIdList\":" + itemIds +
+                    ",\"itemList\":" + items + ",\"numberItems\":12,\"purchasedPackId\":0," +
+                    "\"entitlementQuantities\":null,\"awardSetIds\":[]}";
+                _lastPurchaseResponseBody = purchaseBody;
+                return ("application/json; charset=utf-8", purchaseBody);
+            }
+            string body = _lastPurchaseResponseBody.Length > 0 ? _lastPurchaseResponseBody : "{\"purchase\":[]}";
+            return ("application/json; charset=utf-8", body);
+        }
+
+        if (path.Contains("/delete/") && System.Text.RegularExpressions.Regex.IsMatch(path, @"squad/(\d+)"))
+        {
+            int delId = int.Parse(System.Text.RegularExpressions.Regex.Match(path, @"squad/(\d+)").Groups[1].Value);
+            ClubStore.Mutate(data =>
+            {
+                data.Squads.RemoveAll(s => s.Id == delId);
+                if (data.ActiveSquadId == delId)
+                    data.ActiveSquadId = data.Squads.Count > 0 ? data.Squads[0].Id : 0;
+            });
+            return ("application/json; charset=utf-8", "{}");
+        }
+
+        if (path.EndsWith("/squad") && req.HttpMethod == "POST")
+        {
+            Squad created = null;
+            ClubStore.Mutate(data =>
+            {
+                int newId = data.Squads.Count > 0 ? data.Squads.Max(s => s.Id) + 1 : 0;
+                created = new Squad { Id = newId };
+                data.Squads.Add(created);
+            });
+            return ("application/json; charset=utf-8", BuildFullSquadJson(created));
+        }
+
+        if (System.Text.RegularExpressions.Regex.IsMatch(path, @"squad/(\d+)") && req.HttpMethod == "PUT")
+        {
+            int putId = int.Parse(System.Text.RegularExpressions.Regex.Match(path, @"squad/(\d+)").Groups[1].Value);
+            Squad target = null;
+            ClubStore.Mutate(data =>
+            {
+                target = data.Squads.FirstOrDefault(s => s.Id == putId);
+                if (target == null)
+                {
+                    target = new Squad { Id = putId };
+                    data.Squads.Add(target);
+                }
+                try
+                {
+                    using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
+                    var root = doc.RootElement;
+                    if (root.TryGetProperty("squadName", out var nameEl) && nameEl.ValueKind == System.Text.Json.JsonValueKind.String)
+                        target.Name = nameEl.GetString() ?? target.Name;
+                    if (root.TryGetProperty("formation", out var formEl) && formEl.ValueKind == System.Text.Json.JsonValueKind.String)
+                        target.Formation = formEl.GetString() ?? target.Formation;
+                    if (root.TryGetProperty("chemistry", out var chemEl) && chemEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+                        target.Chemistry = chemEl.GetInt32();
+                    if (root.TryGetProperty("starRating", out var starEl) && starEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+                        target.StarRating = starEl.GetInt32();
+                    if (root.TryGetProperty("players", out var playersEl) && playersEl.ValueKind == System.Text.Json.JsonValueKind.Array)
+                    {
+                        target.Slots.Clear();
+                        foreach (var pl in playersEl.EnumerateArray())
+                        {
+                            if (!pl.TryGetProperty("index", out var idxEl)) continue;
+                            if (!pl.TryGetProperty("itemData", out var itemDataEl)) continue;
+                            if (!itemDataEl.TryGetProperty("id", out var idEl)) continue;
+                            long slotItemId = idEl.GetInt64();
+                            if (slotItemId != 0) target.Slots[idxEl.GetInt32()] = slotItemId;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _log.LogWarning("Squad PUT body parse failed: {0}", ex.Message);
+                }
+
+                var assigned = new HashSet<long>(data.Squads.SelectMany(s => s.Slots.Values).Where(v => v != 0));
+                for (int i = 0; i < data.Inventory.Count; i++)
+                {
+                    int want = assigned.Contains(data.Inventory[i].ItemId) ? 7 : 6;
+                    if (data.Inventory[i].Pile != want)
+                        data.Inventory[i] = new ClubItem(data.Inventory[i].ItemId, data.Inventory[i].Player, want);
+                }
+                data.ActiveSquadId = putId;
+            });
+            return ("application/json; charset=utf-8", BuildFullSquadJson(target));
+        }
+
+        if (System.Text.RegularExpressions.Regex.IsMatch(path, @"squad/(\d+)") && req.HttpMethod == "GET")
+        {
+            int getId = int.Parse(System.Text.RegularExpressions.Regex.Match(path, @"squad/(\d+)").Groups[1].Value);
+            var data = ClubStore.Get();
+            var target = data.Squads.FirstOrDefault(s => s.Id == getId) ?? new Squad { Id = getId };
+            return ("application/json; charset=utf-8", BuildFullSquadJson(target));
+        }
+
+        if (path.EndsWith("/squad/active"))
+        {
+            var data = ClubStore.Get();
+            var active = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
+                ?? (data.Squads.Count > 0 ? data.Squads[0] : new Squad { Id = 0 });
+            return ("application/json; charset=utf-8", BuildFullSquadJson(active));
+        }
+
+        if (path.EndsWith("/squad/list"))
+        {
+            var data = ClubStore.Get();
+            var sb = new StringBuilder("[");
+            for (int i = 0; i < data.Squads.Count; i++)
+            {
+                if (i > 0) sb.Append(',');
+                var s = data.Squads[i];
+                sb.Append("{\"id\":" + s.Id + ",\"squadName\":\"" + Esc(s.Name) + "\",\"formation\":\"" + s.Formation +
+                    "\",\"chemistry\":" + s.Chemistry + ",\"rating\":" + s.StarRating + "}");
+            }
+            sb.Append(']');
+            return ("application/json; charset=utf-8", "{\"squad\":" + sb + "}");
+        }
 
         // FUT user profile (/fut/rs4/ut/game/fifa14/user, .../userdata). Data-driven from the
         // profile: isReturningUser=false => NEW player (client state STATE_WELCOME, not
@@ -496,6 +743,105 @@ internal sealed class WebServer
         sb.Append("]}");
         return sb.ToString();
     }
+
+    private static string BuildRealPlayerItem(Random rnd, RealPlayer player, long id, long timestamp, int pile)
+    {
+        int rating = player.Rating;
+        int resourceId = player.Id;
+        int rareflag = rating >= 75 ? 1 : 0;
+        int[] attrs = { player.Pace, player.Shooting, player.Passing, player.Dribbling, player.Defending, player.Physical };
+        var attrList = new StringBuilder("[");
+        for (int a = 0; a < 6; a++)
+        {
+            if (a > 0) attrList.Append(',');
+            attrList.Append("{\"value\":" + attrs[a] + ",\"index\":" + a + "}");
+        }
+        attrList.Append(']');
+        string zeroStats = "[{\"value\":0,\"index\":0},{\"value\":0,\"index\":1},{\"value\":0,\"index\":2},{\"value\":0,\"index\":3},{\"value\":0,\"index\":4}]";
+        return "{\"id\":" + id + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
+            "\"untradeable\":false,\"assetId\":" + resourceId + ",\"rating\":" + rating + "," +
+            "\"itemType\":\"player\",\"dream\":false,\"resourceId\":" + resourceId + ",\"owners\":1," +
+            "\"discardValue\":" + (rating * 4) + ",\"itemState\":\"free\",\"cardsubtypeid\":3," +
+            "\"lastSalePrice\":0,\"morale\":50,\"fitness\":99,\"injuryType\":\"none\",\"injuryGames\":0," +
+            "\"preferredPosition\":\"" + player.Position + "\",\"statsList\":" + zeroStats +
+            ",\"lifetimeStats\":" + zeroStats + ",\"training\":0,\"contract\":7,\"suspension\":0," +
+            "\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000,\"attributeList\":" + attrList +
+            ",\"teamid\":" + player.TeamId + ",\"rareflag\":" + rareflag + ",\"playStyle\":250," +
+            "\"leagueId\":1,\"assists\":0,\"lifetimeAssists\":0," +
+            "\"loyaltyBonus\":1,\"pile\":" + pile + ",\"loans\":0,\"nation\":" + player.NationId +
+            ",\"resourceGameYear\":2014,\"amount\":0}";
+    }
+
+    private static string BuildFullSquadJson(Squad squad)
+    {
+        var inventory = ClubStore.Get().Inventory;
+        var rnd = new Random();
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var playersSb = new StringBuilder("[");
+        bool first = true;
+        long captainId = 0;
+        foreach (var slot in squad.Slots)
+        {
+            if (slot.Value == 0) continue;
+            var member = inventory.FirstOrDefault(c => c.ItemId == slot.Value);
+            if (member.ItemId == 0) continue;
+            string item = BuildRealPlayerItem(rnd, member.Player, member.ItemId, now, 7);
+            if (!first) playersSb.Append(',');
+            first = false;
+            playersSb.Append("{\"index\":" + slot.Key + ",\"loyaltyBonus\":1,\"kitNumber\":0,\"chemistry\":10,\"itemData\":" + item + "}");
+            if (captainId == 0 || member.Player.Position == "ST") captainId = member.ItemId;
+        }
+        playersSb.Append(']');
+        // The client computes and PUTs its own chemistry/rating/starRating, so we just
+        // persist and echo those back rather than recomputing server-side.
+        int rating = squad.StarRating;
+
+        string actives = "[" +
+            "{\"id\":800001,\"timestamp\":" + now + ",\"formation\":\"f442\",\"untradeable\":false,\"assetId\":261," +
+            "\"rating\":75,\"itemType\":\"stadium\",\"resourceId\":6200057,\"owners\":1,\"discardValue\":110," +
+            "\"itemState\":\"activeStadium\",\"cardsubtypeid\":10,\"lastSalePrice\":0,\"statsList\":[]," +
+            "\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":0,\"rareflag\":0,\"leagueId\":0,\"pile\":7," +
+            "\"resourceGameYear\":2014,\"cardassetid\":36,\"category\":4,\"name\":\"Server Park\"," +
+            "\"description\":\"StadiumDesc_Server\",\"biodescription\":\"StadiumDetailDesc\",\"stadiumid\":1,\"capacity\":30000}," +
+            "{\"id\":800002,\"timestamp\":" + now + ",\"formation\":\"f442\",\"untradeable\":false,\"assetId\":132," +
+            "\"rating\":75,\"itemType\":\"ball\",\"resourceId\":8120223,\"owners\":1,\"discardValue\":110," +
+            "\"itemState\":\"activeBall\",\"cardsubtypeid\":30,\"lastSalePrice\":0,\"statsList\":[]," +
+            "\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":0,\"rareflag\":0,\"leagueId\":0,\"pile\":7," +
+            "\"resourceGameYear\":2014,\"cardassetid\":37,\"category\":1,\"name\":\"Server Ball\",\"value\":75," +
+            "\"manufacturer\":\"ManufacturerGeneric\"}," +
+            "{\"id\":800003,\"timestamp\":" + now + ",\"formation\":\"f442\",\"untradeable\":false,\"assetId\":14," +
+            "\"rating\":75,\"itemType\":\"kit\",\"resourceId\":6300511,\"owners\":1,\"discardValue\":110," +
+            "\"itemState\":\"activeHomeKit\",\"cardsubtypeid\":9,\"lastSalePrice\":0,\"statsList\":[]," +
+            "\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":1,\"rareflag\":0,\"leagueId\":0,\"pile\":7," +
+            "\"resourceGameYear\":2014,\"category\":2,\"year\":0}," +
+            "{\"id\":800004,\"timestamp\":" + now + ",\"formation\":\"f442\",\"untradeable\":false,\"assetId\":14," +
+            "\"rating\":75,\"itemType\":\"kit\",\"resourceId\":6300719,\"owners\":1,\"discardValue\":55," +
+            "\"itemState\":\"activeAwayKit\",\"cardsubtypeid\":9,\"lastSalePrice\":0,\"statsList\":[]," +
+            "\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":1,\"rareflag\":0,\"leagueId\":0,\"pile\":7," +
+            "\"resourceGameYear\":2014,\"category\":2,\"year\":0}," +
+            "{\"id\":800005,\"timestamp\":" + now + ",\"formation\":\"f442\",\"untradeable\":false,\"assetId\":101014," +
+            "\"rating\":75,\"itemType\":\"custom\",\"resourceId\":6000170,\"owners\":1,\"discardValue\":110," +
+            "\"itemState\":\"activeBadge\",\"cardsubtypeid\":11,\"lastSalePrice\":0,\"statsList\":[]," +
+            "\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":1,\"rareflag\":0,\"leagueId\":0,\"pile\":7," +
+            "\"resourceGameYear\":2014,\"category\":1,\"value\":75,\"weightrare\":0,\"header\":\"Badge\"}" +
+            "]";
+
+        string kicktakers = "[{\"id\":" + captainId + ",\"index\":0},{\"id\":" + captainId + ",\"index\":1}," +
+            "{\"id\":" + captainId + ",\"index\":2},{\"id\":" + captainId + ",\"index\":3}," +
+            "{\"id\":" + captainId + ",\"index\":4}]";
+
+        return "{\"id\":" + squad.Id + ",\"valid\":true,\"personaId\":" + BlazePersonaId + ",\"formation\":\"" + squad.Formation +
+            "\",\"rating\":" + rating + ",\"chemistry\":" + squad.Chemistry +
+            ",\"manager\":[{\"id\":0,\"itemType\":\"manager\"}],\"players\":" + playersSb +
+            ",\"actives\":" + actives + ",\"dreamSquad\":false,\"changed\":0,\"squadName\":\"" + Esc(squad.Name) + "\"," +
+            "\"starRating\":" + rating + ",\"captain\":" + captainId + ",\"kicktakers\":" + kicktakers +
+            ",\"squadType\":\"REGULAR_SQUAD\",\"newSquad\":null,\"custom\":null}";
+    }
+
+    private static string CurrenciesJson(long coins) =>
+        "[{\"name\":\"COINS\",\"funds\":" + coins + ",\"finalFunds\":" + coins + ",\"originalPrice\":" + coins + "}," +
+        "{\"name\":\"POINTS\",\"funds\":0,\"finalFunds\":0,\"originalPrice\":0}," +
+        "{\"name\":\"DRAFT_TOKEN\",\"funds\":0,\"finalFunds\":0,\"originalPrice\":0}]";
 
     // Keep these in sync with AuthenticationComponent (UserId / PersonaName) so the EASFC
     // web identity matches the Blaze-authenticated persona.
