@@ -221,10 +221,14 @@ internal sealed class WebServer
             payload = ms.ToArray();
         }
 
-        if (payloadStr.Length > 0)
-            _log.LogInformation("      -> {0} resp({1}): {2}", contentType, payload.Length, Trim(payloadStr, 2048));
+        string status = "200 OK";
+        if ((lp.EndsWith("/user") || lp.EndsWith("/userdata")) && !FutProfileStore.Get().Club.Established)
+            status = "465 Tutorial";
 
-        return BuildBytes("200 OK", contentType, payload, extra, keepAlive);
+        if (payloadStr.Length > 0)
+            _log.LogInformation("      -> [{0}] {1} resp({2}): {3}", status, contentType, payload.Length, Trim(payloadStr, 2048));
+
+        return BuildBytes(status, contentType, payload, extra, keepAlive);
     }
 
     private static byte[] BuildBytes(string status, string contentType, byte[] body, NameValueCollection extra, bool keepAlive)
