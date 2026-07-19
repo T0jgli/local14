@@ -15,12 +15,6 @@ internal sealed class WebServer
 
     private string _lastPurchaseResponseBody = "";
 
-    private static readonly Dictionary<int, int> PackCoinPrices = new()
-    {
-        { 100, 400 }, { 103, 750 }, { 200, 2500 }, { 203, 3750 },
-        { 300, 5000 }, { 304, 7500 }, { 502, 25000 },
-    };
-
     public WebServer(int port, ILogger log)
     {
         _port = port;
@@ -478,14 +472,18 @@ internal sealed class WebServer
                         items.Append(BuildRealPlayerItem(rnd, chosen, itemId, nowUnix, 6));
                         data.Inventory.Add(new ClubItem(itemId, chosen, 6));
                     }
-                    if (currency == "COINS" && PackCoinPrices.TryGetValue(packId, out int price))
-                        FutProfileStore.Mutate(p => p.Coins = Math.Max(0, p.Coins - price));
+                    if (currency == "COINS")
+                    {
+                        int price = StorePacks.FirstOrDefault(sp => sp.Id == packId).Coins;
+                        if (price > 0)
+                            FutProfileStore.Mutate(p => p.Coins = Math.Max(0, p.Coins - price));
+                    }
                 });
 
                 itemIds.Append(']');
                 items.Append(']');
                 string purchaseBody = "{\"duplicateItemIdList\":[],\"itemIdList\":" + itemIds +
-                    ",\"itemList\":" + items + ",\"numberItems\":12,\"purchasedPackId\":0," +
+                    ",\"itemList\":" + items + ",\"numberItems\":12,\"purchasedPackId\":" + packId + "," +
                     "\"entitlementQuantities\":null,\"awardSetIds\":[]}";
                 _lastPurchaseResponseBody = purchaseBody;
                 return ("application/json; charset=utf-8", purchaseBody);
