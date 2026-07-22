@@ -468,8 +468,6 @@ internal sealed class WebServer
                 int packId = 0;
                 var packIdMatch = System.Text.RegularExpressions.Regex.Match(req.Body, "\"packId\"\\s*:\\s*(\\d+)");
                 if (packIdMatch.Success) int.TryParse(packIdMatch.Groups[1].Value, out packId);
-                var currencyMatch = System.Text.RegularExpressions.Regex.Match(req.Body, "\"currency\"\\s*:\\s*\"(\\w+)\"");
-                string currency = currencyMatch.Success ? currencyMatch.Groups[1].Value : "";
 
                 ClubStore.Mutate(data =>
                 {

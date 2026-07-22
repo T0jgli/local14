@@ -37,6 +37,10 @@ internal static class ClubStore
             var midPos = new HashSet<string> { "CM", "CDM", "CAM", "RM", "LM" };
             var attPos = new HashSet<string> { "ST", "CF", "RW", "LW", "RF", "LF" };
             var xi = new List<RealPlayer>();
+            var inXi = new HashSet<int>();
+            void Pick(Func<RealPlayer, bool> where, int n)
+            {
+                foreach (var p in all.Where(p => !inXi.Contains(p.Id) && where(p))
                                      .OrderByDescending(p => p.Rating).Take(n))
                 { xi.Add(p); inXi.Add(p.Id); }
             }
