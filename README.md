@@ -23,6 +23,7 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 - POW/EASFC/EASW web service
 - EA CDN recreation
 - FUT Hub
+- FUT DB
 
 ## SDK
 
@@ -57,6 +58,5 @@ This project is an unofficial, community-developed backend. It is not affiliated
 ## Credits
  
 - MYorderlyHuman on discord (Helped soo much in understanding of the architecture)
-- Draztic on discord (Cert Exploit, authenticationcomponent, cfg xml)
 - [BlazeSDK](https://github.com/Aim4kill/BlazeSDK) By [@Aim4kill](https://github.com/Aim4kill)
 - [Zamboni3](https://github.com/ZamboniDevelopment/Zamboni3) By [@ZamboniDevelopment](https://github.com/ZamboniDevelopment)

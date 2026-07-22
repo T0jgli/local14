@@ -8,6 +8,7 @@ internal sealed class ClubData
     public List<Squad> Squads { get; set; } = new();
     public int ActiveSquadId { get; set; } = 0;
     public bool Seeded { get; set; } = false;
+    public bool AllPlayersSeeded { get; set; } = false; 
 }
 
 internal static class ClubStore
@@ -18,8 +19,48 @@ internal static class ClubStore
 
     static ClubStore()
     {
-        if (!_data.Seeded)
+        if (!_data.AllPlayersSeeded)
+            SeedWholeDatabase();
+        else if (!_data.Seeded)
             Seed();
+    }
+
+    private static void SeedWholeDatabase()
+    {
+        lock (_lock)
+        {
+            _data.Inventory.Clear();
+            _data.Squads.Clear();
+
+            var all = RealPlayers.All;
+            var defPos = new HashSet<string> { "CB", "RB", "LB", "RWB", "LWB" };
+            var midPos = new HashSet<string> { "CM", "CDM", "CAM", "RM", "LM" };
+            var attPos = new HashSet<string> { "ST", "CF", "RW", "LW", "RF", "LF" };
+            var xi = new List<RealPlayer>();
+                                     .OrderByDescending(p => p.Rating).Take(n))
+                { xi.Add(p); inXi.Add(p.Id); }
+            }
+            Pick(p => p.Position == "GK", 1);
+            Pick(p => defPos.Contains(p.Position), 4);
+            Pick(p => midPos.Contains(p.Position), 4);
+            Pick(p => attPos.Contains(p.Position), 2);
+            Pick(_ => true, 11 - xi.Count);   // top up if any category came short
+
+            foreach (var p in all)
+                _data.Inventory.Add(new ClubItem(p.Id, p, inXi.Contains(p.Id) ? 7 : 6));   // 7 = in squad, 6 = club
+
+            if (xi.Count > 0)
+            {
+                var squad = new Squad { Id = 0, Name = "FUT14 FC", Formation = "f442" };
+                for (int i = 0; i < xi.Count; i++) squad.Slots[i] = xi[i].Id;   // slot 0 = GK, then def/mid/att
+                _data.Squads.Add(squad);
+            }
+            _data.ActiveSquadId = 0;
+            _data.Seeded = true;
+            _data.AllPlayersSeeded = true;
+            Save();
+            Console.WriteLine($"[Club] seeded {_data.Inventory.Count} players; starting XI = {xi.Count}");
+        }
     }
 
     public static ClubData Get()
@@ -40,29 +81,6 @@ internal static class ClubStore
     {
         lock (_lock)
         {
-            var seedRnd = new Random();
-            string[] starterPositions = { "GK", "RB", "CB", "CB", "LB", "RM", "CM", "CM", "LM", "ST", "ST" };
-            var seedUsed = new HashSet<int>();
-            var defaultSquad = new Squad { Id = 0, Name = "FUT14 FC", Formation = "f442" };
-            for (int i = 0; i < starterPositions.Length; i++)
-            {
-                var pool = RealPlayers.All.Where(p => p.Position == starterPositions[i] && !seedUsed.Contains(p.Id)).ToArray();
-                if (pool.Length == 0)
-                    pool = RealPlayers.All.Where(p => !seedUsed.Contains(p.Id)).ToArray();
-                RealPlayer chosen = pool[seedRnd.Next(pool.Length)];
-                seedUsed.Add(chosen.Id);
-                long itemId = 900000 + i;
-                _data.Inventory.Add(new ClubItem(itemId, chosen, 7));
-                defaultSquad.Slots[i] = itemId;
-            }
-            long extraItemId = 800100;
-            foreach (var p in RealPlayers.All)
-            {
-                if (seedUsed.Contains(p.Id)) continue;
-                _data.Inventory.Add(new ClubItem(extraItemId++, p, 6));
-            }
-            _data.Squads.Add(defaultSquad);
-            _data.ActiveSquadId = 0;
             _data.Seeded = true;
             Save();
         }
@@ -84,7 +102,7 @@ internal static class ClubStore
 
     private static void Save()
     {
-        try { File.WriteAllText(_path, JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = true })); }
+        try { File.WriteAllText(_path, JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = false })); }
         catch (Exception ex)
         {
             Console.WriteLine($"[Club] failed to save {_path}: {ex.GetType().Name}: {ex.Message}");

@@ -14,6 +14,7 @@ internal sealed class WebServer
     private TcpListener _listener = null!;
 
     private string _lastPurchaseResponseBody = "";
+    private string _lastPackItemList = ""; 
 
     public WebServer(int port, ILogger log)
     {
@@ -448,6 +449,12 @@ internal sealed class WebServer
                     "{\"auctionInfo\":" + auctionSb + ",\"credits\":" + FutProfileStore.Get().Coins + "}");
         }
 
+        if (path.Contains("/club/stats/newcards"))
+        {
+            string nc = _lastPackItemList.Length > 0 ? _lastPackItemList : "[]";
+            return ("application/json; charset=utf-8", "{\"itemList\":" + nc + "}");
+        }
+
         if (path.Contains("/purchased/items"))
         {
             if (req.HttpMethod == "POST")
@@ -466,29 +473,24 @@ internal sealed class WebServer
 
                 ClubStore.Mutate(data =>
                 {
-                    var packUsedIds = new HashSet<int>(data.Inventory.Select(c => c.Player.Id));
+                    var used = new HashSet<int>(data.Inventory.Select(c => c.Player.Id));
                     for (int i = 0; i < 12; i++)
                     {
                         long itemId = idBase + i;
-                        var pool = RealPlayers.All.Where(p => !packUsedIds.Contains(p.Id)).ToArray();
+                        var pool = RealPlayers.All.Where(p => !used.Contains(p.Id)).ToArray();
                         if (pool.Length == 0) pool = RealPlayers.All;
                         RealPlayer chosen = pool[rnd.Next(pool.Length)];
-                        packUsedIds.Add(chosen.Id);
+                        used.Add(chosen.Id);
                         if (i > 0) { itemIds.Append(','); items.Append(','); }
                         itemIds.Append(itemId);
                         items.Append(BuildRealPlayerItem(rnd, chosen, itemId, nowUnix, 6));
                         data.Inventory.Add(new ClubItem(itemId, chosen, 6));
                     }
-                    if (currency == "COINS")
-                    {
-                        int price = StorePacks.FirstOrDefault(sp => sp.Id == packId).Coins;
-                        if (price > 0)
-                            FutProfileStore.Mutate(p => p.Coins = Math.Max(0, p.Coins - price));
-                    }
                 });
 
                 itemIds.Append(']');
                 items.Append(']');
+                _lastPackItemList = items.ToString();
                 string purchasedBody = "{\"duplicateItemIdList\":[],\"itemIdList\":" + itemIds +
                     ",\"itemList\":" + items + ",\"numberItems\":12,\"purchasedPackId\":" + packId + "," +
                     "\"entitlementQuantities\":null,\"awardSetIds\":[]}";
@@ -539,6 +541,20 @@ internal sealed class WebServer
                 {
                     using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
                     var root = doc.RootElement;
+                    if (root.TryGetProperty("players", out var probe) && probe.ValueKind == System.Text.Json.JsonValueKind.Array
+                        && probe.GetArrayLength() > 0)
+                    {
+                        bool anyOwned = false;
+                        foreach (var pl in probe.EnumerateArray())
+                        {
+                            if (!pl.TryGetProperty("itemData", out var it)) continue;
+                            if (!it.TryGetProperty("id", out var idp)) continue;
+                            long sid = idp.GetInt64();
+                            if (sid != 0 && data.Inventory.Any(c => c.ItemId == sid)) { anyOwned = true; break; }
+                        }
+                        if (!anyOwned) return;  
+                    }
+
                     if (root.TryGetProperty("squadName", out var nameEl) && nameEl.ValueKind == System.Text.Json.JsonValueKind.String)
                         target.Name = nameEl.GetString() ?? target.Name;
                     if (root.TryGetProperty("formation", out var formEl) && formEl.ValueKind == System.Text.Json.JsonValueKind.String)
@@ -549,14 +565,20 @@ internal sealed class WebServer
                         target.StarRating = starEl.GetInt32();
                     if (root.TryGetProperty("players", out var playersEl) && playersEl.ValueKind == System.Text.Json.JsonValueKind.Array)
                     {
-                        target.Slots.Clear();
+                        var newSlots = new Dictionary<int, long>();
                         foreach (var pl in playersEl.EnumerateArray())
                         {
                             if (!pl.TryGetProperty("index", out var idxEl)) continue;
                             if (!pl.TryGetProperty("itemData", out var itemDataEl)) continue;
                             if (!itemDataEl.TryGetProperty("id", out var idEl)) continue;
                             long slotItemId = idEl.GetInt64();
-                            if (slotItemId != 0) target.Slots[idxEl.GetInt32()] = slotItemId;
+                            if (slotItemId != 0 && data.Inventory.Any(c => c.ItemId == slotItemId))
+                                newSlots[idxEl.GetInt32()] = slotItemId;
+                        }
+                        if (newSlots.Count > 0)
+                        {
+                            target.Slots.Clear();
+                            foreach (var kv in newSlots) target.Slots[kv.Key] = kv.Value;
                         }
                     }
                 }
@@ -614,6 +636,18 @@ internal sealed class WebServer
         // field names and skips unknown ones, so extra fields are harmless.
         if (path.EndsWith("/user") || path.EndsWith("/userdata"))
         {
+            if (req.HttpMethod == "POST" && req.Body.Contains("clubName"))
+            {
+                FutProfileStore.Mutate(p =>
+                {
+                    p.IsReturningUser = true;
+                    p.Club.Established = true;
+                    var nm = System.Text.RegularExpressions.Regex.Match(req.Body, "\"clubName\"\\s*:\\s*\"([^\"]*)\"");
+                    if (nm.Success) p.Club.Name = nm.Groups[1].Value;
+                    var ab = System.Text.RegularExpressions.Regex.Match(req.Body, "\"clubAbbr\"\\s*:\\s*\"([^\"]*)\"");
+                    if (ab.Success) p.Club.Abbr = ab.Groups[1].Value;
+                });
+                _log.LogInformation("[FUT] club established: '{0}'", FutProfileStore.Get().Club.Name);
             var prof = FutProfileStore.Get();
             return ("application/json; charset=utf-8",
                     "{\"isReturningUser\":" + (prof.IsReturningUser ? "true" : "false") +
@@ -753,7 +787,7 @@ internal sealed class WebServer
     {
         int rating = player.Rating;
         int resourceId = player.Id;
-        int rareflag = rating >= 75 ? 1 : 0;
+        int rareflag = player.Rare;
         int[] attrs = { player.Pace, player.Shooting, player.Passing, player.Dribbling, player.Defending, player.Physical };
         var attrList = new StringBuilder("[");
         for (int a = 0; a < 6; a++)
