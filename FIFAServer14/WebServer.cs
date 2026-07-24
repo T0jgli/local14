@@ -13,8 +13,15 @@ internal sealed class WebServer
     private readonly string _contentRoot;
     private TcpListener _listener = null!;
 
-    private string _lastPurchaseResponseBody = "";
-    private string _lastPackItemList = ""; 
+    private string _lastPackItemList = "";
+
+    private readonly object _pendingLock = new();
+    private readonly List<(long Id, string Json)> _pendingPackItems = new();
+    private readonly List<long> _pendingDuplicateIds = new();
+
+    private const int SpecialPackChance = 4;
+
+    private const int PackItemCount = 12;
 
     public WebServer(int port, ILogger log)
     {
@@ -294,6 +301,9 @@ internal sealed class WebServer
         if (path.Contains("purchasegroup"))
             return ("application/json; charset=utf-8", StorePurchaseGroupBody());
 
+        if (path.Contains("store/transaction"))
+            return ("application/json; charset=utf-8", NoTransactionBody());
+
         if (path.EndsWith("/accountinfo"))
         {
             long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
@@ -370,7 +380,17 @@ internal sealed class WebServer
         }
 
         if (path.EndsWith("/pilesize"))
-            return ("application/json; charset=utf-8", "{}");
+        {
+            var inv = ClubStore.Get().Inventory;
+            var entries = new StringBuilder("[");
+            for (int pileId = 1; pileId <= 5; pileId++)
+            {
+                if (pileId > 1) entries.Append(',');
+                entries.Append("{\"key\":" + pileId + ",\"value\":" + inv.Count(c => c.Pile == pileId) + "}");
+            }
+            entries.Append(']');
+            return ("application/json; charset=utf-8", "{\"entries\":" + entries + "}");
+        }
 
         if (path.Contains("/user/credits"))
         {
@@ -389,20 +409,65 @@ internal sealed class WebServer
                     "\"maximumTradePileSize\":100,\"total\":0}");
         }
 
+        if (path.Contains("/club/consumables/"))
+        {
+            int cCount = int.TryParse(req.QueryString["count"], out int ccl) ? ccl : 500;
+            int cOff = int.TryParse(req.QueryString["start"], out int coff) ? coff : 0;
+            var cons = ClubStore.Get().Consumables.Skip(cOff).Take(cCount).ToArray();
+            long dnow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var dsb = new StringBuilder("[");
+            for (int i = 0; i < cons.Length; i++)
+            {
+                if (i > 0) dsb.Append(',');
+                dsb.Append(ConsumableItems.BuildJson(cons[i], dnow));
+            }
+            dsb.Append(']');
+            return ("application/json; charset=utf-8", "{\"itemData\":" + dsb + "}");
+        }
+
         if (path.EndsWith("/club"))
         {
+            int countLimit = int.TryParse(req.QueryString["count"], out int cl) ? cl : 50;
+            int offset = int.TryParse(req.QueryString["start"], out int off) ? off : 0;
+
+            string typeFilter = (req.QueryString["type"] ?? "players").ToLowerInvariant();
+            if (typeFilter == "equippables")
+            {
+                var cosmetics = ClubStore.Get().Cosmetics.Skip(offset).Take(countLimit).ToArray();
+                long cnow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                var csb = new StringBuilder("[");
+                for (int i = 0; i < cosmetics.Length; i++)
+                {
+                    if (i > 0) csb.Append(',');
+                    csb.Append(ClubItems.BuildJson(cosmetics[i], cnow));
+                }
+                csb.Append(']');
+                return ("application/json; charset=utf-8", "{\"itemData\":" + csb + "}");
+            }
+            if (typeFilter == "staff")
+            {
+                var staff = ClubStore.Get().Staff.Skip(offset).Take(countLimit).ToArray();
+                long snow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                var ssb = new StringBuilder("[");
+                for (int i = 0; i < staff.Length; i++)
+                {
+                    if (i > 0) ssb.Append(',');
+                    ssb.Append(StaffItems.BuildJson(staff[i], snow));
+                }
+                ssb.Append(']');
+                return ("application/json; charset=utf-8", "{\"itemData\":" + ssb + "}");
+            }
+
             string posFilter = req.QueryString["position"] ?? "any";
             int nationFilter = int.TryParse(req.QueryString["nation"], out int nf) ? nf : -1;
             int teamFilter = int.TryParse(req.QueryString["team"], out int tf) ? tf : -1;
-            int countLimit = int.TryParse(req.QueryString["count"], out int cl) ? cl : 50;
-            int offset = int.TryParse(req.QueryString["start"], out int off) ? off : 0;
 
             var inventory = ClubStore.Get().Inventory;
             var matches = inventory
                 .Where(c => (posFilter == "any" || posFilter == "" || c.Player.Position == posFilter)
                     && (nationFilter == -1 || c.Player.NationId == nationFilter)
                     && (teamFilter == -1 || c.Player.TeamId == teamFilter))
-                .DistinctBy(c => c.Player.Id)
+                .DistinctBy(c => c.ItemId)
                 .OrderByDescending(c => c.Player.Rating)
                 .Skip(offset).Take(countLimit)
                 .ToArray();
@@ -424,7 +489,8 @@ internal sealed class WebServer
             int tmStart = int.TryParse(req.QueryString["start"], out int ts) ? ts : 0;
             int tmCount = int.TryParse(req.QueryString["num"], out int tc) ? tc : 12;
 
-            var tmListings = RealPlayers.All.Skip(tmStart % RealPlayers.All.Length).Take(tmCount).ToArray();
+            var tmPool = SpecialCards.All.Concat(RealPlayers.All).ToArray();
+            var tmListings = tmPool.Skip(tmStart % tmPool.Length).Take(tmCount).ToArray();
             var tmRnd = new Random();
             long tmNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var auctionSb = new StringBuilder("[");
@@ -455,6 +521,65 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8", "{\"itemList\":" + nc + "}");
         }
 
+        if (path.EndsWith("/item") && req.HttpMethod == "PUT")
+        {
+            var moves = new List<(long Id, string Pile)>();
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
+                if (doc.RootElement.TryGetProperty("itemData", out var arr)
+                    && arr.ValueKind == System.Text.Json.JsonValueKind.Array)
+                {
+                    foreach (var el in arr.EnumerateArray())
+                    {
+                        if (!el.TryGetProperty("id", out var idEl)) continue;
+                        string pileName = el.TryGetProperty("pile", out var pEl)
+                            && pEl.ValueKind == System.Text.Json.JsonValueKind.String
+                            ? pEl.GetString() ?? "club" : "club";
+                        moves.Add((idEl.GetInt64(), pileName));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.LogWarning("[FUT] item PUT body parse failed: {0}", ex.Message);
+            }
+
+            if (moves.Count > 0)
+            {
+                ClubStore.Mutate(data =>
+                {
+                    foreach (var (id, pileName) in moves)
+                    {
+                        int want = pileName switch { "club" => 6, "trade" => 3, _ => 0 };
+                        if (want == 0) continue;
+                        int idx = data.Inventory.FindIndex(c => c.ItemId == id);
+                        if (idx >= 0 && data.Inventory[idx].Pile != want)
+                            data.Inventory[idx] = new ClubItem(id, data.Inventory[idx].Player, want);
+                    }
+                });
+                int left;
+                lock (_pendingLock)
+                {
+                    var claimedIds = new HashSet<long>(moves.Select(m => m.Id));
+                    _pendingPackItems.RemoveAll(p => claimedIds.Contains(p.Id));
+                    left = _pendingPackItems.Count;
+                }
+                _log.LogInformation("[FUT] claimed {0} item(s) -> {1}; {2} left to deal with",
+                    moves.Count, moves[0].Pile, left);
+            }
+
+            var claimed = new StringBuilder("[");
+            for (int i = 0; i < moves.Count; i++)
+            {
+                if (i > 0) claimed.Append(',');
+                claimed.Append("{\"id\":" + moves[i].Id + ",\"pile\":\"" + Esc(moves[i].Pile) +
+                               "\",\"success\":true}");
+            }
+            claimed.Append(']');
+            return ("application/json; charset=utf-8", "{\"itemData\":" + claimed + "}");
+        }
+
         if (path.Contains("/purchased/items"))
         {
             if (req.HttpMethod == "POST")
@@ -469,34 +594,75 @@ internal sealed class WebServer
                 var packIdMatch = System.Text.RegularExpressions.Regex.Match(req.Body, "\"packId\"\\s*:\\s*(\\d+)");
                 if (packIdMatch.Success) int.TryParse(packIdMatch.Groups[1].Value, out packId);
 
+                int packPrice = StorePacks.FirstOrDefault(p => p.Id == packId).Coins;
+                long coinsAfter = 0;
+                FutProfileStore.Mutate(p =>
+                {
+                    p.Coins = Math.Max(0, p.Coins - packPrice);
+                    coinsAfter = p.Coins;
+                });
+                _log.LogInformation("[FUT] pack {0} opened for {1} coins; balance {2}", packId, packPrice, coinsAfter);
+
+                var drawn = new List<(long Id, string Json)>();
+                var dupIds = new List<long>();
                 ClubStore.Mutate(data =>
                 {
-                    var used = new HashSet<int>(data.Inventory.Select(c => c.Player.Id));
-                    for (int i = 0; i < 12; i++)
+                    var used = new HashSet<int>(data.Inventory.Select(c => c.Player.CardId));
+                    for (int i = 0; i < PackItemCount; i++)
                     {
                         long itemId = idBase + i;
-                        var pool = RealPlayers.All.Where(p => !used.Contains(p.Id)).ToArray();
-                        if (pool.Length == 0) pool = RealPlayers.All;
+                        var source = SpecialCards.All.Length > 0 && rnd.Next(100) < SpecialPackChance
+                            ? SpecialCards.All : RealPlayers.All;
+                        var pool = source.Where(p => !used.Contains(p.CardId)).ToArray();
+                        if (pool.Length == 0) pool = source;
                         RealPlayer chosen = pool[rnd.Next(pool.Length)];
-                        used.Add(chosen.Id);
-                        if (i > 0) { itemIds.Append(','); items.Append(','); }
-                        itemIds.Append(itemId);
-                        items.Append(BuildRealPlayerItem(rnd, chosen, itemId, nowUnix, 6));
+                        if (used.Contains(chosen.CardId)) dupIds.Add(itemId);
+                        used.Add(chosen.CardId);
+                        drawn.Add((itemId, BuildRealPlayerItem(rnd, chosen, itemId, nowUnix, 1)));
                         data.Inventory.Add(new ClubItem(itemId, chosen, 6));
                     }
                 });
 
+                for (int i = 0; i < drawn.Count; i++)
+                {
+                    if (i > 0) { itemIds.Append(','); items.Append(','); }
+                    itemIds.Append(drawn[i].Id);
+                    items.Append(drawn[i].Json);
+                }
                 itemIds.Append(']');
                 items.Append(']');
                 _lastPackItemList = items.ToString();
-                string purchasedBody = "{\"duplicateItemIdList\":[],\"itemIdList\":" + itemIds +
-                    ",\"itemList\":" + items + ",\"numberItems\":12,\"purchasedPackId\":" + packId + "," +
-                    "\"entitlementQuantities\":null,\"awardSetIds\":[]}";
-                _lastPurchaseResponseBody = purchasedBody;
+                lock (_pendingLock)
+                {
+                    _pendingPackItems.Clear();
+                    _pendingPackItems.AddRange(drawn);
+                    _pendingDuplicateIds.Clear();
+                    _pendingDuplicateIds.AddRange(dupIds);
+                }
+                string purchasedBody = "{\"duplicateItemIdList\":[" + string.Join(",", dupIds) +
+                    "],\"itemIdList\":" + itemIds +
+                    ",\"itemList\":" + items + ",\"numberItems\":" + PackItemCount +
+                    ",\"purchasedPackId\":" + packId + "," +
+                    "\"entitlementQuantities\":null,\"awardSetIds\":[]" +
+                    ",\"coins\":" + coinsAfter + ",\"credits\":" + coinsAfter +
+                    ",\"currencies\":" + CurrenciesJson(coinsAfter) + "}";
                 return ("application/json; charset=utf-8", purchasedBody);
             }
-            string body = _lastPurchaseResponseBody.Length > 0 ? _lastPurchaseResponseBody : "{\"purchase\":[]}";
-            return ("application/json; charset=utf-8", body);
+            var pending = new StringBuilder("[");
+            string pendingDupes;
+            lock (_pendingLock)
+            {
+                for (int i = 0; i < _pendingPackItems.Count; i++)
+                {
+                    if (i > 0) pending.Append(',');
+                    pending.Append(_pendingPackItems[i].Json);
+                }
+                pendingDupes = string.Join(",", _pendingDuplicateIds.Where(
+                    id => _pendingPackItems.Any(p => p.Id == id)));
+            }
+            pending.Append(']');
+            return ("application/json; charset=utf-8",
+                    "{\"duplicateItemIdList\":[" + pendingDupes + "],\"itemData\":" + pending + "}");
         }
 
         if (path.Contains("/delete/") && System.Text.RegularExpressions.Regex.IsMatch(path, @"squad/(\d+)"))
@@ -646,6 +812,8 @@ internal sealed class WebServer
                     if (ab.Success) p.Club.Abbr = ab.Groups[1].Value;
                 });
                 _log.LogInformation("[FUT] club established: '{0}'", FutProfileStore.Get().Club.Name);
+            }
+
             var prof = FutProfileStore.Get();
             return ("application/json; charset=utf-8",
                     "{\"isReturningUser\":" + (prof.IsReturningUser ? "true" : "false") +
@@ -742,6 +910,10 @@ internal sealed class WebServer
         (405, "special", "gold",   35000, true),   // Rare Players Pack (promo -> Special tab)
     };
 
+    private static string NoTransactionBody() =>
+        "{\"transactionId\":0,\"state\":\"NOTRANSACTION\",\"packId\":0,\"purchasePackType\":\"\"," +
+        "\"firstPartyStoreId\":0,\"useAuth\":0,\"useCount\":0,\"useTime\":0}";
+
     private static string StorePurchaseGroupBody()
     {
         var sb = new StringBuilder();
@@ -784,7 +956,8 @@ internal sealed class WebServer
     private static string BuildRealPlayerItem(Random rnd, RealPlayer player, long id, long timestamp, int pile)
     {
         int rating = player.Rating;
-        int resourceId = player.Id;
+        int assetId = player.Id;
+        int resourceId = player.CardId;
         int rareflag = player.Rare;
         int[] attrs = { player.Pace, player.Shooting, player.Passing, player.Dribbling, player.Defending, player.Physical };
         var attrList = new StringBuilder("[");
@@ -796,7 +969,7 @@ internal sealed class WebServer
         attrList.Append(']');
         string zeroStats = "[{\"value\":0,\"index\":0},{\"value\":0,\"index\":1},{\"value\":0,\"index\":2},{\"value\":0,\"index\":3},{\"value\":0,\"index\":4}]";
         return "{\"id\":" + id + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
-            "\"untradeable\":false,\"assetId\":" + resourceId + ",\"rating\":" + rating + "," +
+            "\"untradeable\":false,\"assetId\":" + assetId + ",\"rating\":" + rating + "," +
             "\"itemType\":\"player\",\"dream\":false,\"resourceId\":" + resourceId + ",\"owners\":1," +
             "\"discardValue\":" + (rating * 4) + ",\"itemState\":\"free\",\"cardsubtypeid\":3," +
             "\"lastSalePrice\":0,\"morale\":50,\"fitness\":99,\"injuryType\":\"none\",\"injuryGames\":0," +

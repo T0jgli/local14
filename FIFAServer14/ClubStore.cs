@@ -5,10 +5,13 @@ namespace FIFAServer14;
 internal sealed class ClubData
 {
     public List<ClubItem> Inventory { get; set; } = new();
+    public List<CosmeticItem> Cosmetics { get; set; } = new();
+    public List<ConsumableItem> Consumables { get; set; } = new();
+    public List<StaffItem> Staff { get; set; } = new();
     public List<Squad> Squads { get; set; } = new();
     public int ActiveSquadId { get; set; } = 0;
     public bool Seeded { get; set; } = false;
-    public bool AllPlayersSeeded { get; set; } = false; 
+    public bool AllPlayersSeeded { get; set; } = false;
 }
 
 internal static class ClubStore
@@ -17,12 +20,77 @@ internal static class ClubStore
     private static readonly string _path = Path.Combine(AppContext.BaseDirectory, "club_data.json");
     private static readonly ClubData _data = Load();
 
+    private const long SpecialItemIdBase = 900_000_000L;
+
     static ClubStore()
     {
         if (!_data.AllPlayersSeeded)
             SeedWholeDatabase();
         else if (!_data.Seeded)
             Seed();
+
+        SeedSpecials();
+        SeedCosmetics();
+        SeedConsumables();
+        SeedStaff();
+    }
+
+    private static void SeedStaff()
+    {
+        lock (_lock)
+        {
+            _data.Staff.Clear();
+            _data.Staff.AddRange(StaffItems.Catalog);
+            if (StaffItems.Catalog.Length > 0)
+                Console.WriteLine($"[Club] staff: {StaffItems.Catalog.Length}");
+            Save();
+        }
+    }
+
+    private static void SeedConsumables()
+    {
+        lock (_lock)
+        {
+            var catalog = ConsumableItems.Catalog;
+            _data.Consumables.Clear();
+            _data.Consumables.AddRange(catalog);
+            if (catalog.Length > 0)
+                Console.WriteLine($"[Club] consumables: {catalog.Length}");
+            Save();
+        }
+    }
+
+    private static void SeedCosmetics()
+    {
+        lock (_lock)
+        {
+            var catalog = ClubItems.Catalog;
+            _data.Cosmetics.Clear();
+            _data.Cosmetics.AddRange(catalog);
+            if (catalog.Length > 0)
+                Console.WriteLine($"[Club] club items: {catalog.Length}");
+            Save();
+        }
+    }
+
+    private static void SeedSpecials()
+    {
+        lock (_lock)
+        {
+            var specials = SpecialCards.All;
+            int before = _data.Inventory.RemoveAll(c => c.ItemId >= SpecialItemIdBase);
+            for (int i = 0; i < specials.Length; i++)
+                _data.Inventory.Add(new ClubItem(SpecialItemIdBase + i, specials[i], 6));   // 6 = club
+
+            var live = new HashSet<long>(_data.Inventory.Select(c => c.ItemId));
+            foreach (var squad in _data.Squads)
+                foreach (int idx in squad.Slots.Where(s => !live.Contains(s.Value)).Select(s => s.Key).ToList())
+                    squad.Slots.Remove(idx);
+
+            if (before > 0 || specials.Length > 0)
+                Console.WriteLine($"[Club] special cards: removed {before}, added {specials.Length}");
+            Save();
+        }
     }
 
     private static void SeedWholeDatabase()
