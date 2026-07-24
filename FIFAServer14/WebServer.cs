@@ -17,11 +17,12 @@ internal sealed class WebServer
 
     private readonly object _pendingLock = new();
     private readonly List<(long Id, string Json)> _pendingPackItems = new();
-    private readonly List<long> _pendingDuplicateIds = new();
+    private readonly List<(long NewId, long OwnedId)> _pendingDuplicates = new();
 
-    private const int SpecialPackChance = 4;
 
     private const int PackItemCount = 12;
+
+    private const int SpecialCap = 2;
 
     public WebServer(int port, ILogger log)
     {
@@ -521,6 +522,53 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8", "{\"itemList\":" + nc + "}");
         }
 
+        if (path.Contains("/delete/") && path.EndsWith("/item") && req.HttpMethod == "POST")
+        {
+            var sold = new List<long>();
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
+                if (doc.RootElement.TryGetProperty("itemId", out var arr)
+                    && arr.ValueKind == System.Text.Json.JsonValueKind.Array)
+                    foreach (var el in arr.EnumerateArray()) sold.Add(el.GetInt64());
+            }
+            catch (Exception ex)
+            {
+                _log.LogWarning("[FUT] discard body parse failed: {0}", ex.Message);
+            }
+
+            long earned = 0;
+            ClubStore.Mutate(data =>
+            {
+                foreach (long id in sold)
+                {
+                    int idx = data.Inventory.FindIndex(c => c.ItemId == id);
+                    if (idx < 0) continue;
+                    earned += data.Inventory[idx].Player.Rating * 4;
+                    data.Inventory.RemoveAt(idx);
+                }
+            });
+            long balance = 0;
+            FutProfileStore.Mutate(p => { p.Coins += earned; balance = p.Coins; });
+            lock (_pendingLock)
+            {
+                _pendingPackItems.RemoveAll(p => sold.Contains(p.Id));
+                _pendingDuplicates.RemoveAll(d => sold.Contains(d.NewId));
+            }
+            _log.LogInformation("[FUT] quick sold {0} item(s) for {1} coins; balance {2}",
+                sold.Count, earned, balance);
+
+            var soldSb = new StringBuilder("[");
+            for (int i = 0; i < sold.Count; i++)
+            {
+                if (i > 0) soldSb.Append(',');
+                soldSb.Append("{\"id\":" + sold[i] + "}");
+            }
+            soldSb.Append(']');
+            return ("application/json; charset=utf-8",
+                    "{\"totalCredits\":" + balance + ",\"items\":" + soldSb + "}");
+        }
+
         if (path.EndsWith("/item") && req.HttpMethod == "PUT")
         {
             var moves = new List<(long Id, string Pile)>();
@@ -604,20 +652,81 @@ internal sealed class WebServer
                 _log.LogInformation("[FUT] pack {0} opened for {1} coins; balance {2}", packId, packPrice, coinsAfter);
 
                 var drawn = new List<(long Id, string Json)>();
-                var dupIds = new List<long>();
+                var dupes = new List<(long NewId, long OwnedId)>();
+                var packSpec = StorePacks.FirstOrDefault(p => p.Id == packId);
+                string specialSet = packSpec.SpecialSet ?? "";
+
+                double luck = rnd.NextDouble();
+                bool hot = luck >= 0.96;
+                double ratingBias = luck < 0.80 ? 0.72 : luck < 0.96 ? 0.82 : 0.94;
+                double luckMult = luck < 0.80 ? 1.0 : luck < 0.96 ? 1.8 : 3.0;
+                var plan = BuildPackPlan(packId, rnd, luckMult);
+                if (hot) _log.LogInformation("[FUT] hot pack roll ({0:0.00})", luck);
                 ClubStore.Mutate(data =>
                 {
                     var used = new HashSet<int>(data.Inventory.Select(c => c.Player.CardId));
-                    for (int i = 0; i < PackItemCount; i++)
+                    var ownedByCard = new Dictionary<int, long>();
+                    foreach (var c in data.Inventory)
+                        if (!ownedByCard.ContainsKey(c.Player.CardId))
+                            ownedByCard[c.Player.CardId] = c.ItemId;
+
+                    var picks = new List<(long Id, RealPlayer P, int Tier, bool Rare, bool Special)>();
+                    // Cards already dealt in THIS pack. The club holds the whole roster, so the old
+                    // "not already owned" filter matched nothing and always fell through to the
+                    // unfiltered band - which is how the same player could appear twice in one pack.
+                    var packDrawn = new HashSet<int>();
+                    int specialsDrawn = 0;
+                    for (int i = 0; i < plan.Count; i++)
                     {
                         long itemId = idBase + i;
-                        var source = SpecialCards.All.Length > 0 && rnd.Next(100) < SpecialPackChance
-                            ? SpecialCards.All : RealPlayers.All;
-                        var pool = source.Where(p => !used.Contains(p.CardId)).ToArray();
+                        var (tier, wantRare, forceSpecial) = plan[i];
+                        RealPlayer[] band = AboveFloor(PackPools[(tier, wantRare)], packSpec.MinRating);
+                        if (band.Length == 0) band = PackPools[(tier, false)];
+                        if (band.Length == 0) band = RealPlayers.All;
+                        // Specials only land on a rare slot, and only from this slot's tier, so a
+                        // bronze pack can't hand out a blue card and a gold slot can't hand out a
+                        // 63-rated iMOTM. SpecialCap is a hard ceiling per pack whatever the luck
+                        // roll says - pulling a promo card should stay an event, and four in one
+                        // pack made them worthless.
+                        bool takeSpecial = wantRare && specialsDrawn < SpecialCap && forceSpecial;
+                        var source = band;
+                        bool isSpecial = false;
+                        if (takeSpecial
+                            && SpecialPools.TryGetValue((specialSet, tier), out var sp) && sp.Length > 0)
+                        {
+                            source = sp;
+                            isSpecial = true;
+                        }
+                        var pool = source.Where(p => !packDrawn.Contains(p.CardId)).ToArray();
                         if (pool.Length == 0) pool = source;
-                        RealPlayer chosen = pool[rnd.Next(pool.Length)];
-                        if (used.Contains(chosen.CardId)) dupIds.Add(itemId);
-                        used.Add(chosen.CardId);
+                        RealPlayer chosen = PickWeighted(pool, rnd, isSpecial ? 0.90 : ratingBias);
+                        if (isSpecial) specialsDrawn++;
+                        packDrawn.Add(chosen.CardId);
+                        picks.Add((itemId, chosen, tier, wantRare, isSpecial));
+                    }
+
+                    int topSpecial = picks.Where(x => x.Special).Select(x => x.P.Rating)
+                                          .DefaultIfEmpty(0).Max();
+                    if (topSpecial > 0)
+                        for (int i = 0; i < picks.Count; i++)
+                        {
+                            var pk = picks[i];
+                            if (pk.Special || pk.P.Rating < topSpecial) continue;
+                            RealPlayer[] band = AboveFloor(PackPools[(pk.Tier, pk.Rare)], packSpec.MinRating);
+                            var lower = band.Where(p => p.Rating < topSpecial && !packDrawn.Contains(p.CardId)).ToArray();
+                            if (lower.Length == 0) continue;   // nothing lower in this band, leave it
+                            packDrawn.Remove(pk.P.CardId);
+                            var swap = PickWeighted(lower, rnd, ratingBias);
+                            packDrawn.Add(swap.CardId);
+                            picks[i] = (pk.Id, swap, pk.Tier, pk.Rare, false);
+                        }
+
+                    foreach (var (itemId, chosen, _, _, _) in picks)
+                    {
+                        if (ownedByCard.TryGetValue(chosen.CardId, out long ownedId))
+                            dupes.Add((itemId, ownedId));
+                        else
+                            ownedByCard[chosen.CardId] = itemId;
                         drawn.Add((itemId, BuildRealPlayerItem(rnd, chosen, itemId, nowUnix, 1)));
                         data.Inventory.Add(new ClubItem(itemId, chosen, 6));
                     }
@@ -636,12 +745,15 @@ internal sealed class WebServer
                 {
                     _pendingPackItems.Clear();
                     _pendingPackItems.AddRange(drawn);
-                    _pendingDuplicateIds.Clear();
-                    _pendingDuplicateIds.AddRange(dupIds);
+                    _pendingDuplicates.Clear();
+                    _pendingDuplicates.AddRange(dupes);
                 }
-                string purchasedBody = "{\"duplicateItemIdList\":[" + string.Join(",", dupIds) +
-                    "],\"itemIdList\":" + itemIds +
-                    ",\"itemList\":" + items + ",\"numberItems\":" + PackItemCount +
+                if (dupes.Count > 0)
+                    _log.LogInformation("[FUT] {0} of {1} cards are duplicates", dupes.Count, drawn.Count);
+
+                string purchasedBody = "{\"duplicateItemIdList\":" + DuplicateListJson(dupes) +
+                    ",\"itemIdList\":" + itemIds +
+                    ",\"itemList\":" + items + ",\"numberItems\":" + drawn.Count +
                     ",\"purchasedPackId\":" + packId + "," +
                     "\"entitlementQuantities\":null,\"awardSetIds\":[]" +
                     ",\"coins\":" + coinsAfter + ",\"credits\":" + coinsAfter +
@@ -657,12 +769,12 @@ internal sealed class WebServer
                     if (i > 0) pending.Append(',');
                     pending.Append(_pendingPackItems[i].Json);
                 }
-                pendingDupes = string.Join(",", _pendingDuplicateIds.Where(
-                    id => _pendingPackItems.Any(p => p.Id == id)));
+                pendingDupes = DuplicateListJson(
+                    _pendingDuplicates.Where(d => _pendingPackItems.Any(p => p.Id == d.NewId)));
             }
             pending.Append(']');
             return ("application/json; charset=utf-8",
-                    "{\"duplicateItemIdList\":[" + pendingDupes + "],\"itemData\":" + pending + "}");
+                    "{\"duplicateItemIdList\":" + pendingDupes + ",\"itemData\":" + pending + "}");
         }
 
         if (path.Contains("/delete/") && System.Text.RegularExpressions.Regex.IsMatch(path, @"squad/(\d+)"))
@@ -898,17 +1010,131 @@ internal sealed class WebServer
         return "{}";
     }
 
-    private static readonly (int Id, string Group, string Content, int Coins, bool Premium)[] StorePacks =
+    private static readonly (int Id, string Group, int Coins, bool Premium, int Art,
+                             int Gold, int Silver, int Bronze, int Rare, int Special,
+                             int SpecialMin, int MinRating, string SpecialSet)[] StorePacks =
     {
-        (100, "bronze",  "bronze",   400, false),  // Bronze Pack
-        (103, "bronze",  "bronze",   750, true),   // Premium Bronze Pack
-        (200, "silver",  "silver",  2500, false),  // Silver Pack
-        (203, "silver",  "silver",  3750, true),   // Premium Silver Pack
-        (300, "gold",    "gold",    5000, false),  // Gold Pack
-        (304, "gold",    "gold",    7500, true),   // Premium Gold Pack
-        (502, "gold",    "gold",   15000, true),   // Premium Gold Players Pack
-        (405, "special", "gold",   35000, true),   // Rare Players Pack (promo -> Special tab)
+        // id     tab        coins  prem  art  gold silv bron  rare  spc  min  floor  set
+        (100, "bronze",     400, false,   1,   0,   0,  12,   1,   0,   0,   0, ""),  // Bronze Pack
+        (103, "bronze",     750, true,    1,   0,   0,  12,   3,   0,   0,   0, ""),  // Premium Bronze Pack
+        (200, "silver",    2500, false,   2,   0,  12,   0,   1,   0,   0,   0, ""),  // Silver Pack
+        (203, "silver",    3750, true,    2,   0,  12,   0,   3,   0,   0,   0, ""),  // Premium Silver Pack
+        (300, "gold",      5000, false,   3,  12,   0,   0,   1,   0,   0,   0, ""),  // Gold Pack
+        (304, "gold",      7500, true,    3,  12,   0,   0,   3,   3,   0,   0, ""),  // Premium Gold Pack
+        (502, "gold",     15000, true,    3,  12,   0,   0,   3,   8,   0,   0, ""),  // Premium Gold Players Pack
+        (405, "special",  35000, true,    4,  12,   0,   0,  12,   8,   0,   0, ""),  // Rare Players Pack - 12 rare gold
+        (406, "special",  50000, true,    5,  24,   0,   0,  24,  25,   0,  79, ""),  // Jumbo Rare Players - 24 rare gold
+        (404, "special", 100000, true,    6,  30,   0,   0,  30,  45,   0,  82, ""),  // Mega Pack - 30 items
     };
+
+    private static int TierOf(RealPlayer p) => p.Rating >= 75 ? 2 : p.Rating >= 65 ? 1 : 0;
+
+    private static readonly Dictionary<(int Tier, bool Rare), RealPlayer[]> PackPools = BuildPackPools();
+
+    private static readonly Dictionary<int, RealPlayer[]> TierPools =
+        Enumerable.Range(0, 3).ToDictionary(t => t,
+            t => RealPlayers.All.Where(p => TierOf(p) == t).OrderByDescending(p => p.Rating).ToArray());
+
+    private static readonly Dictionary<(string Set, int Tier), RealPlayer[]> SpecialPools = BuildSpecialPools();
+
+    private static Dictionary<(string, int), RealPlayer[]> BuildSpecialPools()
+    {
+        var pools = new Dictionary<(string, int), RealPlayer[]>();
+        var sets = SpecialCards.All.Select(p => p.Set ?? "").Append("").Distinct();
+        foreach (string set in sets)
+            for (int tier = 0; tier <= 2; tier++)
+                pools[(set, tier)] = SpecialCards.All
+                    .Where(p => TierOf(p) == tier
+                        && (set.Length == 0 || string.Equals(p.Set, set, StringComparison.OrdinalIgnoreCase)))
+                    .ToArray();
+        return pools;
+    }
+
+    private static Dictionary<(int, bool), RealPlayer[]> BuildPackPools()
+    {
+        var pools = new Dictionary<(int, bool), RealPlayer[]>();
+        for (int tier = 0; tier <= 2; tier++)
+            foreach (bool rare in new[] { false, true })
+                pools[(tier, rare)] = RealPlayers.All
+                    .Where(p => TierOf(p) == tier && (p.Rare != 0) == rare)
+                    .OrderByDescending(p => p.Rating)   // index 0 = best; PickBiased leans on this
+                    .ToArray();
+        return pools;
+    }
+
+    private static RealPlayer PickWeighted(RealPlayer[] pool, Random rnd, double decay)
+    {
+        if (pool.Length <= 1) return pool[0];
+        int floor = pool[^1].Rating;          // pool is sorted best-first
+        double total = 0;
+        for (int i = 0; i < pool.Length; )
+        {
+            int rating = pool[i].Rating, n = 0;
+            while (i + n < pool.Length && pool[i + n].Rating == rating) n++;
+            total += n * Math.Pow(decay, rating - floor);
+            i += n;
+        }
+        double roll = rnd.NextDouble() * total;
+        for (int i = 0; i < pool.Length; )
+        {
+            int rating = pool[i].Rating, n = 0;
+            while (i + n < pool.Length && pool[i + n].Rating == rating) n++;
+            roll -= n * Math.Pow(decay, rating - floor);
+            if (roll <= 0) return pool[rnd.Next(i, i + n)];
+            i += n;
+        }
+        return pool[^1];
+    }
+
+    private static RealPlayer[] AboveFloor(RealPlayer[] band, int minRating)
+    {
+        if (minRating <= 0 || band.Length == 0 || band[^1].Rating >= minRating) return band;
+        int n = 0;
+        while (n < band.Length && band[n].Rating >= minRating) n++;
+        return n >= 8 ? band[..n] : band;   // never squeeze the pool down to nothing
+    }
+
+    private static List<(int Tier, bool Rare, bool Special)> BuildPackPlan(int packId, Random rnd, double luckMult)
+    {
+        var spec = StorePacks.FirstOrDefault(p => p.Id == packId);
+        if (spec.Id == 0) spec = (packId, "bronze", 0, false, 1, 0, 0, PackItemCount, 1, 0, 0, 0, "");
+
+        var plan = new List<(int Tier, bool Rare, bool Special)>();
+        for (int i = 0; i < spec.Gold; i++) plan.Add((2, false, false));
+        for (int i = 0; i < spec.Silver; i++) plan.Add((1, false, false));
+        for (int i = 0; i < spec.Bronze; i++) plan.Add((0, false, false));
+        if (plan.Count == 0)
+            for (int i = 0; i < PackItemCount; i++) plan.Add((0, false, false));
+
+        for (int i = 0; i < Math.Min(spec.Rare, plan.Count); i++)
+            plan[i] = (plan[i].Tier, true, false);
+        int specials = Math.Min(spec.SpecialMin, SpecialCap);
+        if (specials < SpecialCap && spec.Special > 0 && rnd.NextDouble() * 100 < spec.Special * luckMult)
+            specials++;
+        for (int i = 0; i < Math.Min(specials, Math.Min(spec.Rare, plan.Count)); i++)
+            plan[i] = (plan[i].Tier, true, true);
+
+        for (int i = plan.Count - 1; i > 0; i--)
+        {
+            int j = rnd.Next(i + 1);
+            (plan[i], plan[j]) = (plan[j], plan[i]);
+        }
+        return plan;
+    }
+
+    private static string DuplicateListJson(IEnumerable<(long NewId, long OwnedId)> dupes)
+    {
+        var sb = new StringBuilder("[");
+        bool first = true;
+        foreach (var (newId, ownedId) in dupes)
+        {
+            if (!first) sb.Append(',');
+            first = false;
+            sb.Append("{\"duplicateItemId\":" + newId + ",\"itemId\":" + ownedId + "}");
+        }
+        sb.Append(']');
+        return sb.ToString();
+    }
 
     private static string NoTransactionBody() =>
         "{\"transactionId\":0,\"state\":\"NOTRANSACTION\",\"packId\":0,\"purchasePackType\":\"\"," +
@@ -925,11 +1151,12 @@ internal sealed class WebServer
             // Category tabs order left->right by ascending displayGroup.priority: bronze -> special.
             int prio   = p.Group switch { "bronze" => 0, "silver" => 1, "gold" => 2, "special" => 3, _ => 2 };
             // Pack tier (bronze/silver/gold art) is carried by packContentInfo's *Quantity fields.
-            int gold   = p.Content == "gold"   ? 10 : 0;
-            int silver = p.Content == "silver" ? 10 : 0;
-            int bronze = p.Content == "bronze" ? 10 : 0;
-            int rare   = p.Premium ? 3 : 1;
-            int art    = p.Content == "gold" ? 3 : p.Content == "silver" ? 2 : 1;
+            int gold   = p.Gold;
+            int silver = p.Silver;
+            int bronze = p.Bronze;
+            int rare   = p.Rare;
+            int items  = gold + silver + bronze;
+            int art    = p.Art;
             if (i > 0) sb.Append(',');
             sb.Append("{\"id\":").Append(p.Id)
               .Append(",\"state\":\"active\",\"type\":\"cardpack\",\"description\":\"\"")
@@ -945,7 +1172,7 @@ internal sealed class WebServer
               .Append(",\"isSeasonTicketDiscount\":false,\"useDefaultImage\":true")
               .Append(",\"purchaseMethod\":\"COIN\",\"displayGroupAssetId\":").Append(art).Append(",\"lastPurchasedTime\":0")
               .Append(",\"displayGroupUseDefaultImage\":true,\"unopened\":false,\"packType\":\"CARDPACK\"")
-              .Append(",\"packContentInfo\":{\"itemQuantity\":12,\"goldQuantity\":").Append(gold)
+              .Append(",\"packContentInfo\":{\"itemQuantity\":").Append(items).Append(",\"goldQuantity\":").Append(gold)
               .Append(",\"silverQuantity\":").Append(silver).Append(",\"bronzeQuantity\":").Append(bronze)
               .Append(",\"rareQuantity\":").Append(rare).Append("}}");
         }
