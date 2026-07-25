@@ -23,7 +23,10 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 - POW/EASFC/EASW web service
 - EA CDN recreation
 - FUT Hub
-- FUT DB
+- FUT DB (80% done)
+- Packs
+- Squad saving
+- Club search
 
 ## SDK
 

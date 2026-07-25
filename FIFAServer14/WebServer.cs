@@ -320,10 +320,11 @@ internal sealed class WebServer
                 ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
                 ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + est + ",\"divisionOnline\":1,\"lastAccessTime\":1400000000," +
                 "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
+            string clubListEntries = prof.Club.Established ? clubList : "";
             string persona =
                 "{\"personaId\":" + nucleusId + ",\"personaName\":\"" + BlazePersonaName + "\"," +
                 "\"returningUser\":" + ret + ",\"isReturningUser\":" + ret + ",\"trial\":false,\"userState\":\"\"," +
-                "\"userClubList\":[" + clubList + "]}";
+                "\"userClubList\":[" + clubListEntries + "]}";
             string json =
                 "{\"userAccountInfo\":{\"personas\":[" + persona + "],\"userPersonaInfos\":[]}}";
             return ("application/json; charset=utf-8", json);
@@ -499,7 +500,7 @@ internal sealed class WebServer
             {
                 var p = tmListings[i];
                 long tradeId = 700000000L + tmStart + i;
-                long itemId = 750000000L + tmStart + i;
+                long itemId = ItemIds.For(p);
                 int basePrice = p.Rating * p.Rating * 2;
                 int startingBid = Math.Max(150, basePrice / 10);
                 int buyNowPrice = Math.Max(startingBid * 3, basePrice);
@@ -634,7 +635,6 @@ internal sealed class WebServer
             {
                 var rnd = new Random();
                 long nowUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                long idBase = nowUnix % 100000 * 100;
                 var itemIds = new StringBuilder("[");
                 var items = new StringBuilder("[");
 
@@ -678,7 +678,6 @@ internal sealed class WebServer
                     int specialsDrawn = 0;
                     for (int i = 0; i < plan.Count; i++)
                     {
-                        long itemId = idBase + i;
                         var (tier, wantRare, forceSpecial) = plan[i];
                         RealPlayer[] band = AboveFloor(PackPools[(tier, wantRare)], packSpec.MinRating);
                         if (band.Length == 0) band = PackPools[(tier, false)];
@@ -702,7 +701,7 @@ internal sealed class WebServer
                         RealPlayer chosen = PickWeighted(pool, rnd, isSpecial ? 0.90 : ratingBias);
                         if (isSpecial) specialsDrawn++;
                         packDrawn.Add(chosen.CardId);
-                        picks.Add((itemId, chosen, tier, wantRare, isSpecial));
+                        picks.Add((ItemIds.For(chosen), chosen, tier, wantRare, isSpecial));
                     }
 
                     int topSpecial = picks.Where(x => x.Special).Select(x => x.P.Rating)
@@ -718,17 +717,18 @@ internal sealed class WebServer
                             packDrawn.Remove(pk.P.CardId);
                             var swap = PickWeighted(lower, rnd, ratingBias);
                             packDrawn.Add(swap.CardId);
-                            picks[i] = (pk.Id, swap, pk.Tier, pk.Rare, false);
+                            picks[i] = (ItemIds.For(swap), swap, pk.Tier, pk.Rare, false);
                         }
 
                     foreach (var (itemId, chosen, _, _, _) in picks)
                     {
-                        if (ownedByCard.TryGetValue(chosen.CardId, out long ownedId))
+                        bool dupe = ownedByCard.TryGetValue(chosen.CardId, out long ownedId);
+                        if (dupe)
                             dupes.Add((itemId, ownedId));
                         else
                             ownedByCard[chosen.CardId] = itemId;
                         drawn.Add((itemId, BuildRealPlayerItem(rnd, chosen, itemId, nowUnix, 1)));
-                        data.Inventory.Add(new ClubItem(itemId, chosen, 6));
+                        if (!dupe) data.Inventory.Add(new ClubItem(itemId, chosen, 6));
                     }
                 });
 
@@ -807,12 +807,9 @@ internal sealed class WebServer
             Squad target = null;
             ClubStore.Mutate(data =>
             {
+                if (data.Inventory.Count == 0) return;
+
                 target = data.Squads.FirstOrDefault(s => s.Id == putId);
-                if (target == null)
-                {
-                    target = new Squad { Id = putId };
-                    data.Squads.Add(target);
-                }
                 try
                 {
                     using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
@@ -828,7 +825,13 @@ internal sealed class WebServer
                             long sid = idp.GetInt64();
                             if (sid != 0 && data.Inventory.Any(c => c.ItemId == sid)) { anyOwned = true; break; }
                         }
-                        if (!anyOwned) return;  
+                        if (!anyOwned) return;
+                    }
+
+                    if (target == null)
+                    {
+                        target = new Squad { Id = putId };
+                        data.Squads.Add(target);
                     }
 
                     if (root.TryGetProperty("squadName", out var nameEl) && nameEl.ValueKind == System.Text.Json.JsonValueKind.String)
@@ -853,6 +856,13 @@ internal sealed class WebServer
                         }
                         if (newSlots.Count > 0)
                         {
+                            int had = target.Slots.Count(s => s.Value != 0);
+                            if (newSlots.Count < had)
+                                _log.LogWarning("[FUT] squad PUT {0} shrinks the squad: {1} slot(s) in, {2} saved - the client dropped entries from our last squad body",
+                                    putId, newSlots.Count, had);
+                            else
+                                _log.LogInformation("[FUT] squad PUT {0}: {1} slot(s) (was {2})", putId, newSlots.Count, had);
+
                             target.Slots.Clear();
                             foreach (var kv in newSlots) target.Slots[kv.Key] = kv.Value;
                         }
@@ -870,8 +880,9 @@ internal sealed class WebServer
                     if (data.Inventory[i].Pile != want)
                         data.Inventory[i] = new ClubItem(data.Inventory[i].ItemId, data.Inventory[i].Player, want);
                 }
-                data.ActiveSquadId = putId;
+                if (target != null && target.Slots.Count > 0) data.ActiveSquadId = putId;
             });
+            target ??= new Squad { Id = putId };   // nothing owned/persisted: respond with an empty squad
             return ("application/json; charset=utf-8", BuildFullSquadJson(target));
         }
 
@@ -886,7 +897,9 @@ internal sealed class WebServer
         if (path.EndsWith("/squad/active"))
         {
             var data = ClubStore.Get();
-            var active = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
+            var active = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId && s.Slots.Count > 0)
+                ?? data.Squads.FirstOrDefault(s => s.Slots.Count > 0)
+                ?? data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
                 ?? (data.Squads.Count > 0 ? data.Squads[0] : new Squad { Id = 0 });
             return ("application/json; charset=utf-8", BuildFullSquadJson(active));
         }
@@ -899,11 +912,15 @@ internal sealed class WebServer
             {
                 if (i > 0) sb.Append(',');
                 var s = data.Squads[i];
-                sb.Append("{\"id\":" + s.Id + ",\"squadName\":\"" + Esc(s.Name) + "\",\"formation\":\"" + s.Formation +
-                    "\",\"chemistry\":" + s.Chemistry + ",\"rating\":" + s.StarRating + "}");
+                string sqName = string.IsNullOrWhiteSpace(s.Name) ? "Squad 1" : s.Name;
+                sb.Append("{\"id\":" + s.Id + ",\"squadId\":" + s.Id + ",\"squadName\":\"" + Esc(sqName) +
+                    "\",\"formation\":\"" + s.Formation +
+                    "\",\"chemistry\":" + s.Chemistry + ",\"rating\":" + s.StarRating +
+                    ",\"starRating\":" + s.StarRating + ",\"squadType\":\"REGULAR_SQUAD\"}");
             }
             sb.Append(']');
-            return ("application/json; charset=utf-8", "{\"squad\":" + sb + "}");
+            return ("application/json; charset=utf-8",
+                    "{\"squadList\":" + sb + ",\"squad\":" + sb + "}");
         }
 
         // FUT user profile (/fut/rs4/ut/game/fifa14/user, .../userdata). Data-driven from the
@@ -914,6 +931,7 @@ internal sealed class WebServer
         {
             if (req.HttpMethod == "POST" && req.Body.Contains("clubName"))
             {
+                bool firstTime = !FutProfileStore.Get().Club.Established;
                 FutProfileStore.Mutate(p =>
                 {
                     p.IsReturningUser = true;
@@ -924,6 +942,7 @@ internal sealed class WebServer
                     if (ab.Success) p.Club.Abbr = ab.Groups[1].Value;
                 });
                 _log.LogInformation("[FUT] club established: '{0}'", FutProfileStore.Get().Club.Name);
+                if (firstTime) ClubStore.SeedStarterSquad();   // grant the bronze starter squad once
             }
 
             var prof = FutProfileStore.Get();
@@ -985,15 +1004,22 @@ internal sealed class WebServer
         if (path.Contains("/chal/"))                              return "{\"challenges\":[]}";
 
         if (path.Contains("/pfyc/") && path.EndsWith("/info"))
-            return "{\"clubId\":1,\"clubName\":\"" + BlazePersonaName + "\",\"leagueId\":0," +
+        {
+            var pc = FutProfileStore.Get().Club;
+            return "{\"clubId\":" + (pc.Established ? 1 : 0) + ",\"clubName\":\"" + (pc.Established ? BlazePersonaName : "") + "\",\"leagueId\":0," +
                    "\"globalLeagueId\":0,\"division\":1,\"newDivision\":1,\"prevLeagueId\":0}";
+        }
         if (path.Contains("/pfyc/schedule"))                      return "{\"schedule\":[]}";
         if (path.Contains("/pfyc/user/club"))
-            return "{\"clubId\":1,\"clubName\":\"" + BlazePersonaName + "\",\"leagueId\":0,\"globalLeagueId\":0,\"division\":1}";
+        {
+            var pc = FutProfileStore.Get().Club;
+            return "{\"clubId\":" + (pc.Established ? 1 : 0) + ",\"clubName\":\"" + (pc.Established ? BlazePersonaName : "") + "\",\"leagueId\":0,\"globalLeagueId\":0,\"division\":1}";
+        }
         if (path.Contains("/pfyc/user"))
         {
             long nuc = ParseLong(req.QueryString["friendtiertp"], BlazePersonaId);
-            return "{\"users\":[{\"nucId\":" + nuc + ",\"clubId\":1,\"pendingClubId\":0," +
+            long pfycClubId = FutProfileStore.Get().Club.Established ? 1 : 0;
+            return "{\"users\":[{\"nucId\":" + nuc + ",\"clubId\":" + pfycClubId + ",\"pendingClubId\":0," +
                    "\"numChangesAllowed\":0,\"leagueId\":0,\"globalLeagueId\":0}]}";
         }
         if (path.Contains("/pfyc/"))                              return "{}";
@@ -1214,21 +1240,40 @@ internal sealed class WebServer
         var inventory = ClubStore.Get().Inventory;
         var rnd = new Random();
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        int slotCount = SquadSlots;
+        if (squad.Slots.Count > 0) slotCount = Math.Max(slotCount, squad.Slots.Keys.Max() + 1);
+
         var playersSb = new StringBuilder("[");
-        bool first = true;
         long captainId = 0;
-        foreach (var slot in squad.Slots)
+        int filled = 0;
+        for (int idx = 0; idx < slotCount; idx++)
         {
-            if (slot.Value == 0) continue;
-            var member = inventory.FirstOrDefault(c => c.ItemId == slot.Value);
-            if (member.ItemId == 0) continue;
-            string item = BuildRealPlayerItem(rnd, member.Player, member.ItemId, now, 7);
-            if (!first) playersSb.Append(',');
-            first = false;
-            playersSb.Append("{\"index\":" + slot.Key + ",\"loyaltyBonus\":1,\"kitNumber\":0,\"chemistry\":10,\"itemData\":" + item + "}");
-            if (captainId == 0 || member.Player.Position == "ST") captainId = member.ItemId;
+            if (idx > 0) playersSb.Append(',');
+            squad.Slots.TryGetValue(idx, out long itemId);
+
+            RealPlayer player = default;
+            bool has = false;
+            if (itemId != 0)
+            {
+                var member = inventory.FirstOrDefault(c => c.ItemId == itemId);
+                if (member.ItemId != 0) { player = member.Player; has = true; }
+                else has = ItemIds.TryResolve(itemId, out player);
+            }
+
+            if (!has)
+            {
+                playersSb.Append("{\"index\":" + idx + ",\"loyaltyBonus\":0,\"kitNumber\":0,\"chemistry\":0," +
+                                 "\"itemData\":{\"id\":0}}");
+                continue;
+            }
+
+            filled++;
+            string item = BuildRealPlayerItem(rnd, player, itemId, now, 7);
+            playersSb.Append("{\"index\":" + idx + ",\"loyaltyBonus\":1,\"kitNumber\":0,\"chemistry\":10,\"itemData\":" + item + "}");
+            if (captainId == 0 || player.Position == "ST") captainId = itemId;
         }
         playersSb.Append(']');
+        Console.WriteLine($"[FUT] squad {squad.Id}: {filled} of {slotCount} slots filled");
         // The client computes and PUTs its own chemistry/rating/starRating, so we just
         // persist and echo those back rather than recomputing server-side.
         int rating = squad.StarRating;
@@ -1267,7 +1312,7 @@ internal sealed class WebServer
             "{\"id\":" + captainId + ",\"index\":2},{\"id\":" + captainId + ",\"index\":3}," +
             "{\"id\":" + captainId + ",\"index\":4}]";
 
-        return "{\"id\":" + squad.Id + ",\"valid\":true,\"personaId\":" + BlazePersonaId + ",\"formation\":\"" + squad.Formation +
+        return "{\"id\":" + squad.Id + ",\"valid\":true,\"personaId\":" + FutSquadPersonaId + ",\"formation\":\"" + squad.Formation +
             "\",\"rating\":" + rating + ",\"chemistry\":" + squad.Chemistry +
             ",\"manager\":[{\"id\":0,\"itemType\":\"manager\"}],\"players\":" + playersSb +
             ",\"actives\":" + actives + ",\"dreamSquad\":false,\"changed\":0,\"squadName\":\"" + Esc(squad.Name) + "\"," +
@@ -1282,6 +1327,10 @@ internal sealed class WebServer
 
     // Keep these in sync with AuthenticationComponent (UserId / PersonaName) so the EASFC
     // web identity matches the Blaze-authenticated persona.
+    private const int SquadSlots = 23;
+
+    private const long FutSquadPersonaId = 0;
+
     private const long BlazePersonaId = 1000;
     private const string BlazePersonaName = "FUT14";
 

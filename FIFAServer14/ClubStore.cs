@@ -20,19 +20,153 @@ internal static class ClubStore
     private static readonly string _path = Path.Combine(AppContext.BaseDirectory, "club_data.json");
     private static readonly ClubData _data = Load();
 
-    private const long SpecialItemIdBase = 900_000_000L;
-
     static ClubStore()
     {
-        if (!_data.AllPlayersSeeded)
-            SeedWholeDatabase();
-        else if (!_data.Seeded)
-            Seed();
+        MigrateItemIds();
 
-        SeedSpecials();
-        SeedCosmetics();
-        SeedConsumables();
-        SeedStaff();
+        if (Environment.GetEnvironmentVariable("FUT_SEED_CLUB") == "1")
+        {
+            if (!_data.AllPlayersSeeded)
+                SeedWholeDatabase();
+            else if (!_data.Seeded)
+                Seed();
+
+            SeedSpecials();
+            SeedCosmetics();
+            SeedConsumables();
+            SeedStaff();
+            return;
+        }
+
+        if (_data.AllPlayersSeeded || !FutProfileStore.Get().Club.Established)
+        {
+            lock (_lock)
+            {
+                bool had = _data.Inventory.Count > 0 || _data.Squads.Count > 0 || _data.Cosmetics.Count > 0
+                           || _data.Consumables.Count > 0 || _data.Staff.Count > 0;
+                _data.Inventory.Clear();
+                _data.Cosmetics.Clear();
+                _data.Consumables.Clear();
+                _data.Staff.Clear();
+                _data.Squads.Clear();
+                _data.ActiveSquadId = 0;
+                _data.AllPlayersSeeded = false;
+                _data.Seeded = false;
+                if (had) Save();
+            }
+            Console.WriteLine("[Club] empty club (fresh account / cleared stale seed)");
+            return;
+        }
+
+        RepairEmptyXi();
+    }
+
+    private static readonly HashSet<string> StarterDef = new() { "CB", "RB", "LB", "RWB", "LWB" };
+    private static readonly HashSet<string> StarterMid = new() { "CM", "CDM", "CAM", "RM", "LM" };
+    private static readonly HashSet<string> StarterAtt = new() { "ST", "CF", "RW", "LW", "RF", "LF" };
+
+    private static readonly string[] Formation442 =
+    {
+        "GK", "RB", "CB", "CB", "LB", "RM", "CM", "CM", "LM", "ST", "ST",   // XI
+        "GK", "CB", "LB", "CM", "RM", "ST", "LW",                           // bench
+        "CB", "RB", "CM", "CAM", "ST",                                      // reserves
+    };
+
+    private const int XiSlots = 11;
+
+    public static void SeedStarterSquad(Random rnd = null)
+    {
+        rnd ??= new Random();
+        lock (_lock)
+        {
+            // Fresh club -> clean slate, then grant the squad.
+            _data.Inventory.Clear();
+            _data.Cosmetics.Clear();
+            _data.Consumables.Clear();
+            _data.Staff.Clear();
+            _data.Squads.Clear();
+
+            var tiers = new int[Formation442.Length];
+            var xiDraw = Enumerable.Range(0, XiSlots).OrderBy(_ => rnd.Next()).ToArray();
+            tiers[xiDraw[0]] = 2; tiers[xiDraw[1]] = 2;
+            var free = Enumerable.Range(0, tiers.Length).Where(i => tiers[i] == 0).ToArray();
+            tiers[free[rnd.Next(free.Length)]] = 2;
+
+            int silverSlot = -1;
+            if (rnd.NextDouble() < 0.6)
+            {
+                var bronzeSlots = Enumerable.Range(0, tiers.Length).Where(i => tiers[i] == 0).ToArray();
+                silverSlot = bronzeSlots[rnd.Next(bronzeSlots.Length)];
+                tiers[silverSlot] = 1;
+            }
+
+            int rareSlot = -1;
+            if (rnd.NextDouble() < 0.20)
+            {
+                if (silverSlot >= 0 && rnd.NextDouble() < 0.4)
+                {
+                    rareSlot = silverSlot;
+                }
+                else
+                {
+                    var bronze = Enumerable.Range(0, tiers.Length).Where(i => tiers[i] == 0).ToArray();
+                    if (bronze.Length > 0) rareSlot = bronze[rnd.Next(bronze.Length)];
+                }
+            }
+
+            var used = new HashSet<int>();
+            var chosen = new List<RealPlayer>();
+            for (int i = 0; i < Formation442.Length; i++)
+                chosen.Add(PickStarterPlayer(Formation442[i], tiers[i], i == rareSlot, used, rnd));
+
+            for (int i = 0; i < chosen.Count; i++)
+                _data.Inventory.Add(new ClubItem(ItemIds.For(chosen[i]), chosen[i], 7));
+
+            string clubName = FutProfileStore.Get().Club.Name;
+            var squad = new Squad { Id = 0, Name = string.IsNullOrWhiteSpace(clubName) ? "Squad 1" : clubName, Formation = "f442" };
+            for (int i = 0; i < chosen.Count; i++) squad.Slots[i] = ItemIds.For(chosen[i]);
+            _data.Squads.Add(squad);
+            _data.ActiveSquadId = 0;
+            Save();
+            string colours = string.Join("", tiers.Select(t => t == 2 ? "G" : t == 1 ? "S" : "b"));
+            Console.WriteLine($"[Club] starter squad granted: {chosen.Count} players " +
+                              $"(XI|bench|reserves {colours[..XiSlots]}|{colours[XiSlots..18]}|{colours[18..]})" +
+                              (silverSlot < 0 ? ", no silver" : "") +
+                              (rareSlot >= 0 ? $", one rare in slot {rareSlot}" : ", no rares"));
+        }
+    }
+
+    private static RealPlayer PickStarterPlayer(string pos, int tier, bool wantRare, HashSet<int> used, Random rnd)
+    {
+        Func<RealPlayer, bool> inGroup =
+            pos == "GK"              ? p => p.Position == "GK" :
+            StarterDef.Contains(pos) ? p => StarterDef.Contains(p.Position) :
+            StarterMid.Contains(pos) ? p => StarterMid.Contains(p.Position) :
+                                       p => StarterAtt.Contains(p.Position);
+        Func<RealPlayer, bool> inTier = tier switch
+        {
+            2 => p => p.Rating >= 75 && p.Rating <= 76 && p.Rare == 0,
+            1 => p => p.Rating >= 65 && p.Rating <= 74,
+            _ => p => p.Rating >= 50 && p.Rating <= 64,
+        };
+
+        var pool = RealPlayers.All.Where(p => !used.Contains(p.Id) && p.Position == pos && inTier(p)).ToArray();
+        if (pool.Length == 0)
+            pool = RealPlayers.All.Where(p => !used.Contains(p.Id) && inGroup(p) && inTier(p)).ToArray();
+
+        if (tier != 2 && pool.Length > 0)
+        {
+            var pref = pool.Where(p => (p.Rare != 0) == wantRare).ToArray();
+            if (pref.Length > 0) pool = pref;
+        }
+        if (pool.Length == 0)
+            pool = RealPlayers.All.Where(p => !used.Contains(p.Id) && inGroup(p)).ToArray();
+        if (pool.Length == 0)
+            pool = RealPlayers.All.Where(p => !used.Contains(p.Id)).ToArray();
+
+        var pick = pool[rnd.Next(pool.Length)];
+        used.Add(pick.Id);
+        return pick;
     }
 
     private static void SeedStaff()
@@ -78,9 +212,9 @@ internal static class ClubStore
         lock (_lock)
         {
             var specials = SpecialCards.All;
-            int before = _data.Inventory.RemoveAll(c => c.ItemId >= SpecialItemIdBase);
+            int before = _data.Inventory.RemoveAll(c => c.Player.IsSpecial);
             for (int i = 0; i < specials.Length; i++)
-                _data.Inventory.Add(new ClubItem(SpecialItemIdBase + i, specials[i], 6));   // 6 = club
+                _data.Inventory.Add(new ClubItem(ItemIds.For(specials[i]), specials[i], 6));   // 6 = club
 
             var live = new HashSet<long>(_data.Inventory.Select(c => c.ItemId));
             foreach (var squad in _data.Squads)
@@ -119,12 +253,12 @@ internal static class ClubStore
             Pick(_ => true, 11 - xi.Count);   // top up if any category came short
 
             foreach (var p in all)
-                _data.Inventory.Add(new ClubItem(p.Id, p, inXi.Contains(p.Id) ? 7 : 6));   // 7 = in squad, 6 = club
+                _data.Inventory.Add(new ClubItem(ItemIds.For(p), p, inXi.Contains(p.Id) ? 7 : 6));   // 7 = in squad, 6 = club
 
             if (xi.Count > 0)
             {
                 var squad = new Squad { Id = 0, Name = "FUT14 FC", Formation = "f442" };
-                for (int i = 0; i < xi.Count; i++) squad.Slots[i] = xi[i].Id;   // slot 0 = GK, then def/mid/att
+                for (int i = 0; i < xi.Count; i++) squad.Slots[i] = ItemIds.For(xi[i]);   // slot 0 = GK, then def/mid/att
                 _data.Squads.Add(squad);
             }
             _data.ActiveSquadId = 0;
@@ -155,6 +289,139 @@ internal static class ClubStore
         {
             _data.Seeded = true;
             Save();
+        }
+    }
+
+    private static void RepairEmptyXi()
+    {
+        lock (_lock)
+        {
+            if (_data.Inventory.Count < 11) return;
+
+            var squad = _data.Squads.FirstOrDefault(s => s.Id == _data.ActiveSquadId)
+                        ?? _data.Squads.FirstOrDefault();
+            if (squad == null)
+            {
+                string clubName = FutProfileStore.Get().Club.Name;
+                squad = new Squad
+                {
+                    Id = 0,
+                    Name = string.IsNullOrWhiteSpace(clubName) ? "Squad 1" : clubName,
+                    Formation = "f442",
+                };
+                _data.Squads.Add(squad);
+                _data.ActiveSquadId = 0;
+            }
+
+            int filled = squad.Slots.Count(s => s.Key < XiSlots && s.Value != 0);
+            int benched = squad.Slots.Count(s => s.Key >= XiSlots && s.Value != 0);
+            int spare = _data.Inventory.Count(c => !_data.Squads.SelectMany(s => s.Slots.Values).Contains(c.ItemId));
+            if (filled >= XiSlots && (benched > 0 || spare == 0)) return;
+
+            var assigned = new HashSet<long>(_data.Squads.SelectMany(s => s.Slots.Values).Where(v => v != 0));
+            int added = 0;
+            for (int i = 0; i < Formation442.Length; i++)
+            {
+                if (squad.Slots.TryGetValue(i, out long have) && have != 0) continue;
+                long pick = PickFromClub(Formation442[i], assigned);
+                if (pick == 0) continue;
+                squad.Slots[i] = pick;
+                assigned.Add(pick);
+                added++;
+            }
+
+            for (int i = 0; i < _data.Inventory.Count; i++)
+            {
+                int want = assigned.Contains(_data.Inventory[i].ItemId) ? 7 : 6;
+                if (_data.Inventory[i].Pile != want)
+                    _data.Inventory[i] = new ClubItem(_data.Inventory[i].ItemId, _data.Inventory[i].Player, want);
+            }
+
+            Save();
+            if (added > 0)
+            {
+                int xi = squad.Slots.Count(s => s.Key < XiSlots && s.Value != 0);
+                int subs = squad.Slots.Count(s => s.Key >= XiSlots && s.Value != 0);
+                Console.WriteLine($"[Club] rebuilt the squad from the club: {added} slot(s) filled, " +
+                                  $"{xi}/{XiSlots} in the XI, {subs} on the bench");
+            }
+        }
+    }
+
+    private static long PickFromClub(string pos, HashSet<long> assigned)
+    {
+        Func<RealPlayer, bool> inGroup =
+            pos == "GK"              ? p => p.Position == "GK" :
+            StarterDef.Contains(pos) ? p => StarterDef.Contains(p.Position) :
+            StarterMid.Contains(pos) ? p => StarterMid.Contains(p.Position) :
+                                       p => StarterAtt.Contains(p.Position);
+
+        var free = _data.Inventory.Where(c => !assigned.Contains(c.ItemId)).ToArray();
+        var pool = free.Where(c => c.Player.Position == pos).ToArray();
+        if (pool.Length == 0) pool = free.Where(c => inGroup(c.Player)).ToArray();
+        if (pool.Length == 0) pool = free.Where(c => c.Player.Position != "GK").ToArray();
+        if (pool.Length == 0) pool = free;
+        if (pool.Length == 0) return 0;
+        return pool.OrderByDescending(c => c.Player.Rating).First().ItemId;
+    }
+
+    private static void MigrateItemIds()
+    {
+        lock (_lock)
+        {
+            var remap = new Dictionary<long, long>();
+            var at = new Dictionary<long, int>();
+            var kept = new List<ClubItem>();
+            foreach (var item in _data.Inventory)
+            {
+                long stable = ItemIds.For(item.Player);
+                if (item.ItemId != stable) remap[item.ItemId] = stable;
+                if (at.TryGetValue(stable, out int seen))
+                {
+                    if (item.Pile > kept[seen].Pile)
+                        kept[seen] = new ClubItem(stable, item.Player, item.Pile);
+                    continue;
+                }
+                at[stable] = kept.Count;
+                kept.Add(new ClubItem(stable, item.Player, item.Pile));
+            }
+
+            bool changed = remap.Count > 0 || kept.Count != _data.Inventory.Count;
+            foreach (var squad in _data.Squads)
+                foreach (int idx in squad.Slots.Keys.ToList())
+                {
+                    long id = squad.Slots[idx];
+                    if (remap.TryGetValue(id, out long mapped))
+                    {
+                        squad.Slots[idx] = mapped;
+                        changed = true;
+                    }
+                    else if (id > 0 && id < ItemIds.PlayerBase
+                             && ItemIds.TryResolve(ItemIds.PlayerBase + id, out _))
+                    {
+                        squad.Slots[idx] = ItemIds.PlayerBase + id;
+                        changed = true;
+                    }
+                }
+
+            if (!changed) return;
+            int dropped = _data.Inventory.Count - kept.Count;
+            _data.Inventory.Clear();
+            _data.Inventory.AddRange(kept);
+
+            string backup = Path.Combine(AppContext.BaseDirectory, "club_data.pre-stableid.json");
+            try
+            {
+                if (File.Exists(_path) && !File.Exists(backup)) File.Copy(_path, backup);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Club] could not back up {_path}: {ex.GetType().Name}: {ex.Message}");
+            }
+
+            Save();
+            Console.WriteLine($"[Club] item ids migrated to the stable scheme: {remap.Count} remapped" +
+                              (dropped > 0 ? $", {dropped} duplicate copies collapsed" : ""));
         }
     }
 
