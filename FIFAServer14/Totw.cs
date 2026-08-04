@@ -140,7 +140,7 @@ internal static class Totw
         if (int.TryParse(System.Environment.GetEnvironmentVariable("FUT_TOTW_WEEK"), out int w) && Teams.ContainsKey(w))
             return w;
         var wk = Weeks();
-        return wk.Length > 0 ? wk[0] : 1;
+        return wk.Length > 0 ? wk[wk.Length - 1] : 1;
     }
 
     private static int WeekRating(int week)

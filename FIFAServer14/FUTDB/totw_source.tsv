@@ -281,7 +281,7 @@ week	formation	idx	starter	slot	name	rating
 16	f41212	9	1	RS	Roberto Soldado	85
 16	f41212	10	1	LS	Imoh Ezekiel	73
 16	f41212	11	0	GK	Colin Coosemans	71
-16	f41212	12	0	CB	Magnus Troest	61
+16	f41212	12	0	CB	Magnus Troest	71
 16	f41212	13	0	RB	Inigo Calderon	69
 16	f41212	14	0	LM	Lee Novak	69
 16	f41212	15	0	LM	Matt Ritchie	71
@@ -538,7 +538,7 @@ week	formation	idx	starter	slot	name	rating
 30	f3412	14	0	RM	Jason Puncheon	74
 30	f3412	15	0	ST	Mattia Destro	80
 30	f3412	16	0	ST	Tom Hitchcock	64
-30	f3412	17	0	ST	Declan OBrien	64
+30	f3412	17	0	ST	Declan O'Brien	64
 31	f3412	0	1	GK	Samir Handanovic	85
 31	f3412	1	1	RCB	Daryl Janmaat	77
 31	f3412	2	1	CB	Juanfran	81
@@ -867,3 +867,17 @@ week	formation	idx	starter	slot	name	rating
 49	f3412	15	0	ST	Rodrigo Mora	74
 49	f3412	16	0	ST	Niall McGinn	73
 49	f3412	17	0	ST	Yuri	73
+38	f3412	11	0	GK	Robin Olsen	64
+38	f3412	12	0	CB	Emil Bergstrom	64
+38	f3412	13	0	RM	Conan Byrne	64
+38	f3412	14	0	LM	Marcin Kaczmarek	64
+38	f3412	15	0	ST	Patrick Hoban	64
+38	f3412	16	0	ST	Edgar Cani	64
+38	f3412	17	0	ST	Christopher Fagan	64
+39	f3412	11	0	GK	Luis Robles	69
+39	f3412	12	0	RB	Amin Nouri	64
+39	f3412	13	0	RM	Fabian Castillo	69
+39	f3412	14	0	CDM	Ole Kristian Selnaes	64
+39	f3412	15	0	LM	Masahudu Alhassan	64
+39	f3412	16	0	ST	Mauro Quiroga	64
+39	f3412	17	0	ST	Kike	73
