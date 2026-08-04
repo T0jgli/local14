@@ -190,6 +190,27 @@ internal sealed class WebServer
                 return BuildBytes("200 OK", ct, fbytes, extra, keepAlive);
             }
             _log.LogWarning("      -> dynamicmessages MISS (no mirror for {0})", rel);
+
+            if (rel.StartsWith("fut/items/pc/", StringComparison.OrdinalIgnoreCase)
+                && rel.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
+                && int.TryParse(System.IO.Path.GetFileNameWithoutExtension(rel), out int trophyId)
+                && trophyId >= 8200000)
+            {
+                int tourneyId = trophyId - 8200000;   // trophyResourceId 8200000+S -> tournamentId S
+                Tournaments.ActiveTournamentId = tourneyId;
+                string tjson = Tournaments.TrophyJson(tourneyId);
+                _log.LogInformation("      -> trophy item json {0} tournamentId={1} (TOURNY_LOC key)",
+                    rel, tourneyId);
+                return BuildBytes("200 OK", "application/json; charset=utf-8",
+                                  System.Text.Encoding.UTF8.GetBytes(tjson), extra, keepAlive);
+            }
+
+            if (rel.StartsWith("fut/items/", StringComparison.OrdinalIgnoreCase))
+            {
+                _log.LogInformation("      -> 404 (CDN-style miss for {0})", rel);
+                return BuildBytes("404 Not Found", "text/plain; charset=utf-8",
+                                  System.Text.Encoding.UTF8.GetBytes("Not Found"), extra, keepAlive);
+            }
         }
 
         var (contentType, payloadStr) = Route(req);
