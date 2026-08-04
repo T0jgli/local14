@@ -15,7 +15,7 @@ internal sealed class AccountProfile
 internal static class AccountStore
 {
     private static readonly object _lock = new();
-    private static readonly string _path = Path.Combine(AppContext.BaseDirectory, "account.json");
+    private static readonly string _path = Path.Combine(AppContext.BaseDirectory, "Profile", "account.json");
     private static readonly AccountProfile _profile = Load();
 
     public static AccountProfile Get()
@@ -65,7 +65,11 @@ internal static class AccountStore
 
     private static void Save()
     {
-        try { File.WriteAllText(_path, JsonSerializer.Serialize(_profile)); }
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
+            File.WriteAllText(_path, JsonSerializer.Serialize(_profile));
+        }
         catch (Exception ex)
         {
             Console.WriteLine($"[Account] failed to save {_path}: {ex.GetType().Name}: {ex.Message}");

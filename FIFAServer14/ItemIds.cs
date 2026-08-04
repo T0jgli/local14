@@ -3,8 +3,12 @@ namespace FIFAServer14;
 internal static class ItemIds
 {
     internal const long PlayerBase = 500_000_000L;
+    internal const long PackItemBase = 800_000_000L;
+    private const long PackItemLimit = 900_000_000L;
 
     internal static long For(RealPlayer p) => PlayerBase + p.CardId;
+
+    internal static bool IsPackItem(long itemId) => itemId >= PackItemBase && itemId < PackItemLimit;
 
     internal static bool TryResolve(long itemId, out RealPlayer player)
     {

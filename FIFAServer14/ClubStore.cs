@@ -7,7 +7,7 @@ internal sealed class ClubData
     public List<ClubItem> Inventory { get; set; } = new();
     public List<CosmeticItem> Cosmetics { get; set; } = new();
     public List<ConsumableItem> Consumables { get; set; } = new();
-    public List<StaffItem> Staff { get; set; } = new();
+    public List<Manager> Managers { get; set; } = new();
     public List<Squad> Squads { get; set; } = new();
     public int ActiveSquadId { get; set; } = 0;
     public bool Seeded { get; set; } = false;
@@ -17,7 +17,7 @@ internal sealed class ClubData
 internal static class ClubStore
 {
     private static readonly object _lock = new();
-    private static readonly string _path = Path.Combine(AppContext.BaseDirectory, "club_data.json");
+    private static readonly string _path = Path.Combine(AppContext.BaseDirectory, "Profile", "club_data.json");
     private static readonly ClubData _data = Load();
 
     static ClubStore()
@@ -34,7 +34,6 @@ internal static class ClubStore
             SeedSpecials();
             SeedCosmetics();
             SeedConsumables();
-            SeedStaff();
             return;
         }
 
@@ -43,11 +42,10 @@ internal static class ClubStore
             lock (_lock)
             {
                 bool had = _data.Inventory.Count > 0 || _data.Squads.Count > 0 || _data.Cosmetics.Count > 0
-                           || _data.Consumables.Count > 0 || _data.Staff.Count > 0;
+                           || _data.Consumables.Count > 0;
                 _data.Inventory.Clear();
                 _data.Cosmetics.Clear();
                 _data.Consumables.Clear();
-                _data.Staff.Clear();
                 _data.Squads.Clear();
                 _data.ActiveSquadId = 0;
                 _data.AllPlayersSeeded = false;
@@ -55,10 +53,12 @@ internal static class ClubStore
                 if (had) Save();
             }
             Console.WriteLine("[Club] empty club (fresh account / cleared stale seed)");
+            MigrateCollections();
             return;
         }
 
         RepairEmptyXi();
+        MigrateCollections();
     }
 
     private static readonly HashSet<string> StarterDef = new() { "CB", "RB", "LB", "RWB", "LWB" };
@@ -83,8 +83,25 @@ internal static class ClubStore
             _data.Inventory.Clear();
             _data.Cosmetics.Clear();
             _data.Consumables.Clear();
-            _data.Staff.Clear();
             _data.Squads.Clear();
+            var club = FutProfileStore.Get().Club;
+            long newBadge = club.ActiveBadgeId;
+            long newHomeKit = club.ActiveHomeKitId;
+            long newAwayKit = club.ActiveAwayKitId;
+            long newStadium = club.ActiveStadiumId;
+            long newBall = club.ActiveBallId;
+
+            long nextCosmeticId = ClubItems.CosmeticItemIdBase + 500000;
+            void Grant(long resId) {
+                var it = ClubItems.Catalog.FirstOrDefault(c => c.ResourceId == resId);
+                if (it.ResourceId == resId) _data.Cosmetics.Add(it with { ItemId = nextCosmeticId++ });
+            }
+            Grant(newBadge);
+            Grant(newHomeKit);
+            Grant(newAwayKit);
+            Grant(newStadium);
+            Grant(newBall);
+
 
             var tiers = new int[Formation442.Length];
             var xiDraw = Enumerable.Range(0, XiSlots).OrderBy(_ => rnd.Next()).ToArray();
@@ -123,7 +140,17 @@ internal static class ClubStore
                 _data.Inventory.Add(new ClubItem(ItemIds.For(chosen[i]), chosen[i], 7));
 
             string clubName = FutProfileStore.Get().Club.Name;
-            var squad = new Squad { Id = 0, Name = string.IsNullOrWhiteSpace(clubName) ? "Squad 1" : clubName, Formation = "f442" };
+            
+            var bzSvManagers = Managers.All.Where(m => m.Rating <= 74).ToArray();
+            Manager pickedManager = bzSvManagers.Length > 0 ? bzSvManagers[rnd.Next(bzSvManagers.Length)] : default;
+            long managerItemId = 0;
+            if (pickedManager.ResourceId != 0)
+            {
+                _data.Managers.Add(pickedManager);
+                managerItemId = FIFAServer14.WebServer.ManagerItemIdBase + Array.IndexOf(Managers.All, pickedManager);
+            }
+
+            var squad = new Squad { Id = 0, Name = string.IsNullOrWhiteSpace(clubName) ? "Squad 1" : clubName, Formation = "f442", ManagerId = managerItemId };
             for (int i = 0; i < chosen.Count; i++) squad.Slots[i] = ItemIds.For(chosen[i]);
             _data.Squads.Add(squad);
             _data.ActiveSquadId = 0;
@@ -169,15 +196,17 @@ internal static class ClubStore
         return pick;
     }
 
-    private static void SeedStaff()
+    private static void MigrateCollections()
     {
         lock (_lock)
         {
-            _data.Staff.Clear();
-            _data.Staff.AddRange(StaffItems.Catalog);
-            if (StaffItems.Catalog.Length > 0)
-                Console.WriteLine($"[Club] staff: {StaffItems.Catalog.Length}");
-            Save();
+            int dropped = _data.Cosmetics.RemoveAll(
+                c => c.Category == 0 || (c.Type == "ball" && c.ResourceId < ClubItems.BallIdFloor));
+            if (dropped > 0)
+            {
+                Console.WriteLine($"[Club] dropped {dropped} stale club items");
+                Save();
+            }
         }
     }
 
@@ -374,16 +403,16 @@ internal static class ClubStore
             var kept = new List<ClubItem>();
             foreach (var item in _data.Inventory)
             {
-                long stable = ItemIds.For(item.Player);
-                if (item.ItemId != stable) remap[item.ItemId] = stable;
-                if (at.TryGetValue(stable, out int seen))
+                long itemId = ItemIds.IsPackItem(item.ItemId) ? item.ItemId : ItemIds.For(item.Player);
+                if (item.ItemId != itemId) remap[item.ItemId] = itemId;
+                if (at.TryGetValue(itemId, out int seen))
                 {
                     if (item.Pile > kept[seen].Pile)
-                        kept[seen] = new ClubItem(stable, item.Player, item.Pile);
+                        kept[seen] = new ClubItem(itemId, item.Player, item.Pile);
                     continue;
                 }
-                at[stable] = kept.Count;
-                kept.Add(new ClubItem(stable, item.Player, item.Pile));
+                at[itemId] = kept.Count;
+                kept.Add(new ClubItem(itemId, item.Player, item.Pile));
             }
 
             bool changed = remap.Count > 0 || kept.Count != _data.Inventory.Count;
@@ -409,7 +438,7 @@ internal static class ClubStore
             _data.Inventory.Clear();
             _data.Inventory.AddRange(kept);
 
-            string backup = Path.Combine(AppContext.BaseDirectory, "club_data.pre-stableid.json");
+            string backup = Path.Combine(AppContext.BaseDirectory, "Profile", "club_data.pre-stableid.json");
             try
             {
                 if (File.Exists(_path) && !File.Exists(backup)) File.Copy(_path, backup);
@@ -420,7 +449,7 @@ internal static class ClubStore
             }
 
             Save();
-            Console.WriteLine($"[Club] item ids migrated to the stable scheme: {remap.Count} remapped" +
+            Console.WriteLine($"[Club] player item IDs migrated: {remap.Count} remapped" +
                               (dropped > 0 ? $", {dropped} duplicate copies collapsed" : ""));
         }
     }
@@ -441,7 +470,11 @@ internal static class ClubStore
 
     private static void Save()
     {
-        try { File.WriteAllText(_path, JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = false })); }
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
+            File.WriteAllText(_path, JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = false }));
+        }
         catch (Exception ex)
         {
             Console.WriteLine($"[Club] failed to save {_path}: {ex.GetType().Name}: {ex.Message}");

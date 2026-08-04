@@ -6,27 +6,39 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 
 ## Features
 
-- Full Blaze/Origin authentication (Login, SilentLogin, OriginLogin, ExpressLogin, LoginPersona, Logout, ListUserEntitlements)
-- Redirector server (TLS, port 42127)
-- Main Blaze server (plaintext, port 10000) handling all game logic
-- Post-login notifications (UserSessions, CensusData)
-- URL provisioning
+- Origin authentication
+- Redirector server
+- Blaze server
 - OSDK Configs
-- OSDK web service (HTTP, port 9988) handling the game's web-service calls
-- DIME config routing (cfgrouting.xml / dimerouting.xml)
-- DIME store config (dimecfg / storecfg / storedesc) + sponsored events
-- FUT boot config (futBoot.xml)
+- OSDK web service
+- DIME Confg
 - FUT/EASFC accountinfo
 - EASFC RS4 server redirect
 - Persistent user settings
-- Persistent account profile (email/country/DOB/opt-ins)
-- POW/EASFC/EASW web service
+- Persistent account profile
+- POW/EASFC/EASW web service (Base)
 - EA CDN recreation
 - FUT Hub
-- FUT DB (80% done)
+- FUT DB (90% done)
 - Packs
+- Proper Pack Weights
 - Squad saving
 - Club search
+- TOTW 
+- Tournaments
+- Match Stats
+
+## TODO
+
+- Transfermarket
+- tots cards
+- WC Mode
+- missing staff cards
+- missing consumables
+- divisions
+- manager challenges
+- minor bug fixes
+- missing cdn files
 
 ## SDK
 

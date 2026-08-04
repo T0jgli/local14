@@ -19,7 +19,7 @@ internal static class ConsumableItems
 
     private static ConsumableItem[] Load()
     {
-        string path = Path.Combine(AppContext.BaseDirectory, "consumables.tsv");
+        string path = Path.Combine(AppContext.BaseDirectory, "FUTDB", "consumables.tsv");
         string flag = Environment.GetEnvironmentVariable("FUT_PROBE_CONSUMABLES");
 
         if (flag == "1" || (!File.Exists(path) && flag != "0"))
@@ -68,11 +68,22 @@ internal static class ConsumableItems
         return list;
     }
 
+    internal static string CanonicalType(string rawItemType)
+    {
+        string t = rawItemType ?? "";
+        if (t.StartsWith("Contract", StringComparison.OrdinalIgnoreCase)) return "contract";
+        if (t.StartsWith("Fitness",  StringComparison.OrdinalIgnoreCase)) return "fitness";
+        if (t.StartsWith("Health",   StringComparison.OrdinalIgnoreCase)) return "healing";
+        if (t.StartsWith("TrainingPlayerPos", StringComparison.OrdinalIgnoreCase)) return "position";
+        if (t.StartsWith("Training", StringComparison.OrdinalIgnoreCase)) return "training";
+        return t;
+    }
+
     public static string BuildJson(ConsumableItem it, long timestamp)
     {
         return
             "{\"id\":" + it.ItemId + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
-            "\"untradeable\":false,\"assetId\":0,\"rating\":0,\"itemType\":\"" + Esc(it.ItemType) + "\"," +
+            "\"untradeable\":false,\"assetId\":0,\"rating\":0,\"itemType\":\"" + Esc(CanonicalType(it.ItemType)) + "\"," +
             "\"resourceId\":" + it.ResourceId + ",\"owners\":1,\"discardValue\":0," +
             "\"itemState\":\"free\",\"cardsubtypeid\":" + it.SubType + ",\"lastSalePrice\":0," +
             "\"statsList\":[],\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":0," +

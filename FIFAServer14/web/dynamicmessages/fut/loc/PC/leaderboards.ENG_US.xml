@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<custom_messages>
+  <message_set target="fut-locstrings" version="99" original="global" source-language="ENG_US" datatype="utf-8" date="2014-01-23T11:47:16Z">
+    <message>
+      <locstring id="BallName_80">adidas f50 X-ite - Glow/Earth Green/Solar Zest</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_81">adidas f50 X-ite - Solar Zest/Black/Vivid Berry</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_82">adidas f50 X-ite - Solar Blue/White/Solar Zest</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_83">adidas 11pro Glider - White/Black/Met Silver</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_84">adidas 11pro Glider - White/Black/Slime</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_85">adidas 11pro Glider - White/Blast Purple/Vivid Berry</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_86">adidas Predator Glider - Black/White/Berry</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_87">adidas Predator Glider - White/Solar/Earth Green</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_88">Nike Incyte PL - Hi-Vis</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_89">Nike Incyte LFP - Hi-Vis</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_90">Puma evoPOWER OMB</locstring>
+    </message>
+    <message>
+      <locstring id="BallName_91">adidas Brazuca</locstring>
+    </message>
+    <message>
+      <locstring id="FUT_QUEST_CREATE_SQUAD">Create a new Squad</locstring>
+    </message>
+    <message>
+      <locstring id="FUT_QUEST_CREATE_SQUAD_DESCRIPTION">Create a new Squad from the Squad Actions menu in the Squad screen.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_BADGE">Badge</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_BUILDER">Top Squad</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_BUILDER_LEADERBOARD">TOP BUILDERS</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_BUILDER_LEADERBOARDS">TOP SQUAD LEADERBOARD</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_COLLECTOR">Club Value</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_COLLECTOR_LEADERBOARD">TOP CLUB VALUES</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_COLLECTOR_LEADERBOARDS">CLUB VALUE LEADERBOARD</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_COMPETITOR">Match Earnings</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_COMPETITOR_LEADERBOARD">TOP MATCH EARNINGS</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_COMPETITOR_LEADERBOARDS">MATCH EARNINGS LEADERBOARD</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_CHAMPIONSHIP">Titles Won</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_CHAMPIONSHIP_LEADERBOARD">TITLES WON</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_CHAMPIONSHIPS">Titles Won</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_CHAMPIONSHIPS_LEADERBOARD">TITLES WON</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_PLAYED">Seasons Completed</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_PLAYED_LEADERBOARD">SEASONS COMPLETED</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_POINTS">Season Points</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_SEASON_POINTS_LEADERBOARD">SEASON POINT TOTALS</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_TRADER">Transfer Profit</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_TRADER_LEADERBOARD">TOP TRADERS</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CAT_TRADER_LEADERBOARDS">TRADING LEADERBOARD</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_CATEGORY">Category:</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_BUILDER">Combined Chemistry and Rating scores of your best Squad. </locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_COLLECTOR">Total value of all Players in your Club.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_COMPETITOR">Total Coins earned from matches and tournaments.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_SEASON_CHAMPIONSHIP">Number of Titles won in all Seasons combined.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_SEASON_CHAMPIONSHIPS">Number of Titles won in all Seasons combined.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_SEASON_PLAYED">Total number of Seasons completed.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_SEASON_POINTS">Total points earned from matches in all Seasons combined.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_DESC_TRADER">Coin profits from purchases, sales, and discards.</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_INSET_BUILDER">Top Squad</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_INSET_COLLECTOR">Club Value</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_INSET_COMPETITOR">Match Earnings</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_INSET_TRADER">Trading</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_PER_ALLTIME">All-Time</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_PER_MONTHLY">Monthly</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_PER_WEEKLY">Weekly</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_PERIOD">Time:</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_PERSONA_360">Gamertag</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_PERSONA_PC">Origin ID</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_PERSONA_PS3">Online ID</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_RANK">Rank</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_BUILDER">Top Squad</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_COLLECTOR">Club Value</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_COMPETITOR">Match Coins</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_SEASON_CHAMPIONSHIP">Titles Won</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_SEASON_CHAMPIONSHIPS">Titles Won</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_SEASON_PLAYED">Seasons</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_SEASON_POINTS">Points Earned</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_SCORE_TRADER">Transfer Profit</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_TB_BUILDER">CLUB VALUE</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_TB_COLLECTOR">PLAYER VALUE</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_TB_COMPETITOR">WINS</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_TB_TRADER">CLUB VALUE</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_VIEW">Compare:</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_VIEW_FRIENDS">Friends</locstring>
+    </message>
+    <message>
+      <locstring id="LOC_LB_VIEW_TOP100">Top 100</locstring>
+    </message>
+  </message_set>
+</custom_messages>

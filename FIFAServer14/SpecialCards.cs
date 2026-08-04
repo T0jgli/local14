@@ -10,11 +10,22 @@ internal static class SpecialCards
 
     private static RealPlayer[] Load()
     {
-        string path = Path.Combine(AppContext.BaseDirectory, "specials.tsv");
         var list = new List<RealPlayer>();
+        var bases = RealPlayers.All.ToDictionary(p => p.Id);
+        LoadFile(Path.Combine(AppContext.BaseDirectory, "FUTDB", "specials.tsv"), list, bases);
+
+        foreach (var clash in list.GroupBy(p => p.ResourceId).Where(g => g.Count() > 1))
+            Console.WriteLine($"[Specials] ERROR duplicate resourceId {clash.Key} on baseId " +
+                              $"{clash.First().Id} ({clash.Count()} cards) - give each row its own band");
+
+        return list.Concat(Probe(list)).ToArray();
+    }
+
+    private static void LoadFile(string path, List<RealPlayer> list, Dictionary<int, RealPlayer> bases)
+    {
+        int before = list.Count;
         try
         {
-            var bases = RealPlayers.All.ToDictionary(p => p.Id);
             int lineNo = 1;
             foreach (string line in File.ReadLines(path).Skip(1))
             {
@@ -35,27 +46,23 @@ internal static class SpecialCards
                 list.Add(new RealPlayer(
                     baseId, "", b.TeamId, b.NationId, c[4], rating, rating,
                     int.Parse(c[6]), int.Parse(c[7]), int.Parse(c[8]),
-                    int.Parse(c[9]), int.Parse(c[10]), int.Parse(c[11]), rareflag)
+                    int.Parse(c[9]), int.Parse(c[10]), int.Parse(c[11]), rareflag,
+                    b.Strength, b.BallControl, b.ShotPower, b.SkillMoves, b.FkAccuracy)
                 {
                     ResourceId = baseId + band * Band,
                     Set = c[0],
                 });
             }
-            foreach (var clash in list.GroupBy(p => p.ResourceId).Where(g => g.Count() > 1))
-                Console.WriteLine($"[Specials] ERROR duplicate resourceId {clash.Key} on baseId " +
-                                  $"{clash.First().Id} ({clash.Count()} cards) - give each row its own band");
-
-            Console.WriteLine($"[Specials] loaded {list.Count} special cards from {path}");
+            Console.WriteLine($"[Specials] loaded {list.Count - before} special cards from {path}");
         }
         catch (FileNotFoundException)
         {
-            Console.WriteLine($"[Specials] no {path}, running without special cards");
+            Console.WriteLine($"[Specials] no {path}, skipping");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"[Specials] FAILED to load {path}: {ex.GetType().Name}: {ex.Message}");
         }
-        return list.Concat(Probe(list)).ToArray();
     }
 
     private static IEnumerable<RealPlayer> Probe(List<RealPlayer> specials)

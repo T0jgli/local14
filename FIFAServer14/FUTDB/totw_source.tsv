@@ -1,0 +1,869 @@
+week	formation	idx	starter	slot	name	rating
+1	f343	0	1	GK	Sven Ulreich	80
+1	f343	1	1	RCB	Hugo Campagnaro	83
+1	f343	2	1	CB	Ezequiel Garay	83
+1	f343	3	1	LCB	Aymen Abdennour	80
+1	f343	4	1	RM	Pierre-Emerick Aubameyang	81
+1	f343	5	1	RCM	Aaron Ramsey	79
+1	f343	6	1	LCM	Blaise Matuidi	82
+1	f343	7	1	LM	Marco Reus	86
+1	f343	8	1	RW	Mounir El Hamdaoui	74
+1	f343	9	1	ST	Jo	80
+1	f343	10	1	LW	Konstantinos Mitroglou	78
+1	f343	11	0	GK	Jussi Jaaskelainen	74
+1	f343	12	0	CB	Lorenzo Tonelli	64
+1	f343	13	0	LM	Gylfi Sigurdsson	78
+1	f343	14	0	CM	Craig Bryson	73
+1	f343	15	0	CAM	Dani Quintana	70
+1	f343	16	0	ST	Ilombe Mboyo	74
+1	f343	17	0	ST	Andriy Voronin	77
+2	f343	0	1	GK	Brad Guzan	80
+2	f343	1	1	RCB	Leighton Baines	84
+2	f343	2	1	CB	Dejan Lovren	80
+2	f343	3	1	LCB	David Alaba	82
+2	f343	4	1	RM	Pedro	86
+2	f343	5	1	RCM	Thiago Neves	79
+2	f343	6	1	LCM	Isco	85
+2	f343	7	1	LM	Koke	82
+2	f343	8	1	RW	Sergio Aguero	89
+2	f343	9	1	ST	Diego Milito	83
+2	f343	10	1	LW	Foued Kadir	74
+2	f343	11	0	GK	Robert Green	78
+2	f343	12	0	LB	Dmitriy Kombarov	78
+2	f343	13	0	RM	Acoran	72
+2	f343	14	0	LM	Lucas Piazon	74
+2	f343	15	0	RW	Robbie Kruse	74
+2	f343	16	0	ST	Frode Johnsen	64
+2	f343	17	0	LW	Jesse Lingard	64
+3	f343	0	1	GK	Diego Alves	82
+3	f343	1	1	RCB	Marquinhos	80
+3	f343	2	1	CB	Miranda	82
+3	f343	3	1	LCB	Steven Caulker	74
+3	f343	4	1	RM	Hulk	85
+3	f343	5	1	RCM	Mathieu Valbuena	83
+3	f343	6	1	LCM	Goran Pandev	80
+3	f343	7	1	LM	Ivan Rakitic	82
+3	f343	8	1	RW	Romelu Lukaku	79
+3	f343	9	1	ST	Robert Lewandowski	87
+3	f343	10	1	LW	Graziano Pelle	80
+3	f343	11	0	GK	Dida	77
+3	f343	12	0	RB	Cedric	74
+3	f343	13	0	LM	Georgios Samaras	74
+3	f343	14	0	LM	Ibrahima Traore	78
+3	f343	15	0	ST	Gilberto	73
+3	f343	16	0	ST	Jon Daly	64
+3	f343	17	0	ST	Alan	73
+4	f433	0	1	GK	Bernd Leno	81
+4	f433	1	1	RB	Sascha Riether	77
+4	f433	2	1	RCB	Winston Reid	77
+4	f433	3	1	LCB	Antonio Carlos	73
+4	f433	4	1	LB	Maxwell	79
+4	f433	5	1	RCM	James Rodriguez	84
+4	f433	6	1	CM	Francesco Totti	83
+4	f433	7	1	LCM	Remy Cabella	78
+4	f433	8	1	RW	Pedro Leon	80
+4	f433	9	1	ST	Diego Costa	84
+4	f433	10	1	LW	Neymar	85
+4	f433	11	0	GK	Filip Kurto	69
+4	f433	12	0	CB	Bondz N'Gala	64
+4	f433	13	0	RM	Adnan Januzaj	64
+4	f433	14	0	RM	Rurik Gislason	71
+4	f433	15	0	ST	Facundo Ferreyra	73
+4	f433	16	0	ST	Konstantinos Mitroglou	81
+4	f433	17	0	ST	Pierre-Michel Lasogga	74
+5	f3412	0	1	GK	Dudu Aouate	74
+5	f3412	1	1	RCB	Philipp Lahm	88
+5	f3412	2	1	CB	Maynor Figueroa	77
+5	f3412	3	1	LCB	Martin Olsson	74
+5	f3412	4	1	RM	Salomon Kalou	80
+5	f3412	5	1	RCM	Graham Zusi	74
+5	f3412	6	1	LCM	Gervinho	80
+5	f3412	7	1	LM	Ezequiel Lavezzi	86
+5	f3412	8	1	CAM	Toni Kroos	85
+5	f3412	9	1	RS	Robin van Persie	90
+5	f3412	10	1	LS	Alexis Sanchez	83
+5	f3412	11	0	GK	Justo Villar	73
+5	f3412	12	0	CB	Alaeddine Yahia	72
+5	f3412	13	0	CM	Aron Gunnarsson	73
+5	f3412	14	0	RM	Andros Townsend	73
+5	f3412	15	0	ST	Nicklas Bendtner	77
+5	f3412	16	0	ST	Ciaran Kilduff	64
+5	f3412	17	0	LW	Kekuta Manneh	64
+6	f3412	0	1	GK	David Ospina	77
+6	f3412	1	1	RCB	Arribas	78
+6	f3412	2	1	CB	Fallou Diagne	78
+6	f3412	3	1	LCB	Pape Ndiaye Souare	73
+6	f3412	4	1	RM	Luca Cigarini	80
+6	f3412	5	1	RCM	Miralem Pjanic	80
+6	f3412	6	1	LCM	Wesley Sneijder	85
+6	f3412	7	1	LM	Eden Hazard	86
+6	f3412	8	1	CAM	Mesut Ozil	88
+6	f3412	9	1	RS	Giuseppe Rossi	82
+6	f3412	10	1	LS	Zlatan Ibrahimovic	90
+6	f3412	11	0	GK	Marco Bizot	71
+6	f3412	12	0	CB	Miguel Vitor	73
+6	f3412	13	0	CAM	David Destorme	71
+6	f3412	14	0	RM	Kevin Kampl	74
+6	f3412	15	0	CAM	Mateusz Klich	72
+6	f3412	16	0	ST	Ivan Santini	71
+6	f3412	17	0	ST	Mostafa Abdellaoue	73
+7	f343	0	1	GK	Tim Howard	82
+7	f343	1	1	RCB	Darijo Srna	81
+7	f343	2	1	CB	Medhi Benatia	83
+7	f343	3	1	LCB	Jose Angel	74
+7	f343	4	1	RM	Zoran Tosic	78
+7	f343	5	1	RCM	Nuri Sahin	83
+7	f343	6	1	LCM	Alex Lopez	74
+7	f343	7	1	LM	Marco Parolo	74
+7	f343	8	1	RW	Giovani dos Santos	80
+7	f343	9	1	ST	Luis Suarez	87
+7	f343	10	1	LW	Juan Cuadrado	82
+7	f343	11	0	GK	Ricardo	74
+7	f343	12	0	CB	Sebastien Squillaci	74
+7	f343	13	0	RM	Nabil El Zhar	74
+7	f343	14	0	LW	Sadio Mane	72
+7	f343	15	0	ST	Camilo	70
+7	f343	16	0	RW	Jay Emmanuel-Thomas	71
+7	f343	17	0	ST	Mahir Saglik	70
+8	f343	0	1	GK	Vincent Enyeama	78
+8	f343	1	1	RCB	Mathieu Debuchy	80
+8	f343	2	1	CB	Steven Caulker	77
+8	f343	3	1	LCB	Lucas Digne	77
+8	f343	4	1	RM	Domenico Berardi	73
+8	f343	5	1	RCM	Ivelin Popov	79
+8	f343	6	1	LCM	Ruben Pardo	74
+8	f343	7	1	LM	Cristiano Ronaldo	93
+8	f343	8	1	RW	Robert Lewandowski	88
+8	f343	9	1	ST	Sergio Aguero	90
+8	f343	10	1	LW	Karim Benzema	86
+8	f343	11	0	GK	Roberto	74
+8	f343	12	0	CB	Rafal Grodzicki	64
+8	f343	13	0	RM	Andre Hahn	71
+8	f343	14	0	CM	Steven Schumacher	64
+8	f343	15	0	ST	Humberto Suazo	78
+8	f343	16	0	ST	Niclas Fullkrug	71
+8	f343	17	0	ST	Marius Helle	64
+9	f352	0	1	GK	Tim Krul	80
+9	f352	1	1	RCB	Wes Brown	78
+9	f352	2	1	CB	Simon Kjaer	77
+9	f352	3	1	LCB	Virgil van Dijk	73
+9	f352	4	1	RDM	Cesc Fabregas	87
+9	f352	5	1	LDM	Daniele Conti	78
+9	f352	6	1	RM	Adam Lallana	80
+9	f352	7	1	LM	Paul Pogba	80
+9	f352	8	1	CAM	Kevin-Prince Boateng	82
+9	f352	9	1	RS	Yura Movsisyan	78
+9	f352	10	1	LS	Heung-Min Son	78
+9	f352	11	0	GK	Jamie MacDonald	70
+9	f352	12	0	CB	Kees Kwakman	71
+9	f352	13	0	RM	Kasper Kusk	69
+9	f352	14	0	ST	Timo Werner	64
+9	f352	15	0	ST	Youssef El Arabi	74
+9	f352	16	0	CF	Ross McCormack	74
+9	f352	17	0	ST	Mauro Boselli	73
+10	f433	0	1	GK	Andriy Pyatov	78
+10	f433	1	1	RB	Vassilis Torosidis	78
+10	f433	2	1	RCB	Maximiliano Pereira	79
+10	f433	3	1	LCB	Mamadou Sakho	82
+10	f433	4	1	LB	Darijo Srna	82
+10	f433	5	1	RCM	Joao Moutinho	84
+10	f433	6	1	CM	Jean II Makoun	74
+10	f433	7	1	LCM	Clarence Seedorf	83
+10	f433	8	1	RW	Dimitris Salpingidis	77
+10	f433	9	1	ST	Oribe Peralta	78
+10	f433	10	1	LW	Cristiano Ronaldo	94
+10	f433	11	0	GK	Copa	74
+10	f433	12	0	LB	Ari Skulason	64
+10	f433	13	0	CB	Andy Frampton	64
+10	f433	14	0	CDM	Ogenyi Onazi	74
+10	f433	15	0	ST	Adam Taggart	64
+10	f433	16	0	RW	Clayton Donaldson	69
+10	f433	17	0	ST	Nahki Wells	68
+11	f343	0	1	GK	Oliver Baumann	80
+11	f343	1	1	RCB	Thomas Heurtaux	73
+11	f343	2	1	CB	Mario Fernandes	77
+11	f343	3	1	LCB	Pape Ndiaye Souare	74
+11	f343	4	1	RM	Jesus Navas	86
+11	f343	5	1	RCM	Raul Garcia	80
+11	f343	6	1	LCM	Diego Tardelli	78
+11	f343	7	1	LM	Philipp Lahm	89
+11	f343	8	1	RW	Sergio Garcia	78
+11	f343	9	1	ST	Dejan Damjanovic	80
+11	f343	10	1	LW	Carlos Vela	83
+11	f343	11	0	GK	Nathan Coe	64
+11	f343	12	0	LB	Jordan Lukaku	64
+11	f343	13	0	CAM	Halil Altintop	74
+11	f343	14	0	CAM	Ryan Gauld	64
+11	f343	15	0	CAM	Antoni Sarcevic	64
+11	f343	16	0	ST	Philipp Hosiner	73
+11	f343	17	0	ST	Ryan Lowe	64
+12	f352	0	1	GK	Ricardo	77
+12	f352	1	1	RCB	Loic Perrin	80
+12	f352	2	1	CB	John Terry	84
+12	f352	3	1	LCB	Sejad Salihovic	79
+12	f352	4	1	RDM	Borja Valero	83
+12	f352	5	1	LDM	Aaron Ramsey	80
+12	f352	6	1	RM	Gareth Bale	88
+12	f352	7	1	LM	Samir Nasri	85
+12	f352	8	1	CAM	Arjen Robben	89
+12	f352	9	1	RS	Jonas	82
+12	f352	10	1	LS	Jurado	78
+12	f352	11	0	GK	Cristopher Toselli	74
+12	f352	12	0	LB	Bryan Oviedo	71
+12	f352	13	0	CB	Kim Won Il	64
+12	f352	14	0	RM	Kevin Kampl	77
+12	f352	15	0	CDM	Ander Iturraspe	79
+12	f352	16	0	ST	Wissam Ben Yedder	77
+12	f352	17	0	ST	Kim Dong Ki	64
+13	f3421	0	1	GK	Vincent Enyeama	80
+13	f3421	1	1	RCB	Maicon	80
+13	f3421	2	1	CB	Mike Williamson	74
+13	f3421	3	1	LCB	Omer Toprak	80
+13	f3421	4	1	RM	Yann Jouffre	77
+13	f3421	5	1	RCM	Stephen Ireland	78
+13	f3421	6	1	LCM	Walter Montillo	80
+13	f3421	7	1	LM	Franck Ribery	91
+13	f3421	8	1	RF	Luis Suarez	88
+13	f3421	9	1	LF	Mario Balotelli	85
+13	f3421	10	1	ST	Zlatan Ibrahimovic	91
+13	f3421	11	0	GK	Philipp Tschauner	72
+13	f3421	12	0	LB	Patrick van Aanholt	73
+13	f3421	13	0	CB	Aurelien Collin	73
+13	f3421	14	0	CM	Davy Klaassen	71
+13	f3421	15	0	CAM	Michal Maslowski	64
+13	f3421	16	0	LW	Sidnei	64
+13	f3421	17	0	ST	Fredy Montero	74
+14	f3421	0	1	GK	Diego Benaglio	81
+14	f3421	1	1	RCB	Marc Bertran	74
+14	f3421	2	1	CB	Ezequiel Munoz	74
+14	f3421	3	1	LCB	Sebastian Jung	78
+14	f3421	4	1	RM	James Rodriguez	85
+14	f3421	5	1	RCM	Ruben Pardo	77
+14	f3421	6	1	LCM	Fernandinho	82
+14	f3421	7	1	LM	Adam Maher	80
+14	f3421	8	1	RF	Salomon Kalou	81
+14	f3421	9	1	LF	Patrick Helmes	80
+14	f3421	10	1	ST	Carlos Tevez	87
+14	f3421	11	0	GK	Sammy Bossut	73
+14	f3421	12	0	LB	Jon Flanagan	64
+14	f3421	13	0	CAM	Faycal Fajr	71
+14	f3421	14	0	RM	Michal Kucharczyk	69
+14	f3421	15	0	CAM	Soren Rieks	71
+14	f3421	16	0	ST	Arruabarrena	64
+14	f3421	17	0	ST	Javi Guerra	74
+15	f433	0	1	GK	Nicolas Penneteau	74
+15	f433	1	1	RB	Sebastian Prodl	74
+15	f433	2	1	RCB	Diego Godin	84
+15	f433	3	1	LCB	Mehdi Benatia	84
+15	f433	4	1	LB	Eliaquim Mangala	82
+15	f433	5	1	RCM	Angel Di Maria	87
+15	f433	6	1	CM	Yohan Cabaye	83
+15	f433	7	1	LCM	Eric Bautheac	77
+15	f433	8	1	RW	Shinji Okazaki	74
+15	f433	9	1	ST	Emmanuel Adebayor	81
+15	f433	10	1	LW	Pedro	87
+15	f433	11	0	GK	Esteban	74
+15	f433	12	0	CB	Liam Moore	64
+15	f433	13	0	CAM	Ross Barkley	73
+15	f433	14	0	RM	Sami Allagui	73
+15	f433	15	0	ST	Luca Toni	74
+15	f433	16	0	ST	Michael de Leeuw	73
+15	f433	17	0	ST	Andrea Caracciolo	71
+16	f41212	0	1	GK	Joe Hart	84
+16	f41212	1	1	RB	Seamus Coleman	73
+16	f41212	2	1	RCB	Per Mertesacker	81
+16	f41212	3	1	LCB	Maynor Figueroa	79
+16	f41212	4	1	LB	Thiago Neves	80
+16	f41212	5	1	CDM	Felipe Melo	81
+16	f41212	6	1	RM	Theo Walcott	82
+16	f41212	7	1	LM	Eden Hazard	87
+16	f41212	8	1	CAM	Robert Koren	74
+16	f41212	9	1	RS	Roberto Soldado	85
+16	f41212	10	1	LS	Imoh Ezekiel	73
+16	f41212	11	0	GK	Colin Coosemans	71
+16	f41212	12	0	CB	Magnus Troest	61
+16	f41212	13	0	RB	Inigo Calderon	69
+16	f41212	14	0	LM	Lee Novak	69
+16	f41212	15	0	LM	Matt Ritchie	71
+16	f41212	16	0	ST	Stevie May	64
+16	f41212	17	0	ST	Tony Watt	70
+17	f343	0	1	GK	Cirilo Saucedo	74
+17	f343	1	1	RCB	Carvajal	79
+17	f343	2	1	CB	Gonzalo Rodriguez	81
+17	f343	3	1	LCB	Leonardo Bonucci	80
+17	f343	4	1	RM	Sofiane Feghouli	82
+17	f343	5	1	RCM	Ivan Rakitic	83
+17	f343	6	1	LCM	Kaka	83
+17	f343	7	1	LM	Dries Mertens	81
+17	f343	8	1	RW	Alexis Sanchez	84
+17	f343	9	1	ST	Ikechukwu Uche	73
+17	f343	10	1	LW	Antoine Griezmann	81
+17	f343	11	0	GK	Matt Duke	64
+17	f343	12	0	RWB	Paul Aguilar	73
+17	f343	13	0	CB	Leon Legge	64
+17	f343	14	0	CM	Liam Miller	69
+17	f343	15	0	CAM	Soriano	73
+17	f343	16	0	CAM	Alejandro Dominguez	77
+17	f343	17	0	ST	Wes Fletcher	64
+18	f352	0	1	GK	Adrian	78
+18	f352	1	1	RCB	Maicon	81
+18	f352	2	1	CB	Ezequiel Garay	84
+18	f352	3	1	LCB	Damia	77
+18	f352	4	1	RDM	Gareth Barry	80
+18	f352	5	1	LDM	Grzegorz Krychowiak	78
+18	f352	6	1	RM	Stephan Lichtsteiner	80
+18	f352	7	1	LM	Blaise Matuidi	83
+18	f352	8	1	CAM	Adam Johnson	79
+18	f352	9	1	RS	Raul Rusescu	74
+18	f352	10	1	LS	Giovani dos Santos	81
+18	f352	11	0	GK	Remy Riou	73
+18	f352	12	0	CB	Jeison Murillo	74
+18	f352	13	0	CM	Kieran Lee	64
+18	f352	14	0	RM	Rafinha	74
+18	f352	15	0	CM	Peter Murphy	64
+18	f352	16	0	RW	Domenico Berardi	74
+18	f352	17	0	RW	Florin Berenguer	69
+19	f343	0	1	GK	Keylor Navas	73
+19	f343	1	1	RCB	Daryl Janmaat	74
+19	f343	2	1	CB	Ricardo Carvalho	79
+19	f343	3	1	LCB	Henri Bedimo	77
+19	f343	4	1	RM	Arturo Vidal	86
+19	f343	5	1	RCM	Marco Verratti	79
+19	f343	6	1	LCM	Yohan Cabaye	84
+19	f343	7	1	LM	Santi Cazorla	86
+19	f343	8	1	RW	Alessandro Matri	78
+19	f343	9	1	ST	Samuel Eto'o	85
+19	f343	10	1	LW	Emmanuel Adebayor	82
+19	f343	11	0	GK	Bartosz Bialkowski	64
+19	f343	12	0	RB	James Tavernier	64
+19	f343	13	0	CM	Filip Kiss	64
+19	f343	14	0	CAM	Javito	69
+19	f343	15	0	ST	Adam Le Fondre	74
+19	f343	16	0	ST	Dalibor Veselinovic	64
+19	f343	17	0	ST	Imad Khalili	64
+20	f343	0	1	GK	Benoit Costil	80
+20	f343	1	1	RCB	Marco Russ	74
+20	f343	2	1	CB	Pique	87
+20	f343	3	1	LCB	Filipe Luis	83
+20	f343	4	1	RM	Alberto Aquilani	81
+20	f343	5	1	RCM	Alessandro Del Piero	77
+20	f343	6	1	LCM	Jeremy Toulalan	83
+20	f343	7	1	LM	Arda Turan	85
+20	f343	8	1	RW	Aduriz	80
+20	f343	9	1	ST	Alexandre Lacazette	77
+20	f343	10	1	LW	Antoine Griezmann	82
+20	f343	11	0	GK	Jeroen Zoet	77
+20	f343	12	0	RB	Gonzalo Fierro	73
+20	f343	13	0	LM	Leonardo Bittencourt	72
+20	f343	14	0	RM	Febian Brandy	64
+20	f343	15	0	RM	Billy Ketkeophomphone	64
+20	f343	16	0	CAM	Rachid Bourabia	70
+20	f343	17	0	ST	Dayro Moreno	77
+21	f352	0	1	GK	David Marshall	74
+21	f352	1	1	RCB	Mathieu Bodmer	77
+21	f352	2	1	CB	Alex	82
+21	f352	3	1	LCB	Giorgio Chiellini	87
+21	f352	4	1	RDM	Thiago	82
+21	f352	5	1	LDM	Alex Oxlade-Chamberlain	79
+21	f352	6	1	RM	Sofiane Feghouli	83
+21	f352	7	1	LM	Charlie Adam	77
+21	f352	8	1	CAM	Wesley Sneijder	86
+21	f352	9	1	RS	German Denis	81
+21	f352	10	1	LS	Remy Cabella	80
+21	f352	11	0	GK	Romain Salin	72
+21	f352	12	0	CB	Grant Hanley	71
+21	f352	13	0	CAM	Duda	74
+21	f352	14	0	CAM	Kevin Nolan	77
+21	f352	15	0	ST	Ross McCormack	77
+21	f352	16	0	ST	Esteban Paredes	74
+21	f352	17	0	ST	Michy Batshuayi	73
+22	f3412	0	1	GK	Danijel Subasic	73
+22	f3412	1	1	RCB	Walter Samuel	83
+22	f3412	2	1	CB	Sebastien Bassong	77
+22	f3412	3	1	LCB	Martin Skrtel	82
+22	f3412	4	1	RM	Dimitri Payet	81
+22	f3412	5	1	RCM	Luka Modric	86
+22	f3412	6	1	LCM	Eden Hazard	88
+22	f3412	7	1	LM	Raheem Sterling	78
+22	f3412	8	1	CAM	Henrikh Mkhitaryan	82
+22	f3412	9	1	RS	Adrian Ramos	78
+22	f3412	10	1	LS	Gonzalo Higuain	85
+22	f3412	11	0	GK	Jake Cole	64
+22	f3412	12	0	LB	Jelle Van Damme	74
+22	f3412	13	0	CDM	Verza	73
+22	f3412	14	0	CM	Ji Sung Park	80
+22	f3412	15	0	ST	Scott Hogan	64
+22	f3412	16	0	ST	Jonatan Soriano	73
+22	f3412	17	0	ST	Borja Viguera	64
+23	f4312	0	1	GK	Diego Alves	83
+23	f4312	1	1	RB	Juanfran	80
+23	f4312	2	1	RCB	Diego Colotto	77
+23	f4312	3	1	LCB	Emerson	74
+23	f4312	4	1	LB	Nicolas Nkoulou	82
+23	f4312	5	1	RCM	Pierre-Emerick Aubameyang	82
+23	f4312	6	1	CM	Roberto Firmino	80
+23	f4312	7	1	LCM	Cesc Fabregas	88
+23	f4312	8	1	CAM	Lionel Messi	95
+23	f4312	9	1	RS	Mattia Destro	78
+23	f4312	10	1	LS	Ola Toivonen	79
+23	f4312	11	0	GK	Ralf Fahrmann	74
+23	f4312	12	0	CB	John McCombe	64
+23	f4312	13	0	LM	Caio	72
+23	f4312	14	0	CAM	Michael Jacobs	72
+23	f4312	15	0	ST	Anthony Stokes	73
+23	f4312	16	0	ST	David Williams	64
+23	f4312	17	0	ST	Domi Kumbela	74
+24	f3412	0	1	GK	Raphael Schafer	78
+24	f3412	1	1	RCB	Semih Kaya	80
+24	f3412	2	1	CB	John Terry	85
+24	f3412	3	1	LCB	Adil Rami	83
+24	f3412	4	1	RM	Thomas Muller	86
+24	f3412	5	1	RCM	Daniel Sturridge	83
+24	f3412	6	1	LCM	Jordan Henderson	79
+24	f3412	7	1	LM	Cejudo	74
+24	f3412	8	1	CAM	Daniel Luduena	74
+24	f3412	9	1	RS	Olivier Giroud	81
+24	f3412	10	1	LS	Zlatan Ibrahimovic	92
+24	f3412	11	0	GK	Anthony Lopes	73
+24	f3412	12	0	CB	Gavin Gunning	64
+24	f3412	13	0	CM	David Syers	64
+24	f3412	14	0	CAM	Gonzalo Castellani	72
+24	f3412	15	0	ST	Alan	74
+24	f3412	16	0	ST	Cheick Diarra	71
+24	f3412	17	0	ST	Marcin Robak	64
+25	f343	0	1	GK	Geoffrey Jourdren	78
+25	f343	1	1	RCB	Lorik Cana	80
+25	f343	2	1	CB	Thiago Silva	88
+25	f343	3	1	LCB	Mats Hummels	86
+25	f343	4	1	RM	Arjen Robben	90
+25	f343	5	1	RCM	Moussa Sissoko	77
+25	f343	6	1	LCM	Andre Schurrle	81
+25	f343	7	1	LM	Nico Gaitan	82
+25	f343	8	1	RW	Aduriz	81
+25	f343	9	1	ST	Christian Benteke	82
+25	f343	10	1	LW	Carlos Tevez	88
+25	f343	11	0	GK	Marek Stech	71
+25	f343	12	0	CB	Vilmos Vanczak	73
+25	f343	13	0	LM	Luke Freeman	64
+25	f343	14	0	LM	Pione Sisto	64
+25	f343	15	0	CF	James McFadden	73
+25	f343	16	0	ST	Leigh Griffiths	72
+25	f343	17	0	ST	Yann Kermorgant	71
+26	f433	0	1	GK	Bernd Leno	82
+26	f433	1	1	RB	Antonio Rukavina	77
+26	f433	2	1	RCB	Andrea Ranocchia	80
+26	f433	3	1	LCB	Steven Caulker	80
+26	f433	4	1	LB	Marcelo	84
+26	f433	5	1	RCM	Serge Aurier	77
+26	f433	6	1	CM	Yuriy Zhirkov	80
+26	f433	7	1	LCM	Kwadwo Asamoah	81
+26	f433	8	1	RW	Klaas-Jan Huntelaar	85
+26	f433	9	1	ST	Didier Drogba	84
+26	f433	10	1	LW	Ezequiel Lavezzi	87
+26	f433	11	0	GK	Nick Rimando	73
+26	f433	12	0	RB	Mattias Johansson	71
+26	f433	13	0	CM	Fran Rico	71
+26	f433	14	0	CAM	Ravel Morrison	74
+26	f433	15	0	ST	Mauro Zarate	77
+26	f433	16	0	ST	Habib Habibou	71
+26	f433	17	0	ST	Marcus Berg	73
+27	f3412	0	1	GK	Gianluigi Buffon	87
+27	f3412	1	1	RCB	Marko Basa	79
+27	f3412	2	1	CB	Laurent Koscielny	84
+27	f3412	3	1	LCB	Diego Godin	85
+27	f3412	4	1	RM	Alex Teixeira	80
+27	f3412	5	1	RCM	Steven Gerrard	84
+27	f3412	6	1	LCM	Bastian Schweinsteiger	89
+27	f3412	7	1	LM	David Silva	89
+27	f3412	8	1	CAM	Dusan Tadic	81
+27	f3412	9	1	RS	Lionel Messi	96
+27	f3412	10	1	LS	Jermain Defoe	82
+27	f3412	11	0	GK	Javier Garcia	73
+27	f3412	12	0	RB	Thomas Meunier	72
+27	f3412	13	0	CB	Victor Bernardez	73
+27	f3412	14	0	LM	Kris Commons	74
+27	f3412	15	0	LM	Shkelzen Gashi	64
+27	f3412	16	0	ST	Willian Jose	73
+27	f3412	17	0	ST	Jordan Rhodes	74
+28	f352	0	1	GK	Benoit Costil	81
+28	f352	1	1	RCB	Aymeric Laporte	73
+28	f352	2	1	CB	Federico Fazio	80
+28	f352	3	1	LCB	Nuno Andre Coelho	73
+28	f352	4	1	RDM	Yaya Toure	87
+28	f352	5	1	LDM	Christian Eriksen	83
+28	f352	6	1	RM	Javi Fuego	80
+28	f352	7	1	LM	Giacomo Bonaventura	80
+28	f352	8	1	CAM	Oscar	85
+28	f352	9	1	RS	Luis Suarez	91
+28	f352	10	1	LS	Iniesta	90
+28	f352	11	0	GK	Tobias Sippel	73
+28	f352	12	0	RB	Simon Madden	64
+28	f352	13	0	LM	Serge Gakpe	73
+28	f352	14	0	CM	Craig Bryson	74
+28	f352	15	0	ST	Ciro Immobile	77
+28	f352	16	0	ST	Elton	73
+28	f352	17	0	ST	Ari	74
+29	f343	0	1	GK	Guillermo Ochoa	80
+29	f343	1	1	RCB	Ricardo van Rhijn	73
+29	f343	2	1	CB	Marcos Rojo	78
+29	f343	3	1	LCB	Naldo	81
+29	f343	4	1	RM	Gareth Bale	89
+29	f343	5	1	RCM	Roman Shirokov	80
+29	f343	6	1	LCM	Kaka	84
+29	f343	7	1	LM	Marco Reus	87
+29	f343	8	1	RW	Dayro Moreno	79
+29	f343	9	1	ST	Diego Costa	86
+29	f343	10	1	LW	Claudio Pizarro	82
+29	f343	11	0	GK	Julian Speroni	74
+29	f343	12	0	RB	James Tavernier	68
+29	f343	13	0	LM	Jay Rodriguez	74
+29	f343	14	0	RM	David Schloffer	64
+29	f343	15	0	ST	Silvio	70
+29	f343	16	0	ST	Nasser Al Shamrani	74
+29	f343	17	0	ST	Cillian Morrison	64
+30	f3412	0	1	GK	Sven Ulreich	81
+30	f3412	1	1	RCB	Vasiliy Berezutskiy	79
+30	f3412	2	1	CB	Pepe	84
+30	f3412	3	1	LCB	Heiko Westermann	79
+30	f3412	4	1	RM	James Rodriguez	86
+30	f3412	5	1	RCM	Camacho	80
+30	f3412	6	1	LCM	Andre Ayew	81
+30	f3412	7	1	LM	Adel Taarabt	80
+30	f3412	8	1	CAM	Juan Mata	88
+30	f3412	9	1	RS	Salomon Rondon	79
+30	f3412	10	1	LS	Clint Dempsey	82
+30	f3412	11	0	GK	Lukas Hradecky	71
+30	f3412	12	0	CB	John Stones	71
+30	f3412	13	0	CDM	Dalibor Stevanovic	64
+30	f3412	14	0	RM	Jason Puncheon	74
+30	f3412	15	0	ST	Mattia Destro	80
+30	f3412	16	0	ST	Tom Hitchcock	64
+30	f3412	17	0	ST	Declan OBrien	64
+31	f3412	0	1	GK	Samir Handanovic	85
+31	f3412	1	1	RCB	Daryl Janmaat	77
+31	f3412	2	1	CB	Juanfran	81
+31	f3412	3	1	LCB	Sokratis	81
+31	f3412	4	1	RM	Hulk	86
+31	f3412	5	1	RCM	Alberto Aquilani	82
+31	f3412	6	1	LCM	Coutinho	81
+31	f3412	7	1	LM	Jordan Ayew	77
+31	f3412	8	1	CAM	Carlos Darwin Quintero	74
+31	f3412	9	1	RS	Gonzalo Higuain	86
+31	f3412	10	1	LS	Kevin Gameiro	80
+31	f3412	11	0	GK	Orestis Karnezis	74
+31	f3412	12	0	CB	Martin Riley	64
+31	f3412	13	0	CM	Luke Murphy	71
+31	f3412	14	0	CAM	Jandro	73
+31	f3412	15	0	ST	Alberto Paloschi	78
+31	f3412	16	0	RW	Lucas Simon	64
+31	f3412	17	0	ST	Craig Davies	72
+32	f343	0	1	GK	Vito Mannone	73
+32	f343	1	1	RCB	Seamus Coleman	78
+32	f343	2	1	CB	Emir Spahic	79
+32	f343	3	1	LCB	Lukasz Piszczek	84
+32	f343	4	1	RM	Martin Harnik	79
+32	f343	5	1	RCM	Ryad Boudebouz	78
+32	f343	6	1	LCM	Paul Pogba	83
+32	f343	7	1	LM	Lukas Podolski	81
+32	f343	8	1	RW	Raheem Sterling	80
+32	f343	9	1	ST	Cheick Diabate	74
+32	f343	10	1	LW	Nolito	78
+32	f343	11	0	GK	Raphael Wolf	71
+32	f343	12	0	CB	Matt Hedges	64
+32	f343	13	0	CAM	Petter Andersson	70
+32	f343	14	0	LM	Paul Gallagher	70
+32	f343	15	0	RW	Mario Rondon	74
+32	f343	16	0	ST	Nouha Dicko	71
+32	f343	17	0	ST	Marvin Sordell	73
+33	f3412	0	1	GK	Kevin Trapp	80
+33	f3412	1	1	RCB	Iraola	80
+33	f3412	2	1	CB	Marko Basa	80
+33	f3412	3	1	LCB	Rafael Toloi	74
+33	f3412	4	1	RM	Alexandr Samedov	80
+33	f3412	5	1	RCM	Raul Garcia	81
+33	f3412	6	1	LCM	Jonjo Shelvey	74
+33	f3412	7	1	LM	Juan Cuadrado	83
+33	f3412	8	1	CAM	Dusan Tadic	82
+33	f3412	9	1	RS	Claudio Pizarro	83
+33	f3412	10	1	LS	Dimitar Berbatov	83
+33	f3412	11	0	GK	Matt Gilks	73
+33	f3412	12	0	RB	Callum Paterson	64
+33	f3412	13	0	CAM	Halil Altintop	77
+33	f3412	14	0	CM	Jeff Hendrick	72
+33	f3412	15	0	ST	Bradley Wright-Phillips	71
+33	f3412	16	0	LW	Muniain	80
+33	f3412	17	0	ST	Esteban Paredes	77
+34	f343	0	1	GK	Cedric Carrasso	82
+34	f343	1	1	RCB	Souleymane Diawara	77
+34	f343	2	1	CB	Michael Turner	77
+34	f343	3	1	LCB	John O'Shea	77
+34	f343	4	1	RM	Aaron Hunt	80
+34	f343	5	1	RCM	Nigel de Jong	80
+34	f343	6	1	LCM	Ander Herrera	80
+34	f343	7	1	LM	Pedro Morales	77
+34	f343	8	1	RW	Edin Dzeko	84
+34	f343	9	1	ST	Antonio Di Natale	86
+34	f343	10	1	LW	Mario Gotze	86
+34	f343	11	0	GK	Keylor Navas	74
+34	f343	12	0	LB	Mounir Hamoud	64
+34	f343	13	0	LM	Callum Harriott	64
+34	f343	14	0	CAM	Faycal Fajr	73
+34	f343	15	0	CAM	Shkelzen Gashi	67
+34	f343	16	0	ST	Ryan Stevenson	64
+34	f343	17	0	ST	Dwight Gayle	71
+35	f343	0	1	GK	Wilfredo Caballero	80
+35	f343	1	1	RCB	Semih Kaya	81
+35	f343	2	1	CB	Andreas Granqvist	79
+35	f343	3	1	LCB	Luciano Fabian Monzon	74
+35	f343	4	1	RM	Samir Nasri	87
+35	f343	5	1	RCM	Christian Bolanos	74
+35	f343	6	1	LCM	Javier Morales	77
+35	f343	7	1	LM	Salvador Agra	74
+35	f343	8	1	RW	Lucas	83
+35	f343	9	1	ST	Rodrigo Palacio	83
+35	f343	10	1	LW	Wilfried Bony	81
+35	f343	11	0	GK	Mathew Ryan	73
+35	f343	12	0	CB	Robin Knoche	72
+35	f343	13	0	CAM	Lee Myung Joo	70
+35	f343	14	0	LM	Guido Burgstaller	72
+35	f343	15	0	RW	Edgar Salli	71
+35	f343	16	0	ST	Fabian Klos	70
+35	f343	17	0	ST	Kike	71
+36	f343	0	1	GK	Marcelo Grohe	78
+36	f343	1	1	RCB	Jeremy Morel	74
+36	f343	2	1	CB	Bakary Kone	74
+36	f343	3	1	LCB	Loic Perrin	81
+36	f343	4	1	RM	Ganso	79
+36	f343	5	1	RCM	Iborra	79
+36	f343	6	1	LCM	Dries Mertens	82
+36	f343	7	1	LM	Daniel Wass	74
+36	f343	8	1	RW	Amauri	78
+36	f343	9	1	ST	Antonio Di Natale	87
+36	f343	10	1	LW	Wissam Ben Yedder	79
+36	f343	11	0	GK	Simone Colombi	71
+36	f343	12	0	LB	Per Egil Flo	64
+36	f343	13	0	CB	Nathan Pond	64
+36	f343	14	0	LM	Davide Calla	64
+36	f343	15	0	CF	Federico Higuain	74
+36	f343	16	0	ST	Fernando Cavenaghi	73
+36	f343	17	0	ST	Rubin Okotie	71
+37	f3412	0	1	GK	Marcelo Barovero	77
+37	f3412	1	1	RCB	Alessandro Budel	72
+37	f3412	2	1	CB	Richard Dunne	74
+37	f3412	3	1	LCB	Gum	73
+37	f3412	4	1	RM	Petter Vaagan Moen	73
+37	f3412	5	1	RCM	Dillon Powers	69
+37	f3412	6	1	LCM	Jesus Datolo	74
+37	f3412	7	1	LM	Jadson	80
+37	f3412	8	1	CAM	Landon Donovan	80
+37	f3412	9	1	RS	Bobby Zamora	77
+37	f3412	10	1	LS	Walter	74
+37	f3412	11	0	GK	Krzysztof Kaminski	64
+37	f3412	12	0	RB	Johan Larsson	64
+37	f3412	13	0	CB	Adam Danch	71
+37	f3412	14	0	RM	Jota	64
+37	f3412	15	0	CM	Karim Laribi	64
+37	f3412	16	0	ST	Alex Revell	64
+37	f3412	17	0	ST	Romarinho	73
+38	f3412	0	1	GK	Jon Busch	70
+38	f3412	1	1	RCB	Nenad Djordjevic	69
+38	f3412	2	1	CB	Lucio	79
+38	f3412	3	1	LCB	Dudu Paraiba	69
+38	f3412	4	1	RM	Marco Paixao	70
+38	f3412	5	1	RCM	Edu Bedia	64
+38	f3412	6	1	LCM	Pedro Morales	79
+38	f3412	7	1	LM	Marco Pappa	71
+38	f3412	8	1	CAM	Alex	82
+38	f3412	9	1	RS	Keirrison	73
+38	f3412	10	1	LS	Jermain Defoe	84
+39	f3412	0	1	GK	Dan Kennedy	73
+39	f3412	1	1	RCB	Luka Krajnc	64
+39	f3412	2	1	CB	Bobby Boswell	71
+39	f3412	3	1	LCB	Nicolai Hogh	69
+39	f3412	4	1	RM	Carmona	71
+39	f3412	5	1	RCM	Guzman	64
+39	f3412	6	1	LCM	Felipe Sanchon	72
+39	f3412	7	1	LM	Mohamed Elyounoussi	70
+39	f3412	8	1	CAM	Dejan Lekic	73
+39	f3412	9	1	RS	Guido Marilungo	73
+39	f3412	10	1	LS	Conor Casey	70
+40	f343	0	1	GK	Kim Young Kwang	74
+40	f343	1	1	RCB	Mounir Hamoud	68
+40	f343	2	1	CB	Martin Linnes	70
+40	f343	3	1	LCB	Jung In Whan	69
+40	f343	4	1	RM	Nabil Bahoui	70
+40	f343	5	1	RCM	Tobias Eriksson	64
+40	f343	6	1	LCM	Mike Jensen	73
+40	f343	7	1	LM	Simon Lundevall	64
+40	f343	8	1	RW	Mauricio Molina	74
+40	f343	9	1	ST	Lee Dong	79
+40	f343	10	1	LW	Bradley Wright-Phillips	73
+40	f343	11	0	GK	Sten Michael Grytebust	70
+40	f343	12	0	RB	Emil Salomonsson	64
+40	f343	13	0	RM	Zlatko Tripic	64
+40	f343	14	0	RM	Nick DeLeon	64
+40	f343	15	0	ST	Patrick McEleney	64
+40	f343	16	0	CM	Gary McCabe	64
+40	f343	17	0	ST	Erick Torres	69
+41	f343	0	1	GK	Sean Johnson	70
+41	f343	1	1	RCB	Kim Jin Kyu	73
+41	f343	2	1	CB	Vegard Forren	77
+41	f343	3	1	LCB	Alexander Milosevic	72
+41	f343	4	1	RM	Haris Radetinac	71
+41	f343	5	1	RCM	Christian Grindheim	73
+41	f343	6	1	LCM	Martin Ericsson	73
+41	f343	7	1	LM	Emil Forsberg	64
+41	f343	8	1	RW	Thierry Henry	80
+41	f343	9	1	ST	Jermain Defoe	85
+41	f343	10	1	LW	Fagner	71
+41	f343	11	0	GK	Mathias Dyngeland	64
+41	f343	12	0	CB	Garry Buckley	64
+41	f343	13	0	CB	Chad Marshall	71
+41	f343	14	0	LM	Lee Jong Ho	64
+41	f343	15	0	ST	Matthias Vilhjalmsson	64
+41	f343	16	0	ST	Dom Dwyer	64
+41	f343	17	0	ST	Rory Patterson	64
+42	f3412	0	1	GK	Steve Clark	71
+42	f3412	1	1	RCB	Liam Ridgewell	72
+42	f3412	2	1	CB	Matias Cahais	73
+42	f3412	3	1	LCB	Mauricio Romero	73
+42	f3412	4	1	RM	Leonardo	73
+42	f3412	5	1	RCM	Diego Valeri	78
+42	f3412	6	1	LCM	Osvaldo Martinez	73
+42	f3412	7	1	LM	Daniel Luduena	77
+42	f3412	8	1	CAM	Jonathan Estrada	70
+42	f3412	9	1	RS	Jonatan Soriano	77
+42	f3412	10	1	LS	Robbie Keane	80
+42	f3412	11	0	GK	Alexander Lund Hansen	69
+42	f3412	12	0	CB	Jason McGuinness	64
+42	f3412	13	0	LM	Bernardo Anor	64
+42	f3412	14	0	LM	Sylvester Igboun	72
+42	f3412	15	0	RM	Christopher Wernitznig	64
+42	f3412	16	0	ST	Vojo Ubiparip	64
+42	f3412	17	0	ST	Ricardo Santos	64
+43	f451	0	1	GK	Jonathan Orozco	77
+43	f451	1	1	RB	Gonzalo Fierro	74
+43	f451	2	1	RCB	Drew Moor	69
+43	f451	3	1	LCB	Oscar Duarte	72
+43	f451	4	1	LB	Nils-Eric Johansson	70
+43	f451	5	1	RM	Adam Fraczczak	64
+43	f451	6	1	RCM	Christian Schneuwly	72
+43	f451	7	1	CM	Fernando Arce	73
+43	f451	8	1	LCM	Yassine Chikhaoui	74
+43	f451	9	1	LM	Hernan Dario Burbano	72
+43	f451	10	1	ST	Gustavo Canales	74
+43	f451	11	0	GK	Jan Novota	69
+43	f451	12	0	LM	Geoffrey Mujangi Bia	71
+43	f451	13	0	CB	Jasmin Sudic	64
+43	f451	14	0	LM	Michael Duffy	64
+43	f451	15	0	ST	Christian Gytkjaer	64
+43	f451	16	0	ST	Olmes Garcia	64
+43	f451	17	0	ST	Mateusz Piatkowski	64
+44	f3412	0	1	GK	Andrey Dikan	78
+44	f3412	1	1	RCB	Lars Vilsvik	73
+44	f3412	2	1	CB	Jan Simunek	73
+44	f3412	3	1	LCB	Domenico Criscito	81
+44	f3412	4	1	RM	Billy Ketkeophomphone	68
+44	f3412	5	1	RCM	Anders Svensson	74
+44	f3412	6	1	LCM	Jaime Valdes	78
+44	f3412	7	1	LM	Mark Gonzalez	77
+44	f3412	8	1	CAM	Alexandr Kokorin	80
+44	f3412	9	1	RS	Raul Jimenez	73
+44	f3412	10	1	LS	Artem Dzyuba	78
+44	f3412	11	0	GK	Bill Hamid	71
+44	f3412	12	0	LB	Ermir Lenjani	64
+44	f3412	13	0	CM	Lee Nguyen	64
+44	f3412	14	0	CAM	Santos	71
+44	f3412	15	0	ST	Laurent Depoitre	64
+44	f3412	16	0	ST	Marco Djuricin	64
+44	f3412	17	0	ST	Junior Dutra	71
+45	f3412	0	1	GK	Benjamin Lecomte	71
+45	f3412	1	1	RCB	Jeffrey Gouweleeuw	73
+45	f3412	2	1	CB	Lamine Sane	77
+45	f3412	3	1	LCB	Ken Reichel	71
+45	f3412	4	1	RM	Sebastien Le Toux	72
+45	f3412	5	1	RCM	Antoine Devaux	73
+45	f3412	6	1	LCM	Braulio Leal	70
+45	f3412	7	1	LM	Thiago Neves	81
+45	f3412	8	1	CAM	Lasse Schone	74
+45	f3412	9	1	RS	Jonatan Soriano	79
+45	f3412	10	1	LS	Salomon Rondon	80
+45	f3412	11	0	GK	Davino Verhulst	64
+45	f3412	12	0	CB	Evan McMillan	64
+45	f3412	13	0	CB	Chris Schuler	64
+45	f3412	14	0	LM	Baba	71
+45	f3412	15	0	ST	Rory Gaffney	64
+45	f3412	16	0	ST	Henok Goitom	72
+45	f3412	17	0	ST	Ilijan Micanski	71
+46	f3412	0	1	GK	Allan McGregor	74
+46	f3412	1	1	RCB	Eric Dier	74
+46	f3412	2	1	CB	Douglas	77
+46	f3412	3	1	LCB	James Chester	73
+46	f3412	4	1	RM	Romain Danze	74
+46	f3412	5	1	RCM	Cesc Fabregas	89
+46	f3412	6	1	LCM	Gylfi Sigurdsson	80
+46	f3412	7	1	LM	Anthony Mounier	79
+46	f3412	8	1	CAM	Mathieu Valbuena	85
+46	f3412	9	1	RS	Dorlan Pabon	77
+46	f3412	10	1	LS	Lucas Pratto	78
+46	f3412	11	0	GK	Andrey Sinitsin	64
+46	f3412	12	0	RM	Diego Rolan	71
+46	f3412	13	0	LM	Lim Sang Hyup	64
+46	f3412	14	0	RM	Chris Humphrey	69
+46	f3412	15	0	ST	Kenwyne Jones	74
+46	f3412	16	0	LW	Memphis Depay	80
+46	f3412	17	0	ST	Simon Makienok	70
+47	f4321	0	1	GK	Kevin Trapp	81
+47	f4321	1	1	RB	Branislav Ivanovic	81
+47	f4321	2	1	RCB	Nicolas Nkoulou	83
+47	f4321	3	1	LCB	Eliseu	78
+47	f4321	4	1	LB	Jordi Alba	83
+47	f4321	5	1	RCM	Erik Lamela	82
+47	f4321	6	1	CM	Edgar Prib	74
+47	f4321	7	1	LCM	Nolito	80
+47	f4321	8	1	RF	Thierry Henry	81
+47	f4321	9	1	LF	Obafemi Martins	79
+47	f4321	10	1	ST	Stevan Jovetic	85
+47	f4321	11	0	GK	Carlos Idriss Kameni	77
+47	f4321	12	0	RB	Martin Linnes	73
+47	f4321	13	0	LM	Michail Antonio	72
+47	f4321	14	0	RW	Luciano Narsingh	78
+47	f4321	15	0	RM	Karim Bellarabi	73
+47	f4321	16	0	ST	Yun Il Lok	71
+47	f4321	17	0	ST	Sebastian Andersson	64
+48	f4321	0	1	GK	Samir Handanovic	86
+48	f4321	1	1	RB	Lewis Dunk	69
+48	f4321	2	1	RCB	Ryan Shawcross	80
+48	f4321	3	1	LCB	Emir Spahic	80
+48	f4321	4	1	LB	Maxwell	80
+48	f4321	5	1	RCM	Radja Nainggolan	81
+48	f4321	6	1	CM	Morgan Schneiderlin	79
+48	f4321	7	1	LCM	Dimitri Payet	82
+48	f4321	8	1	RF	Antonio Di Natale	88
+48	f4321	9	1	LF	Diego Costa	87
+48	f4321	10	1	ST	Jackson Martinez	82
+48	f4321	11	0	GK	Nick Marsman	71
+48	f4321	12	0	CDM	Bibras Natkho	78
+48	f4321	13	0	LM	Zurutuza	74
+48	f4321	14	0	CAM	Benjamin Nivet	77
+48	f4321	15	0	CAM	Marko Stankovic	69
+48	f4321	16	0	ST	Mark Uth	70
+48	f4321	17	0	RW	Lucas Simon	69
+49	f3412	0	1	GK	Hugo Lloris	85
+49	f3412	1	1	RCB	Lorik Cana	81
+49	f3412	2	1	CB	Leonardo Bonucci	81
+49	f3412	3	1	LCB	Aleksandar Kolarov	80
+49	f3412	4	1	RM	Angel Di Maria	89
+49	f3412	5	1	RCM	Aiden McGeady	80
+49	f3412	6	1	LCM	Steven Defour	79
+49	f3412	7	1	LM	Landon Donovan	81
+49	f3412	8	1	CAM	Thomas Muller	90
+49	f3412	9	1	RS	Danny Welbeck	80
+49	f3412	10	1	LS	Robert Lewandowski	89
+49	f3412	11	0	GK	Etrit Berisha	72
+49	f3412	12	0	LB	Walter Ayovi	71
+49	f3412	13	0	CDM	Pierre-Emile Hojbjerg	64
+49	f3412	14	0	CAM	Riku Riski	71
+49	f3412	15	0	ST	Rodrigo Mora	74
+49	f3412	16	0	ST	Niall McGinn	73
+49	f3412	17	0	ST	Yuri	73

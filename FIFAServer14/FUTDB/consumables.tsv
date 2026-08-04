@@ -1,0 +1,102 @@
+itemType	cardsubtypeid	resourceId	name	rareflag
+ContractPlayer	201	5001001	Player Bronze	0
+ContractPlayer	201	5001002	Player Silver	0
+ContractPlayer	201	5001003	Player Gold	0
+ContractPlayer	201	5001004	Player Rare Bronze	1
+ContractPlayer	201	5001005	Player Rare Silver	1
+ContractPlayer	201	5001006	Player Rare Gold	1
+ContractStaff	202	5001007	Staff Bronze	0
+ContractStaff	202	5001008	Staff Silver	0
+ContractStaff	202	5001009	Staff Gold	0
+ContractStaff	202	5001010	Staff Bronze Rare	1
+ContractStaff	202	5001011	Staff Silver Rare	1
+ContractStaff	202	5001012	Staff Gold Rare	1
+FitnessPlayer	219	5002001	Fitness Player Bronze	0
+FitnessPlayer	219	5002002	Fitness Player Silver	0
+FitnessPlayer	219	5002003	Fitness Player Gold	0
+FitnessTeam	220	5002004	Fitness Team Bronze	1
+FitnessTeam	220	5002005	Fitness Team Silver	1
+FitnessTeam	220	5002006	Fitness Team Gold	1
+HealthHead	211	5002007	Health Head Bronze	0
+HealthHead	211	5002008	Health Head Silver	0
+HealthHead	211	5002009	Health Head Gold	0
+HealthShoulder	212	5002010	Health Shoulder Bronze	0
+HealthShoulder	212	5002011	Health Shoulder Silver	0
+HealthShoulder	212	5002012	Health Shoulder Gold	0
+HealthArm	213	5002013	Health Arm Bronze	0
+HealthArm	213	5002014	Health Arm Silver	0
+HealthArm	213	5002015	Health Arm Gold	0
+HealthHip	215	5002019	Health Hip Bronze	0
+HealthHip	215	5002020	Health Hip Silver	0
+HealthHip	215	5002021	Health Hip Gold	0
+HealthLeg	216	5002022	Health Leg Bronze	0
+HealthLeg	216	5002023	Health Leg Silver	0
+HealthLeg	216	5002024	Health Leg Gold	0
+HealthFoot	217	5002025	Health Foot Bronze	0
+HealthFoot	217	5002026	Health Foot Silver	0
+HealthFoot	217	5002027	Health Foot Gold	0
+HealthAll	218	5002028	Health All Bronze	1
+HealthAll	218	5002029	Health All Silver	1
+HealthAll	218	5002030	Health All Gold	1
+TrainingGkDiving	51	5003001	GK Diving Bronze	0
+TrainingGkDiving	51	5003002	GK Diving Silver	0
+TrainingGkDiving	51	5003003	GK Diving Gold	0
+TrainingGkHandling	52	5003004	GK Handling Bronze	0
+TrainingGkHandling	52	5003005	GK Handling Silver	0
+TrainingGkHandling	52	5003006	GK Handling Gold	0
+TrainingGkKicking	53	5003007	GK Kicking Bronze	0
+TrainingGkKicking	53	5003008	GK Kicking Silver	0
+TrainingGkKicking	53	5003009	GK Kicking Gold	0
+TrainingGkSpeed	54	5003010	GK Speed Bronze	0
+TrainingGkSpeed	54	5003011	GK Speed Silver	0
+TrainingGkSpeed	54	5003012	GK Speed Gold	0
+TrainingGkPosition	55	5003013	GK Position Bronze	0
+TrainingGkPosition	55	5003014	GK Position Silver	0
+TrainingGkPosition	55	5003015	GK Position Gold	0
+TrainingGkReflex	56	5003016	GK Reflexes Bronze	0
+TrainingGkReflex	56	5003017	GK Reflexes Silver	0
+TrainingGkReflex	56	5003018	GK Reflexes Gold	0
+TrainingGkAll	57	5003019	GK All Bronze	1
+TrainingGkAll	57	5003020	GK All Silver	1
+TrainingGkAll	57	5003021	GK All Gold	1
+TrainingPlayerPace	61	5003022	Player Pace Bronze	0
+TrainingPlayerPace	61	5003023	Player Pace Silver	0
+TrainingPlayerPace	61	5003024	Player Pace Gold	0
+TrainingPlayerShooting	62	5003025	Player Shooting Bronze	0
+TrainingPlayerShooting	62	5003026	Player Shooting Silver	0
+TrainingPlayerShooting	62	5003027	Player Shooting Gold	0
+TrainingPlayerPassing	63	5003028	Player Passing Bronze	0
+TrainingPlayerPassing	63	5003029	Player Passing Silver	0
+TrainingPlayerPassing	63	5003030	Player Passing Gold	0
+TrainingPlayerDribbling	64	5003031	Player Dribbling Bronze	0
+TrainingPlayerDribbling	64	5003032	Player Dribbling Silver	0
+TrainingPlayerDribbling	64	5003033	Player Dribbling Gold	0
+TrainingPlayerHeading	65	5003034	Player Heading Bronze	0
+TrainingPlayerHeading	65	5003035	Player Heading Silver	0
+TrainingPlayerHeading	65	5003036	Player Heading Gold	0
+TrainingPlayerDefend	66	5003037	Player Defend Bronze	0
+TrainingPlayerDefend	66	5003038	Player Defend Silver	0
+TrainingPlayerDefend	66	5003039	Player Defend Gold	0
+TrainingPlayerAll	67	5003040	Player All Bronze	1
+TrainingPlayerAll	67	5003041	Player All Silver	1
+TrainingPlayerAll	67	5003042	Player All Gold	1
+TrainingPlayerPosLWB_LB	91	5003059	Player LWB-LB	1
+TrainingPlayerPosLB_LWB	92	5003060	Player LB-LWB	1
+TrainingPlayerPosRWB_RB	93	5003061	Player RWB-RB	1
+TrainingPlayerPosRB_RWB	94	5003062	Player RB-RWB	1
+TrainingPlayerPosLM_LW	95	5003063	Player LM-LW	1
+TrainingPlayerPosRM_RW	96	5003064	Player RM-RW	1
+TrainingPlayerPosLW_LM	97	5003065	Player LW-LM	1
+TrainingPlayerPosRW_RM	98	5003066	Player RW-RM	1
+TrainingPlayerPosLW_LF	99	5003067	Player LW-LF	0
+TrainingPlayerPosRW_RF	100	5003068	Player RW-RF	0
+TrainingPlayerPosLF_LW	101	5003069	Player LF-LW	0
+TrainingPlayerPosRF_RW	102	5003070	Player RF-RW	0
+TrainingPlayerPosCM_CAM	103	5003071	Player CM-CAM	1
+TrainingPlayerPosCAM_CM	104	5003072	Player CAM-CM	1
+TrainingPlayerPosCDM_CM	105	5003073	Player CDM-CM	1
+TrainingPlayerPosCM_CDM	106	5003074	Player CM-CDM	1
+TrainingPlayerPosCAM_CF	107	5003075	Player CAM-CF	1
+TrainingPlayerPosCF_CAM	108	5003076	Player CF-CAM	1
+TrainingPlayerPosCF_ST	109	5003077	Player CF-ST	1
+TrainingPlayerPosST_CF	110	5003078	Player ST-CF	1

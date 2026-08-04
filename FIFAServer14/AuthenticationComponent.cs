@@ -10,7 +10,7 @@ namespace FIFAServer14;
 internal sealed class AuthenticationComponent : AuthenticationComponentBase.Server
 {
     private const long UserId = 1000;
-    private const string PersonaName = "FUT14";
+    private static readonly string PersonaName = UserConfig.Username;
     private const string Email = "player@fifa14.local";
     private const string SessionKey = "fifa14sessionkey";
     private const uint Locale = 1701729619;

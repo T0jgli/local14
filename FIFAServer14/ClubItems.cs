@@ -1,10 +1,13 @@
 namespace FIFAServer14;
 
 internal readonly record struct CosmeticItem(
-    long ItemId, string Type, int AssetId, long ResourceId, int SubType, string Name, int Rating);
+    long ItemId, string Type, int AssetId, long ResourceId, int SubType, string Name, int Rating,
+    int Rare = 0, int Category = 0, int TeamId = 0);
 
 internal static class ClubItems
 {
+    internal const long BallIdFloor = 8_120_091L;
+
     private const long BallBase    = 8120000;
     private const long StadiumBase = 6200000;
     private const long KitBase     = 6300000;
@@ -30,7 +33,7 @@ internal static class ClubItems
 
     private static CosmeticItem[] Load()
     {
-        string path = Path.Combine(AppContext.BaseDirectory, "items.tsv");
+        string path = Path.Combine(AppContext.BaseDirectory, "FUTDB", "items.tsv");
         var list = new List<CosmeticItem>();
         try
         {
@@ -42,7 +45,7 @@ internal static class ClubItems
                 if (line.Length == 0 || line[0] == '#') continue;
                 string[] c = line.Split('\t');
                 if (c.Length < 3) continue;
-                // type  assetId  name  [resourceId]  [rating]
+                // type  assetId  name  [resourceId]  [rating]  [rare]  [category]  [teamid]
                 string type = c[0].Trim();
                 var (subType, baseRes) = Info(type);
                 if (subType == 0)
@@ -53,8 +56,10 @@ internal static class ClubItems
                 int assetId = int.Parse(c[1]);
                 string name = c.Length > 2 ? c[2] : type;
                 long resId = c.Length > 3 && c[3].Length > 0 && c[3] != "-" ? long.Parse(c[3]) : baseRes + assetId;
-                int rating = c.Length > 4 && c[4].Length > 0 ? int.Parse(c[4]) : 75;
-                list.Add(new CosmeticItem(id++, type, assetId, resId, subType, name, rating));
+                int F(int i, int fallback) =>
+                    c.Length > i && c[i].Length > 0 && int.TryParse(c[i], out int v) ? v : fallback;
+                list.Add(new CosmeticItem(id++, type, assetId, resId, subType, name,
+                    F(4, 75), F(5, 0), F(6, 0), F(7, 0)));
             }
             Console.WriteLine($"[Items] loaded {list.Count} club items from {path}");
         }
@@ -101,19 +106,24 @@ internal static class ClubItems
             "\"itemType\":\"" + (it.Type == "badge" ? "custom" : it.Type) + "\"," +
             "\"resourceId\":" + it.ResourceId + ",\"owners\":1,\"discardValue\":" + discard + "," +
             "\"itemState\":\"free\",\"cardsubtypeid\":" + it.SubType + ",\"lastSalePrice\":0," +
-            "\"statsList\":[],\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":0,\"rareflag\":0," +
+            "\"statsList\":[],\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":" + it.TeamId +
+            ",\"rareflag\":" + it.Rare + "," +
             "\"leagueId\":0,\"pile\":6,\"resourceGameYear\":2014";
+        int category = it.Category;
 
         string name = Esc(it.Name);
         string tail = it.Type switch
         {
-            "stadium" => ",\"cardassetid\":" + it.AssetId + ",\"category\":4,\"name\":\"" + name +
-                         "\",\"description\":\"StadiumDesc_Server\",\"biodescription\":\"StadiumDetailDesc\"," +
-                         "\"stadiumid\":" + it.AssetId + ",\"capacity\":30000}",
-            "ball"    => ",\"cardassetid\":" + it.AssetId + ",\"category\":1,\"name\":\"" + name +
+            "stadium" => ",\"cardassetid\":36,\"category\":" + category + ",\"name\":\"" + name +
+                         "\",\"description\":\"StadiumDesc_" + it.AssetId + "\"," +
+                         "\"biodescription\":\"StadiumDetailDesc\"," +
+                         "\"stadiumid\":" + it.AssetId + ",\"value\":" + it.Rating +
+                         ",\"capacity\":30000}",
+            "ball"    => ",\"cardassetid\":37,\"category\":" + category + ",\"name\":\"" + name +
                          "\",\"value\":" + it.Rating + ",\"manufacturer\":\"ManufacturerGeneric\"}",
-            "kit"     => ",\"category\":2,\"year\":0}",
-            "badge"   => ",\"category\":1,\"value\":" + it.Rating + ",\"weightrare\":0,\"header\":\"Badge\"}",
+            "kit"     => ",\"category\":" + category + ",\"value\":" + it.Rating + ",\"year\":0}",
+            "badge"   => ",\"category\":" + category + ",\"value\":" + it.Rating +
+                         ",\"weightrare\":" + (it.Rare * 10) + ",\"header\":\"Badge\"}",
             _         => "}",
         };
         return head + tail;

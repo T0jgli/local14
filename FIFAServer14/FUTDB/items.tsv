@@ -1,0 +1,2031 @@
+type	assetId	name	resourceId	rating	rare	category	teamid
+ball	23	BallName_23	8120091	74	0	1	0
+ball	32	BallName_32	8120092	74	0	1	0
+ball	37	BallName_37	8120093	74	0	1	0
+ball	39	BallName_39	8120094	74	0	1	0
+ball	40	BallName_40	8120095	74	0	1	0
+ball	41	BallName_41	8120096	74	0	1	0
+ball	46	BallName_46	8120097	74	0	1	0
+ball	52	BallName_52	8120098	74	0	1	0
+ball	67	BallName_67	8120099	74	0	1	0
+ball	68	BallName_68	8120100	74	0	1	0
+ball	53	BallName_53	8120101	74	0	1	0
+ball	69	BallName_69	8120102	74	0	1	0
+ball	56	BallName_56	8120103	74	0	1	0
+ball	59	BallName_59	8120104	74	0	1	0
+ball	61	BallName_61	8120105	74	0	1	0
+ball	65	BallName_65	8120106	74	0	1	0
+ball	31	BallName_31	8120107	74	0	1	0
+ball	33	BallName_33	8120108	74	0	1	0
+ball	34	BallName_34	8120109	74	0	1	0
+ball	35	BallName_35	8120110	74	0	1	0
+ball	36	BallName_36	8120111	74	0	1	0
+ball	38	BallName_38	8120112	74	0	1	0
+ball	42	BallName_42	8120113	74	0	1	0
+ball	43	BallName_43	8120114	74	0	1	0
+ball	44	BallName_44	8120115	74	0	1	0
+ball	45	BallName_45	8120116	74	0	1	0
+ball	47	BallName_47	8120117	74	0	1	0
+ball	48	BallName_48	8120118	74	0	1	0
+ball	49	BallName_49	8120119	74	0	1	0
+ball	50	BallName_50	8120120	74	0	1	0
+ball	51	BallName_51	8120121	74	0	1	0
+ball	54	BallName_54	8120122	74	0	1	0
+ball	55	BallName_55	8120123	74	0	1	0
+ball	57	BallName_57	8120124	74	0	1	0
+ball	72	BallName_72	8120125	74	0	1	0
+ball	73	BallName_73	8120126	74	0	1	0
+ball	58	BallName_58	8120127	74	0	1	0
+ball	60	BallName_60	8120128	74	0	1	0
+ball	62	BallName_62	8120129	74	0	1	0
+ball	63	BallName_63	8120130	74	0	1	0
+ball	64	BallName_64	8120131	74	0	1	0
+ball	66	BallName_66	8120132	74	0	1	0
+ball	74	BallName_74	8120133	74	0	1	0
+ball	80	BallName_80	8120134	74	0	1	0
+ball	81	BallName_81	8120135	74	0	1	0
+ball	82	BallName_82	8120136	74	0	1	0
+ball	83	BallName_83	8120137	74	0	1	0
+ball	84	BallName_84	8120138	74	0	1	0
+ball	85	BallName_85	8120139	74	0	1	0
+ball	86	BallName_86	8120140	74	0	1	0
+ball	87	BallName_87	8120141	74	0	1	0
+ball	91	BallName_91	8120142	74	0	1	0
+ball	88	BallName_88	8120143	74	0	1	0
+ball	89	BallName_89	8120144	74	0	1	0
+ball	90	BallName_90	8120145	74	0	1	0
+stadium	1	Old Trafford	6200000	85	1	4	0
+stadium	2	Santiago Bernabéu	6200001	85	1	4	0
+stadium	4	Stade Gerland	6200002	85	0	4	0
+stadium	5	San Siro	6200003	85	1	4	0
+stadium	6	Camp Nou	6200004	85	1	4	0
+stadium	9	Signal Iduna Park	6200005	85	0	4	0
+stadium	10	Mestalla	6200006	85	0	4	0
+stadium	13	Anfield	6200007	85	1	4	0
+stadium	14	Parc des Princes	6200008	85	1	4	0
+stadium	15	Amsterdam ArenA	6200009	85	1	4	0
+stadium	26	Forest Park Stadium (Square Ground)	6200010	64	0	4	0
+stadium	28	Stamford Bridge	6200011	85	1	4	0
+stadium	29	Stade Velodrome	6200012	85	0	4	0
+stadium	30	Veltins-Arena	6200013	85	1	4	0
+stadium	32	Crown Lane	6200014	74	0	4	0
+stadium	33	Euro Arena	6200015	64	0	4	0
+stadium	34	Town Park	6200016	64	0	4	0
+stadium	35	Euro Park	6200017	64	0	4	0
+stadium	41	Imtech Arena	6200018	85	1	4	0
+stadium	42	Estadio Vicente Calderon	6200019	85	0	4	0
+stadium	100	St James' Park	6200020	85	1	4	0
+stadium	104	Estadio Azteca	6200021	85	1	4	0
+stadium	116	White Hart Lane	6200022	85	1	4	0
+stadium	135	Olympiastadion	6200023	85	1	4	0
+stadium	137	Allianz Arena	6200024	85	1	4	0
+stadium	147	Stadion Europa	6200025	74	0	4	0
+stadium	149	Stade Kokoto	6200026	74	0	4	0
+stadium	153	Aloha Park	6200027	74	0	4	0
+stadium	155	Wembley Stadium	6200028	85	1	4	0
+stadium	156	Emirates Stadium	6200029	85	0	4	0
+stadium	157	Stadio Olimpico	6200030	85	0	4	0
+stadium	158	Estadio de las Artes (Generic Stadium NG)	6200031	64	1	4	0
+stadium	174	Stadio Comunale (Olimpico Generico)	6200032	64	1	4	0
+stadium	175	Arena del Centenario (Estadio del Pueblo)	6200033	64	0	4	0
+stadium	176	Waldstadion (Fussballstadion)	6200034	74	1	4	0
+stadium	177	La Canchita (El Reducto)	6200035	74	1	4	0
+stadium	178	Stadion Neder	6200036	74	0	4	0
+stadium	179	Stade Municipal	6200037	64	0	4	0
+stadium	180	Ivy Lane	6200038	64	0	4	0
+stadium	181	El Monumento (Estadio Latino)	6200039	64	0	4	0
+stadium	182	Stadion 23. Maj	6200040	74	0	4	0
+stadium	183	Estadio Nacional (El Medio)	6200041	74	0	4	0
+stadium	192	El Libertador (La Bombastico)	6200042	64	0	4	0
+stadium	193	Stadio Classico	6200043	64	1	4	0
+stadium	194	Eastpoint Arena (Football Ground)	6200044	64	1	4	0
+stadium	195	Stadion Olympik	6200045	64	0	4	0
+stadium	196	Stadion Hanguk	6200046	64	0	4	0
+stadium	197	O Dromo	6200047	74	1	4	0
+stadium	212	Estadio Presidente G.Lopes	6200048	74	1	4	0
+stadium	225	Akaaroa Stadium	6200049	74	1	4	0
+stadium	228	Court Lane	6200050	74	0	4	0
+stadium	229	Arena d'Oro	6200051	64	0	4	0
+stadium	246	Etihad Stadium	6200052	85	1	4	0
+stadium	247	Juventus Stadium	6200053	85	1	4	0
+stadium	248	BC Place Stadium	6200054	85	1	4	0
+stadium	249	Molton Road (Sheldon Stadium)	6200055	74	0	4	0
+stadium	260	Donbass Arena	6200056	85	0	4	0
+stadium	261	Sanderson Park (FIFA 13 NEW generic)	6200057	74	1	4	0
+stadium	262	King Fahd International Stadium	6200058	85	0	4	0
+stadium	264	La Bombonera	6200059	85	0	4	0
+stadium	265	Goodison Park	6200060	85	0	4	0
+kit	14	FC Barcelona	6300000	89	1	2	241
+kit	14	FC Barcelona	6300001	89	0	2	241
+kit	14	FC Barcelona	6300002	89	1	5	241
+kit	14	Real Madrid	6300003	89	1	2	243
+kit	14	Real Madrid	6300004	89	1	5	243
+kit	14	Bayern München	6300005	88	1	2	21
+kit	14	Bayern München	6300006	88	0	2	21
+kit	14	Bayern München	6300007	88	1	5	21
+kit	14	Manchester City	6300008	87	1	2	10
+kit	14	Manchester City	6300009	87	0	2	10
+kit	14	Manchester City	6300010	87	1	5	10
+kit	14	Manchester United	6300011	87	1	2	11
+kit	14	Manchester United	6300012	87	1	5	11
+kit	14	Juventus	6300013	87	1	2	45
+kit	14	Juventus	6300014	87	0	2	45
+kit	14	Juventus	6300015	87	1	5	45
+kit	14	Chelsea	6300016	86	1	2	5
+kit	14	Chelsea	6300017	86	0	2	5
+kit	14	Chelsea	6300018	86	1	5	5
+kit	14	Borussia Dortmund	6300019	86	1	2	22
+kit	14	Borussia Dortmund	6300020	86	0	2	22
+kit	14	Borussia Dortmund	6300021	86	1	5	22
+kit	14	Tottenham Hotspur	6300022	85	1	2	18
+kit	14	Tottenham Hotspur	6300023	85	1	5	18
+kit	14	Paris Saint-Germain	6300024	85	1	2	73
+kit	14	Paris Saint-Germain	6300025	85	0	2	73
+kit	14	Paris Saint-Germain	6300026	85	1	5	73
+kit	14	Atlético de Madrid	6300027	85	1	2	240
+kit	14	Atlético de Madrid	6300028	85	0	2	240
+kit	14	Arsenal	6300029	84	1	2	1
+kit	14	Arsenal	6300030	84	0	2	1
+kit	14	Arsenal	6300031	84	1	5	1
+kit	14	Inter	6300032	84	1	2	44
+kit	14	Inter	6300033	84	0	2	44
+kit	14	Inter	6300034	84	1	5	44
+kit	14	Napoli	6300035	84	1	2	48
+kit	14	Napoli	6300036	84	1	5	48
+kit	14	Fiorentina	6300037	84	1	2	110374
+kit	14	Fiorentina	6300038	84	0	2	110374
+kit	14	Fiorentina	6300039	84	1	5	110374
+kit	14	Liverpool	6300040	83	1	2	9
+kit	14	Liverpool	6300041	83	1	5	9
+kit	14	Lazio	6300042	83	1	2	46
+kit	14	Lazio	6300043	83	1	5	46
+kit	14	Milan	6300044	83	1	2	47
+kit	14	Milan	6300045	83	0	2	47
+kit	14	Milan	6300046	83	1	5	47
+kit	14	Roma	6300047	83	1	2	52
+kit	14	Roma	6300048	83	0	2	52
+kit	14	FC Porto 	6300049	83	1	2	236
+kit	14	FC Porto 	6300050	83	1	5	236
+kit	14	Valencia CF	6300051	83	1	2	461
+kit	14	Valencia CF	6300052	83	0	2	461
+kit	14	Valencia CF	6300053	83	1	5	461
+kit	14	Newcastle United	6300054	82	1	2	13
+kit	14	Newcastle United	6300055	82	0	2	13
+kit	14	Newcastle United	6300056	82	1	5	13
+kit	14	FC Schalke 04	6300057	82	1	2	34
+kit	14	FC Schalke 04	6300058	82	0	2	34
+kit	14	FC Schalke 04	6300059	82	1	5	34
+kit	14	Fulham	6300060	82	1	2	144
+kit	14	Fulham	6300061	82	1	5	144
+kit	14	VfL Wolfsburg	6300062	82	1	2	175
+kit	14	VfL Wolfsburg	6300063	82	0	2	175
+kit	14	VfL Wolfsburg	6300064	82	1	5	175
+kit	14	SL Benfica	6300065	82	1	2	234
+kit	14	Galatasaray SK	6300066	82	1	2	325
+kit	14	Galatasaray SK	6300067	82	1	5	325
+kit	14	Zenit St. Petersburg	6300068	82	1	2	100769
+kit	14	Everton	6300069	81	1	2	7
+kit	14	Everton	6300070	81	0	2	7
+kit	14	Everton	6300071	81	1	5	7
+kit	14	Bayer 04 Leverkusen	6300072	81	1	2	32
+kit	14	Bayer 04 Leverkusen	6300073	81	0	2	32
+kit	14	Bayer 04 Leverkusen	6300074	81	1	5	32
+kit	14	AS Monaco	6300075	81	1	2	69
+kit	14	AS Monaco	6300076	81	1	5	69
+kit	14	Olympique de Marseille	6300077	81	1	2	219
+kit	14	Olympique de Marseille	6300078	81	0	2	219
+kit	14	Olympique de Marseille	6300079	81	1	5	219
+kit	14	Athletic Club de Bilbao	6300080	81	1	2	448
+kit	14	Real Sociedad	6300081	81	1	2	457
+kit	14	Sevilla FC	6300082	81	1	2	481
+kit	14	Sevilla FC	6300083	81	1	5	481
+kit	14	Swansea City	6300084	81	1	2	1960
+kit	14	Borussia M'gladbach	6300085	80	1	2	23
+kit	14	Borussia M'gladbach	6300086	80	0	2	23
+kit	14	Borussia M'gladbach	6300087	80	1	5	23
+kit	14	Hamburger SV	6300088	80	1	2	28
+kit	14	Hamburger SV	6300089	80	0	2	28
+kit	14	Hamburger SV	6300090	80	1	5	28
+kit	14	VfB Stuttgart	6300091	80	1	2	36
+kit	14	VfB Stuttgart	6300092	80	0	2	36
+kit	14	VfB Stuttgart	6300093	80	1	5	36
+kit	14	Atalanta	6300094	80	1	2	39
+kit	14	Atalanta	6300095	80	1	5	39
+kit	14	Udinese	6300096	80	1	2	55
+kit	14	Udinese	6300097	80	1	5	55
+kit	14	Olympique Lyonnais	6300098	80	1	2	66
+kit	14	Olympique Lyonnais	6300099	80	0	2	66
+kit	14	Olympique Lyonnais	6300100	80	1	5	66
+kit	14	CSKA Moskva	6300101	80	1	2	315
+kit	14	Málaga CF	6300102	80	1	2	573
+kit	14	Málaga CF	6300103	80	1	5	573
+kit	14	Atlético Mineiro	6300104	80	1	2	1035
+kit	14	Stoke City	6300105	80	1	2	1806
+kit	14	Stoke City	6300106	80	0	2	1806
+kit	14	Spartak Moskva	6300107	80	1	2	100767
+kit	14	Spartak Moskva	6300108	80	1	5	100767
+kit	14	Shakhtar Donetsk	6300109	80	1	2	101059
+kit	14	Southampton	6300110	79	0	2	17
+kit	14	West Ham United	6300111	79	0	2	19
+kit	14	West Ham United	6300112	79	0	5	19
+kit	14	Parma	6300113	79	0	2	50
+kit	14	Parma	6300114	79	0	5	50
+kit	14	LOSC Lille	6300115	79	0	2	65
+kit	14	LOSC Lille	6300116	79	0	2	65
+kit	14	LOSC Lille	6300117	79	0	5	65
+kit	14	Sunderland	6300118	79	0	2	106
+kit	14	West Bromwich Albion	6300119	79	0	2	109
+kit	14	West Bromwich Albion	6300120	79	0	2	109
+kit	14	West Bromwich Albion	6300121	79	0	5	109
+kit	14	Sporting CP	6300122	79	0	2	237
+kit	14	Sporting CP	6300123	79	0	5	237
+kit	14	Ajax	6300124	79	0	2	245
+kit	14	PSV	6300125	79	0	2	247
+kit	14	Olympiacos CFP	6300126	79	0	2	280
+kit	14	Olympiacos CFP	6300127	79	0	5	280
+kit	14	Dinamo Moskva	6300128	79	0	2	312
+kit	14	Real Betis Balompié	6300129	79	0	2	449
+kit	14	Real Betis Balompié	6300130	79	0	5	449
+kit	14	Hannover 96	6300131	79	0	2	485
+kit	14	Hannover 96	6300132	79	0	2	485
+kit	14	Hannover 96	6300133	79	0	5	485
+kit	14	Cruzeiro	6300134	79	0	2	568
+kit	14	São Paulo	6300135	79	0	2	598
+kit	14	Corinthians	6300136	79	0	2	1041
+kit	14	Internacional	6300137	79	0	2	1048
+kit	14	Grêmio	6300138	79	0	2	1629
+kit	14	AS Saint-Etienne	6300139	79	0	2	1819
+kit	14	Eintracht Frankfurt	6300140	79	0	2	1824
+kit	14	Eintracht Frankfurt	6300141	79	0	2	1824
+kit	14	Eintracht Frankfurt	6300142	79	0	5	1824
+kit	14	Cagliari	6300143	79	0	2	1842
+kit	14	Cagliari	6300144	79	0	5	1842
+kit	14	Braga	6300145	79	0	2	1896
+kit	14	Braga	6300146	79	0	5	1896
+kit	14	1899 Hoffenheim	6300147	79	0	2	10029
+kit	14	1899 Hoffenheim	6300148	79	0	2	10029
+kit	14	1899 Hoffenheim	6300149	79	0	5	10029
+kit	14	Anzhi Makhachkala	6300150	79	0	2	100766
+kit	14	Catania	6300151	79	0	2	110364
+kit	14	Genoa	6300152	79	0	2	110556
+kit	14	Aston Villa	6300153	78	0	2	2
+kit	14	Aston Villa	6300154	78	0	2	2
+kit	14	Aston Villa	6300155	78	0	5	2
+kit	14	Queens Park Rangers	6300156	78	0	2	15
+kit	14	Queens Park Rangers	6300157	78	0	5	15
+kit	14	Werder Bremen	6300158	78	0	2	38
+kit	14	Werder Bremen	6300159	78	0	2	38
+kit	14	Werder Bremen	6300160	78	0	5	38
+kit	14	Girondins de Bordeaux	6300161	78	0	2	59
+kit	14	Girondins de Bordeaux	6300162	78	0	2	59
+kit	14	Girondins de Bordeaux	6300163	78	0	5	59
+kit	14	Montpellier HSC	6300164	78	0	2	70
+kit	14	Stade Rennais	6300165	78	0	2	74
+kit	14	Stade Rennais	6300166	78	0	5	74
+kit	14	Bologna	6300167	78	0	2	189
+kit	14	Bologna	6300168	78	0	5	189
+kit	14	RCD Espanyol	6300169	78	0	2	452
+kit	14	RCD Espanyol	6300170	78	0	5	452
+kit	14	Botafogo	6300171	78	0	2	517
+kit	14	Fluminense	6300172	78	0	2	567
+kit	14	Flamengo	6300173	78	0	2	1043
+kit	14	Norwich City	6300174	78	0	2	1792
+kit	14	Getafe CF	6300175	78	0	2	1860
+kit	14	Getafe CF	6300176	78	0	5	1860
+kit	14	Lokomotiv Moskva	6300177	78	0	2	100765
+kit	14	Rubin Kazan	6300178	78	0	2	110227
+kit	14	Newell's Old Boys	6300179	78	0	2	110396
+kit	14	SC Freiburg	6300180	77	0	2	25
+kit	14	SC Freiburg	6300181	77	0	2	25
+kit	14	SC Freiburg	6300182	77	0	5	25
+kit	14	Torino	6300183	77	0	2	54
+kit	14	Torino	6300184	77	0	5	54
+kit	14	Hertha BSC	6300185	77	0	2	166
+kit	14	Hertha BSC	6300186	77	0	2	166
+kit	14	Hertha BSC	6300187	77	0	5	166
+kit	14	1. FSV Mainz 05	6300188	77	0	2	169
+kit	14	1. FSV Mainz 05	6300189	77	0	2	169
+kit	14	1. FSV Mainz 05	6300190	77	0	5	169
+kit	14	1. FC Nürnberg	6300191	77	0	2	171
+kit	14	1. FC Nürnberg	6300192	77	0	2	171
+kit	14	1. FC Nürnberg	6300193	77	0	5	171
+kit	14	Chievo Verona	6300194	77	0	2	192
+kit	14	Feyenoord	6300195	77	0	2	246
+kit	14	Feyenoord	6300196	77	0	5	246
+kit	14	Palmeiras	6300197	77	0	2	383
+kit	14	PAOK FC	6300198	77	0	2	393
+kit	14	RC Celta de Vigo	6300199	77	0	2	450
+kit	14	RC Celta de Vigo	6300200	77	0	5	450
+kit	14	Real Valladolid	6300201	77	0	2	462
+kit	14	Real Valladolid	6300202	77	0	5	462
+kit	14	Elche CF	6300203	77	0	2	468
+kit	14	CA Osasuna	6300204	77	0	2	479
+kit	14	Rayo Vallecano	6300205	77	0	2	480
+kit	14	Rayo Vallecano	6300206	77	0	5	480
+kit	14	Villarreal CF	6300207	77	0	2	483
+kit	14	Vasco da Gama	6300208	77	0	2	569
+kit	14	Palermo	6300209	77	0	2	1843
+kit	14	Levante UD	6300210	77	0	2	1853
+kit	14	Levante UD	6300211	77	0	5	1853
+kit	14	Boca Juniors	6300212	77	0	2	1877
+kit	14	Wigan Athletic	6300213	77	0	2	1917
+kit	14	Vélez Sarsfield	6300214	77	0	2	101088
+kit	14	Granada CF	6300215	77	0	2	110832
+kit	14	Granada CF	6300216	77	0	5	110832
+kit	14	OGC Nice	6300217	76	0	2	72
+kit	14	OGC Nice	6300218	76	0	5	72
+kit	14	Celtic	6300219	76	0	2	78
+kit	14	Celtic	6300220	76	0	5	78
+kit	14	Hellas Verona	6300221	76	0	2	206
+kit	14	Hellas Verona	6300222	76	0	5	206
+kit	14	FC Lorient	6300223	76	0	2	217
+kit	14	FC Lorient	6300224	76	0	5	217
+kit	14	Anderlecht	6300225	76	0	2	229
+kit	14	Standard Liège	6300226	76	0	2	232
+kit	14	Santos	6300227	76	0	2	1053
+kit	14	Reading	6300228	76	0	2	1793
+kit	14	Toulouse FC	6300229	76	0	2	1809
+kit	14	Toulouse FC	6300230	76	0	5	1809
+kit	14	Sampdoria	6300231	76	0	2	1837
+kit	14	Sampdoria	6300232	76	0	5	1837
+kit	14	Hull City	6300233	76	0	2	1952
+kit	14	Cardiff City	6300234	76	0	2	1961
+kit	14	Cardiff City	6300235	76	0	5	1961
+kit	14	Tigres U.A.N.L.	6300236	76	0	2	1970
+kit	14	FC Augsburg	6300237	76	0	2	100409
+kit	14	FC Augsburg	6300238	76	0	2	100409
+kit	14	FC Augsburg	6300239	76	0	5	100409
+kit	14	Coritiba	6300240	76	0	2	111044
+kit	14	Bolton Wanderers	6300241	75	0	2	4
+kit	14	1. FC Kaiserslautern	6300242	75	0	2	29
+kit	14	FC Sochaux	6300243	75	0	2	226
+kit	14	FC Sochaux	6300244	75	0	5	226
+kit	14	Club Brugge	6300245	75	0	2	231
+kit	14	RCD Mallorca	6300246	75	0	2	453
+kit	14	Al Hilal (Riyadh)	6300247	75	0	2	605
+kit	14	RC Genk	6300248	75	0	2	673
+kit	14	FC København	6300249	75	0	2	819
+kit	14	Monterrey	6300250	75	0	2	1032
+kit	14	Crystal Palace	6300251	75	0	2	1799
+kit	14	Brighton & Hove Albion	6300252	75	0	2	1808
+kit	14	UD Almería	6300253	75	0	2	1861
+kit	14	América	6300254	75	0	2	1879
+kit	14	AZ	6300255	75	0	2	1906
+kit	14	AZ	6300256	75	0	5	1906
+kit	14	FC Twente	6300257	75	0	2	1908
+kit	14	Vitesse	6300258	75	0	2	1909
+kit	14	Estudiantes de La Plata	6300259	75	0	2	101083
+kit	14	Racing Club de Avellaneda	6300260	75	0	2	101085
+kit	14	Kuban Krasnodar	6300261	75	0	2	110089
+kit	14	Portuguesa	6300262	75	0	2	111292
+kit	14	Nottingham Forest	6300263	74	1	2	14
+kit	14	1. FC Köln	6300264	74	1	2	31
+kit	14	SC Bastia	6300265	74	1	2	58
+kit	14	Pescara	6300266	74	1	2	200
+kit	14	Pescara	6300267	74	1	5	200
+kit	14	Real Zaragoza	6300268	74	1	2	244
+kit	14	Stade de Reims	6300269	74	1	2	379
+kit	14	Stade de Reims	6300270	74	1	5	379
+kit	14	FC Basel	6300271	74	1	2	896
+kit	14	San Lorenzo de Almagro	6300272	74	1	2	1013
+kit	14	Monarcas Morelia	6300273	74	1	2	1028
+kit	14	Atlético Paranaense	6300274	74	1	2	1039
+kit	14	Bahia	6300275	74	1	2	1598
+kit	14	Vitória	6300276	74	1	2	1719
+kit	14	Watford 	6300277	74	1	2	1795
+kit	14	Siena	6300278	74	1	2	1838
+kit	14	River Plate	6300279	74	1	2	1876
+kit	14	River Plate	6300280	74	1	5	1876
+kit	14	Cruz Azul	6300281	74	1	2	1878
+kit	14	Panathinaikos FC	6300282	74	1	2	1884
+kit	14	Atlético Nacional	6300283	74	1	2	101100
+kit	14	Santos Laguna	6300284	74	1	2	110144
+kit	14	Club Atlético Colón	6300285	74	1	2	110406
+kit	14	Valenciennes FC	6300286	74	1	2	110456
+kit	14	Valenciennes FC	6300287	74	1	5	110456
+kit	14	Eintracht Braunschweig	6300288	74	1	2	110500
+kit	14	Eintracht Braunschweig	6300289	74	0	2	110500
+kit	14	Eintracht Braunschweig	6300290	74	1	5	110500
+kit	14	Fortuna Düsseldorf	6300291	74	1	2	110636
+kit	14	Fortuna Düsseldorf	6300292	74	1	5	110636
+kit	14	Orlando Pirates	6300293	74	1	2	110930
+kit	14	Goiás	6300294	74	1	2	111042
+kit	14	Criciúma	6300295	74	1	2	111046
+kit	14	Náutico	6300296	74	1	2	111050
+kit	14	Seattle Sounders	6300297	74	1	2	111144
+kit	14	Seattle Sounders	6300298	74	1	5	111144
+kit	14	Évian Thonon Gaillard FC	6300299	74	1	2	111271
+kit	14	FC Krasnodar	6300300	74	1	2	112218
+kit	14	Blackburn Rovers	6300301	73	1	2	3
+kit	14	Blackburn Rovers	6300302	73	0	2	3
+kit	14	Leeds United	6300303	73	1	2	8
+kit	14	Leeds United	6300304	73	1	5	8
+kit	14	Middlesbrough	6300305	73	1	2	12
+kit	14	FC Nantes	6300306	73	1	2	71
+kit	14	Derby County	6300307	73	1	2	91
+kit	14	Derby County	6300308	73	0	2	91
+kit	14	Leicester City	6300309	73	1	2	95
+kit	14	Millwall	6300310	73	1	2	97
+kit	14	Millwall	6300311	73	1	5	97
+kit	14	Wolverhampton Wanderers	6300312	73	1	2	110
+kit	14	Wolverhampton Wanderers	6300313	73	0	2	110
+kit	14	Red Bull Salzburg	6300314	73	1	2	191
+kit	14	RC Deportivo	6300315	73	1	2	242
+kit	14	RC Deportivo	6300316	73	1	5	242
+kit	14	AC Ajaccio	6300317	73	1	2	614
+kit	14	AC Ajaccio	6300318	73	1	5	614
+kit	14	AA Gent	6300319	73	1	2	674
+kit	14	Rio Ave	6300320	73	1	2	744
+kit	14	Livorno	6300321	73	1	2	1844
+kit	14	Guadalajara	6300322	73	1	2	1880
+kit	14	Guadalajara	6300323	73	1	5	1880
+kit	14	Toluca	6300324	73	1	2	1882
+kit	14	Paços de Ferreira	6300325	73	1	2	1892
+kit	14	FC Utrecht	6300326	73	1	2	1903
+kit	14	SC Heerenveen	6300327	73	1	2	1913
+kit	14	Lokeren	6300328	73	1	2	2007
+kit	14	SV Zulte-Waregem	6300329	73	1	2	15005
+kit	14	Universidad de Chile	6300330	73	1	2	15029
+kit	14	Pachuca	6300331	73	1	2	110147
+kit	14	Lanús	6300332	73	1	2	110395
+kit	14	León	6300333	73	1	2	110781
+kit	14	Kaizer Chiefs	6300334	73	1	2	110929
+kit	14	Ponte Preta	6300335	73	1	2	111043
+kit	14	Montreal Impact	6300336	73	1	2	111139
+kit	14	Montreal Impact	6300337	73	1	5	111139
+kit	14	Tijuana	6300338	73	1	2	111678
+kit	14	Sassuolo	6300339	73	1	2	111974
+kit	14	TSV 1860 München	6300340	72	1	2	33
+kit	14	En Avant Guingamp	6300341	72	1	2	62
+kit	14	Birmingham City	6300342	72	1	2	88
+kit	14	Energie Cottbus	6300343	72	1	2	162
+kit	14	SpVgg Greuther Fürth	6300344	72	1	2	165
+kit	14	Austria Wien	6300345	72	1	2	256
+kit	14	Rosenborg BK	6300346	72	1	2	298
+kit	14	Stade Brestois	6300347	72	1	2	378
+kit	14	Molde FK	6300348	72	1	2	417
+kit	14	Real Sporting de Gijón	6300349	72	1	2	459
+kit	14	UD Las Palmas	6300350	72	1	2	472
+kit	14	New York Red Bulls	6300351	72	1	2	689
+kit	14	Sporting KC	6300352	72	1	2	696
+kit	14	Sporting KC	6300353	72	1	5	696
+kit	14	Los Angeles Galaxy	6300354	72	1	2	697
+kit	14	Los Angeles Galaxy	6300355	72	1	5	697
+kit	14	FC Seoul	6300356	72	1	2	982
+kit	14	1. FC Union Berlin	6300357	72	1	2	1831
+kit	14	Legia Warszawa	6300358	72	1	2	1871
+kit	14	U.N.A.M.	6300359	72	0	2	1881
+kit	14	Nacional	6300360	72	0	2	1891
+kit	14	Marítimo	6300361	72	0	2	1893
+kit	14	Académica	6300362	72	0	2	1901
+kit	14	Blackpool	6300363	72	0	2	1926
+kit	14	Estoril	6300364	72	0	2	10020
+kit	14	Deportivo Cali	6300365	72	0	2	101102
+kit	14	Independiente Santa Fe	6300366	72	0	2	101104
+kit	14	Atlas	6300367	72	0	2	101114
+kit	14	Atlante	6300368	72	0	2	101116
+kit	14	Girona FC	6300369	72	0	2	110062
+kit	14	Terek Grozny	6300370	72	0	2	110109
+kit	14	Puebla	6300371	72	0	2	110152
+kit	14	FC Rostov	6300372	72	0	2	110231
+kit	14	FC St. Pauli	6300373	72	0	2	110329
+kit	14	Arsenal de Sarandi	6300374	72	0	2	110394
+kit	14	FC Ingolstadt 04	6300375	72	0	2	111239
+kit	14	Al Shabab (Riyadh)	6300376	72	0	2	111674
+kit	14	Club Atlético Tigre	6300377	72	0	2	111715
+kit	14	Deportes Tolima	6300378	72	0	2	111722
+kit	14	Al Ahli (Jeddah)	6300379	72	0	2	112387
+kit	14	AJ Auxerre	6300380	71	0	2	57
+kit	14	Ipswich Town	6300381	71	0	2	94
+kit	14	VfL Bochum	6300382	71	0	2	160
+kit	14	Brescia	6300383	71	0	2	190
+kit	14	ES Troyes AC	6300384	71	0	2	294
+kit	14	Malmö FF	6300385	71	0	2	320
+kit	14	Grasshopper Club Zürich	6300386	71	0	2	322
+kit	14	Helsingborgs IF	6300387	71	0	2	432
+kit	14	RC Recreativo	6300388	71	0	2	571
+kit	14	ADO Den Haag	6300389	71	0	2	650
+kit	14	Vitória Setúbal	6300390	71	0	2	665
+kit	14	Chicago Fire	6300391	71	0	2	693
+kit	14	FC Dallas	6300392	71	0	2	695
+kit	14	IF Elfsborg	6300393	71	0	2	700
+kit	14	Lech Poznań	6300394	71	0	2	873
+kit	14	BSC Young Boys	6300395	71	0	2	900
+kit	14	Strømsgodset Toppfotball	6300396	71	0	2	922
+kit	14	Suwon Samsung Bluewings	6300397	71	0	2	983
+kit	14	Jeonbuk Hyundai Motors	6300398	71	0	2	1477
+kit	14	Sheffield Wednesday	6300399	71	0	2	1807
+kit	14	AS Nancy	6300400	71	0	2	1823
+kit	14	Vitória Guimarães	6300401	71	0	2	1887
+kit	14	Roda JC Kerkrade	6300402	71	0	2	1902
+kit	14	FC Groningen	6300403	71	0	2	1915
+kit	14	Huddersfield Town	6300404	71	0	2	1939
+kit	14	SD Ponferradina	6300405	71	0	2	2023
+kit	14	Heracles Almelo	6300406	71	0	2	100634
+kit	14	Krylya Sovetov Samara	6300407	71	0	2	100764
+kit	14	AD Alcorcón	6300408	71	0	2	100831
+kit	14	Hércules CF	6300409	71	0	2	100879
+kit	14	Junior Barranquilla	6300410	71	0	2	101101
+kit	14	Querétaro	6300411	71	0	2	110150
+kit	14	Rosario Central	6300412	71	0	2	110580
+kit	14	Spezia	6300413	71	0	2	110741
+kit	14	Padova	6300414	71	0	2	110912
+kit	14	Cesena	6300415	71	0	2	110915
+kit	14	Universidad Católica	6300416	71	0	2	110975
+kit	14	Belgrano de Córdoba	6300417	71	0	2	111022
+kit	14	Real Salt Lake	6300418	71	0	2	111065
+kit	14	Godoy Cruz	6300419	71	0	2	111706
+kit	14	All Boys	6300420	71	0	2	111717
+kit	14	San Jose Earthquakes	6300421	71	0	2	111928
+kit	14	San Jose Earthquakes	6300422	71	0	5	111928
+kit	14	Al Nassr (Riyadh)	6300423	71	0	2	112139
+kit	14	Arouca	6300424	71	0	2	112513
+kit	14	Chiapas FC	6300425	71	0	2	112679
+kit	14	Racing Club de Lens	6300426	70	0	2	64
+kit	14	Doncaster Rovers	6300427	70	0	2	142
+kit	14	Reggina	6300428	70	0	2	203
+kit	14	Sturm Graz	6300429	70	0	2	209
+kit	14	SM Caen	6300430	70	0	2	210
+kit	14	Rapid Wien	6300431	70	0	2	254
+kit	14	Tromsø IL	6300432	70	0	2	418
+kit	14	AIK	6300433	70	0	2	433
+kit	14	Dynamo Dresden	6300434	70	0	2	503
+kit	14	Ternana	6300435	70	0	2	570
+kit	14	Colorado Rapids	6300436	70	0	2	694
+kit	14	Houston Dynamo	6300437	70	0	2	698
+kit	14	Houston Dynamo	6300438	70	0	5	698
+kit	14	BK Häcken	6300439	70	0	2	711
+kit	14	Vålerenga Fotball	6300440	70	0	2	920
+kit	14	Ulsan Hyundai FC	6300441	70	0	2	1473
+kit	14	Pohang Steelers	6300442	70	0	2	1474
+kit	14	Modena	6300443	70	0	2	1744
+kit	14	Mons	6300444	70	0	2	1747
+kit	14	FC Nordsjælland	6300445	70	0	2	1788
+kit	14	Burnley	6300446	70	0	2	1796
+kit	14	Burnley	6300447	70	0	2	1796
+kit	14	Gil Vicente	6300448	70	0	2	1888
+kit	14	Belenenses	6300449	70	0	2	1889
+kit	14	NAC Breda	6300450	70	0	2	1904
+kit	14	NAC Breda	6300451	70	0	5	1904
+kit	14	NEC	6300452	70	0	2	1910
+kit	14	PEC Zwolle	6300453	70	0	2	1914
+kit	14	Bournemouth	6300454	70	0	2	1943
+kit	14	Bournemouth	6300455	70	0	5	1943
+kit	14	SC Paderborn 07	6300456	70	0	2	10030
+kit	14	KV Kortrijk	6300457	70	0	2	100081
+kit	14	OH Leuven	6300458	70	0	2	100087
+kit	14	Vancouver Whitecaps	6300459	70	0	2	101112
+kit	14	Vancouver Whitecaps	6300460	70	0	5	101112
+kit	14	Tiburones Rojos de Veracruz	6300461	70	0	2	110145
+kit	14	Amkar Perm	6300462	70	0	2	110234
+kit	14	Atlético de Rafaela	6300463	70	0	2	110392
+kit	14	Olimpo Bahía Blanca	6300464	70	0	2	110398
+kit	14	FSV Frankfurt	6300465	70	0	2	110596
+kit	14	KV Mechelen	6300466	70	0	2	110724
+kit	14	Waasland-Beveren	6300467	70	0	2	110913
+kit	14	Unión Española	6300468	70	0	2	110977
+kit	14	Colo Colo	6300469	70	0	2	110980
+kit	14	Argentinos Juniors	6300470	70	0	2	111019
+kit	14	Portland Timbers	6300471	70	0	2	111140
+kit	14	Portland Timbers	6300472	70	0	5	111140
+kit	14	Olhanense	6300473	70	0	2	111540
+kit	14	CD O'Higgins	6300474	70	0	2	112116
+kit	14	Philadelphia Union	6300475	70	0	2	112134
+kit	14	Philadelphia Union	6300476	70	0	5	112134
+kit	14	FC Volga Nizhniy Novgorod	6300477	70	0	2	112217
+kit	14	Novara	6300478	70	0	2	112225
+kit	14	Charlton Athletic	6300479	69	0	2	89
+kit	14	Lierse	6300480	69	0	2	239
+kit	14	Aarhus GF	6300481	69	0	2	271
+kit	14	Viking FK	6300482	69	0	2	300
+kit	14	IFK Göteborg	6300483	69	0	2	319
+kit	14	Erzgebirge Aue	6300484	69	0	2	506
+kit	14	Al Ittihad (Jeddah)	6300485	69	0	2	607
+kit	14	Al Ittihad (Jeddah)	6300486	69	0	5	607
+kit	14	Charleroi	6300487	69	0	2	670
+kit	14	Columbus Crew	6300488	69	0	2	687
+kit	14	D.C. United	6300489	69	0	2	688
+kit	14	New England Revolution	6300490	69	0	2	691
+kit	14	Aalborg BK	6300491	69	0	2	820
+kit	14	FC Zürich	6300492	69	0	2	894
+kit	14	Seongnam Ilhwa Chunma	6300493	69	0	2	981
+kit	14	Jeju United FC	6300494	69	0	2	1478
+kit	14	Empoli	6300495	69	0	2	1746
+kit	14	Cercle Brugge	6300496	69	0	2	1750
+kit	14	Aalesunds FK	6300497	69	0	2	1755
+kit	14	Karlsruher SC	6300498	69	0	2	1832
+kit	14	Real Murcia CF	6300499	69	0	2	1855
+kit	14	RKC Waalwijk	6300500	69	0	2	1905
+kit	14	RKC Waalwijk	6300501	69	0	5	1905
+kit	14	Bristol City	6300502	69	0	2	1919
+kit	14	Barnsley	6300503	69	0	2	1932
+kit	14	CE Sabadell FC	6300504	69	0	2	15021
+kit	14	Gimnasia y Esgrima La Plata	6300505	69	0	2	101084
+kit	14	Independiente	6300506	69	0	2	110093
+kit	14	SV Sandhausen	6300507	69	0	2	110178
+kit	14	Tom Tomsk	6300508	69	0	2	110233
+kit	14	FC Barcelona B	6300509	69	0	2	110704
+kit	14	FC Barcelona B	6300510	69	0	5	110704
+kit	14	Real Madrid Castilla	6300511	69	0	2	110710
+kit	14	Real Madrid Castilla	6300512	69	0	5	110710
+kit	14	FC Sion	6300513	69	0	2	110770
+kit	14	CD Cobreloa	6300514	69	0	2	110979
+kit	14	Śląsk Wrocław	6300515	69	0	2	111092
+kit	14	FC Ural	6300516	69	0	2	111264
+kit	14	CD Huachipato	6300517	69	0	2	111327
+kit	14	Toronto FC	6300518	69	0	2	111651
+kit	14	Deportivo Pasto	6300519	69	0	2	111723
+kit	14	Juve Stabia	6300520	69	0	2	112124
+kit	14	Varese	6300521	69	0	2	112237
+kit	14	Al Fateh (Al Ahsa)	6300522	69	0	2	112390
+kit	14	Deportes Iquique	6300523	69	0	2	112531
+kit	14	Itagüí	6300524	69	0	2	112578
+kit	14	FC Metz	6300525	64	1	2	68
+kit	14	Aberdeen	6300526	64	1	2	77
+kit	14	Motherwell	6300527	64	1	2	83
+kit	14	Arminia Bielefeld	6300528	64	1	2	159
+kit	14	CD Tenerife	6300529	64	1	2	260
+kit	14	Brøndby IF	6300530	64	1	2	269
+kit	14	Odense Boldklub	6300531	64	1	2	272
+kit	14	Górnik Zabrze	6300532	64	1	2	420
+kit	14	Deportivo Alavés	6300533	64	1	2	463
+kit	14	SD Eibar	6300534	64	1	2	467
+kit	14	CD Numancia	6300535	64	1	2	477
+kit	14	VfR Aalen	6300536	64	1	2	550
+kit	14	Inverness Caledonian Thistle	6300537	64	1	2	620
+kit	14	SC Cambuur	6300538	64	1	2	647
+kit	14	FC Luzern	6300539	64	1	2	897
+kit	14	SK Brann	6300540	64	1	2	919
+kit	14	Angers SCO	6300541	64	1	2	1530
+kit	14	Randers FC	6300542	64	1	2	1786
+kit	14	Milton Keynes Dons	6300543	64	1	2	1798
+kit	14	Coventry City	6300544	64	1	2	1800
+kit	14	Preston North End	6300545	64	1	2	1801
+kit	14	Preston North End	6300546	64	0	2	1801
+kit	14	Córdoba CF	6300547	64	1	2	1867
+kit	14	Wisła Kraków	6300548	64	1	2	1873
+kit	14	Peterborough United	6300549	64	1	2	1938
+kit	14	St. Johnstone	6300550	64	1	2	100804
+kit	14	Millonarios FC	6300551	64	1	2	101105
+kit	14	CD Mirandés	6300552	64	1	2	110069
+kit	14	Quilmes Atlético Club	6300553	64	1	2	110554
+kit	14	Dijon Football	6300554	64	1	2	110569
+kit	14	Crotone	6300555	64	1	2	110734
+kit	14	Jagiellonia Białystok	6300556	64	1	2	110745
+kit	14	Zagłębie Lubin	6300557	64	1	2	110749
+kit	14	Incheon United FC	6300558	64	1	2	110765
+kit	14	CD Lugo	6300559	64	1	2	110831
+kit	14	Santiago Wanderers	6300560	64	1	2	110976
+kit	14	Chivas USA	6300561	64	1	2	111070
+kit	14	Cúcuta Deportivo	6300562	64	1	2	111721
+kit	14	Al Ettifaq (Dammam)	6300563	64	1	2	112096
+kit	14	Latina	6300564	64	1	2	112487
+kit	14	Envigado FC	6300565	64	1	2	112526
+kit	14	Deportes Antofagasta	6300566	64	1	2	112533
+kit	14	Kilmarnock	6300567	64	1	2	82
+kit	14	Dundee United	6300568	64	1	2	181
+kit	14	Dundee United	6300569	64	1	5	181
+kit	14	Lillestrøm SK	6300570	64	1	2	299
+kit	14	Yeovil Town	6300571	64	1	2	346
+kit	14	Ross County	6300572	64	1	2	631
+kit	14	Djurgårdens IF	6300573	64	1	2	710
+kit	14	SV Ried	6300574	64	1	2	780
+kit	14	Ruch Chorzów	6300575	64	1	2	874
+kit	14	Kalmar FF	6300576	64	1	2	1439
+kit	14	Esbjerg fB	6300577	64	1	2	1445
+kit	14	Busan I'Park	6300578	64	1	2	1476
+kit	14	FC Midtjylland	6300579	64	1	2	1516
+kit	14	FC Thun	6300580	64	1	2	1715
+kit	14	Le Havre AC	6300581	64	1	2	1738
+kit	14	Sheffield United	6300582	64	1	2	1794
+kit	14	Rotherham United	6300583	64	1	2	1797
+kit	14	Bradford City	6300584	64	1	2	1804
+kit	14	Chamois Niortais FC	6300585	64	1	2	1813
+kit	14	FC Istres	6300586	64	1	2	1820
+kit	14	Bari	6300587	64	1	2	1848
+kit	14	Chesterfield	6300588	64	1	2	1924
+kit	14	Brentford	6300589	64	1	2	1925
+kit	14	Colchester United	6300590	64	1	2	1935
+kit	14	Notts County	6300591	64	1	2	1937
+kit	14	Notts County	6300592	64	0	2	1937
+kit	14	Leyton Orient	6300593	64	1	2	1958
+kit	14	Avellino	6300594	64	1	2	2038
+kit	14	Go Ahead Eagles	6300595	64	1	2	100632
+kit	14	Go Ahead Eagles	6300596	64	1	5	100632
+kit	14	Independiente Medellín	6300597	64	1	2	101103
+kit	14	Tours FC	6300598	64	1	2	110326
+kit	14	Korona Kielce	6300599	64	0	2	111083
+kit	14	Piast Gliwice	6300600	64	0	2	111086
+kit	14	Lechia Gdańsk	6300601	64	0	2	111091
+kit	14	Brisbane Roar	6300602	64	0	2	111395
+kit	14	Central Coast Mariners	6300603	64	0	2	111396
+kit	14	GyeongNam FC	6300604	64	0	2	111588
+kit	14	AC Arles-Avignon	6300605	64	0	2	111989
+kit	14	Cittadella	6300606	64	0	2	111993
+kit	14	Virtus Lanciano	6300607	64	0	2	112020
+kit	14	Rangers de Talca	6300608	64	0	2	112110
+kit	14	Melbourne Heart	6300609	64	0	2	112224
+kit	14	Western Sydney Wanderers	6300610	64	0	2	112427
+kit	14	Atlético Huila	6300611	64	0	2	112528
+kit	14	Everton de Viña del Mar	6300612	64	0	2	112584
+kit	14	Ñublense	6300613	64	0	2	112585
+kit	14	Hibernian	6300614	64	0	2	81
+kit	14	LB Châteauroux	6300615	64	0	2	212
+kit	14	Nîmes Olympique	6300616	64	0	2	224
+kit	14	AEK Athens	6300617	64	0	2	278
+kit	14	Stevenage	6300618	64	0	2	361
+kit	14	Real Jaén CF	6300619	64	0	2	471
+kit	14	KV Oostende	6300620	64	0	2	682
+kit	14	IFK Norrköping	6300621	64	0	2	702
+kit	14	Odds Ballklubb	6300622	64	0	2	1456
+kit	14	Chunnam Dragons	6300623	64	0	2	1475
+kit	14	IK Start	6300624	64	0	2	1524
+kit	14	Partick Thistle	6300625	64	0	2	1754
+kit	14	Gillingham	6300626	64	0	2	1802
+kit	14	US Créteil-Lusitanos	6300627	64	0	2	1812
+kit	14	Stade Lavallois	6300628	64	0	2	1814
+kit	14	Clermont Foot	6300629	64	0	2	1815
+kit	14	Hønefoss BK	6300630	64	0	2	1841
+kit	14	Swindon Town	6300631	64	0	2	1934
+kit	14	Tranmere Rovers	6300632	64	0	2	15048
+kit	14	St. Mirren	6300633	64	0	2	100805
+kit	14	St. Mirren	6300634	64	0	5	100805
+kit	14	Audax Italiano	6300635	64	0	2	101097
+kit	14	Pogoń Szczecin	6300636	64	0	2	110746
+kit	14	Crawley Town	6300637	64	0	2	110890
+kit	14	Cobresal	6300638	64	0	2	110978
+kit	14	CSD Palestino	6300639	64	0	2	111328
+kit	14	Adelaide United	6300640	64	0	2	111393
+kit	14	Newcastle Jets	6300641	64	0	2	111398
+kit	14	Perth Glory	6300642	64	0	2	111399
+kit	14	Sydney FC	6300643	64	0	2	111400
+kit	14	Åtvidabergs FF	6300644	64	0	2	111835
+kit	14	Carpi	6300645	64	0	2	112409
+kit	14	Zawisza Bydgoszcz	6300646	64	0	2	112512
+kit	14	Unión La Calera	6300647	64	0	2	112535
+kit	14	Rangers	6300648	64	0	2	86
+kit	14	Rangers	6300649	64	0	5	86
+kit	14	Crewe Alexandra	6300650	64	0	2	121
+kit	14	Widzew Łódź	6300651	64	0	2	301
+kit	14	FC Aarau	6300652	64	0	2	434
+kit	14	FC St. Gallen	6300653	64	0	2	898
+kit	14	Daejeon Citizen	6300654	64	0	2	980
+kit	14	FK Haugesund	6300655	64	0	2	1463
+kit	14	Portsmouth	6300656	64	0	2	1790
+kit	14	Walsall	6300657	64	0	2	1803
+kit	14	FC Lausanne-Sport	6300658	64	0	2	1862
+kit	14	Oldham Athletic	6300659	64	0	2	1920
+kit	14	Port Vale	6300660	64	0	2	1928
+kit	14	Cheltenham Town	6300661	64	0	2	1936
+kit	14	Bury	6300662	64	0	2	1945
+kit	14	Scunthorpe United	6300663	64	0	2	1949
+kit	14	Wacker Innsbruck	6300664	64	0	2	2045
+kit	14	Daegu FC	6300665	64	0	2	2056
+kit	14	Cracovia	6300666	64	0	2	110747
+kit	14	Podbeskidzie Bielsko-Biała	6300667	64	0	2	111087
+kit	14	Gefle IF	6300668	64	0	2	111277
+kit	14	Melbourne Victory	6300669	64	0	2	111397
+kit	14	IF Brommapojkarna	6300670	64	0	2	111705
+kit	14	Wellington Phoenix	6300671	64	0	2	111766
+kit	14	Wolfsberger AC	6300672	64	0	2	111822
+kit	14	Gangwon FC	6300673	64	0	2	112115
+kit	14	Sarpsborg 08 FF	6300674	64	0	2	112199
+kit	14	Universidad de Concepción	6300675	64	0	2	112534
+kit	14	Heart of Midlothian	6300676	64	0	2	80
+kit	14	Shrewsbury Town	6300677	64	0	2	127
+kit	14	Shamrock Rovers	6300678	64	0	2	306
+kit	14	Viborg FF	6300679	64	0	2	1443
+kit	14	SønderjyskE	6300680	64	0	2	1447
+kit	14	Carlisle United	6300681	64	0	2	1480
+kit	14	Östers IF	6300682	64	0	2	1870
+kit	14	Plymouth Argyle	6300683	64	0	2	1929
+kit	14	Northampton Town	6300684	64	0	2	1930
+kit	14	Oxford United	6300685	64	0	2	1951
+kit	14	Southend United	6300686	64	0	2	1954
+kit	14	Burton Albion	6300687	64	0	2	15015
+kit	14	Once Caldas	6300688	64	0	2	101106
+kit	14	SC Wiener Neustadt	6300689	64	0	2	111373
+kit	14	Admira Wacker	6300690	64	0	2	111821
+kit	14	Mjällby AIF	6300691	64	0	2	112072
+kit	14	Fleetwood Town	6300692	64	0	2	112260
+kit	14	Syrianska FC	6300693	64	0	2	112267
+kit	14	Sandnes Ulf	6300694	64	0	2	112374
+kit	14	Al Faisaly (Harmah)	6300695	64	0	2	112389
+kit	14	Al Taawoun (Buraidah)	6300696	64	0	2	112393
+kit	14	Najran SC	6300697	64	0	2	112395
+kit	14	Al Shoulla (Al Kharj)	6300698	64	0	2	112407
+kit	14	Exeter City	6300699	63	0	2	143
+kit	14	Halmstads BK	6300700	63	0	2	321
+kit	14	Sligo Rovers	6300701	63	0	2	563
+kit	14	Wycombe Wanderers	6300702	63	0	2	1933
+kit	14	Hartlepool United	6300703	63	0	2	1941
+kit	14	Torquay United	6300704	63	0	2	1946
+kit	14	Rochdale	6300705	63	0	2	1955
+kit	14	Bristol Rovers	6300706	63	0	2	1962
+kit	14	AFC Wimbledon	6300707	63	0	2	112259
+kit	14	Trapani	6300708	63	0	2	112410
+kit	14	CA Bastia	6300709	63	0	2	112549
+kit	14	Alianza Petrolera	6300710	63	0	2	112579
+kit	14	Morecambe	6300711	62	0	2	357
+kit	14	Dagenham & Redbridge	6300712	62	0	2	373
+kit	14	St. Patrick's Athletic	6300713	62	0	2	423
+kit	14	Sogndal Fotball	6300714	62	0	2	1465
+kit	14	Mansfield Town	6300715	62	0	2	1940
+kit	14	York City	6300716	62	0	2	1948
+kit	14	Accrington Stanley	6300717	62	0	2	110313
+kit	14	SV Grödig	6300718	62	0	2	112022
+kit	14	Newport County	6300719	62	0	2	112254
+kit	14	Al Raed (Buraidah)	6300720	62	0	2	112392
+kit	14	FC Vestsjælland	6300721	62	0	2	112424
+kit	14	Patriotas Boyacá	6300722	62	0	2	112527
+kit	14	Derry City	6300723	61	0	2	445
+kit	14	Dundalk FC	6300724	61	0	2	837
+kit	14	Limerick FC	6300725	61	0	2	111285
+kit	14	Cork City	6300726	60	0	2	422
+kit	14	Shelbourne	6300727	60	0	2	834
+kit	14	Drogheda United	6300728	60	0	2	1572
+kit	14	Boyacá Chicó	6300729	60	0	2	112019
+kit	14	Bohemian FC	6300730	59	0	2	305
+kit	14	Deportes Quindío	6300731	59	0	2	112525
+kit	14	Al Nahdha (Dammam)	6300732	59	0	2	112676
+kit	14	Bray Wanderers	6300733	58	0	2	838
+kit	14	La Equidad	6300734	58	0	2	112523
+kit	14	Al Orubah (Skaka)	6300735	58	0	2	112675
+kit	14	U.C.D.	6300736	57	0	2	111132
+kit	14	ICE BREAKER HOME	6300737	99	0	2	7200
+kit	14	ICE BREAKER AWAY	6300738	99	0	2	7201
+kit	14	FUT LEGENDS	6300739	99	0	2	112658
+kit	14	FUT LEGENDS	6300740	99	0	5	112658
+kit	15	FC Barcelona	6400000	89	1	3	241
+kit	15	Real Madrid	6400001	89	1	3	243
+kit	15	Bayern München	6400002	88	1	3	21
+kit	15	Manchester City	6400003	87	1	3	10
+kit	15	Manchester United	6400004	87	1	3	11
+kit	15	Juventus	6400005	87	1	3	45
+kit	15	Chelsea	6400006	86	1	3	5
+kit	15	Borussia Dortmund	6400007	86	1	3	22
+kit	15	Tottenham Hotspur	6400008	85	1	3	18
+kit	15	Paris Saint-Germain	6400009	85	1	3	73
+kit	15	Atlético de Madrid	6400010	85	1	3	240
+kit	15	Arsenal	6400011	84	1	3	1
+kit	15	Inter	6400012	84	1	3	44
+kit	15	Napoli	6400013	84	1	3	48
+kit	15	Fiorentina	6400014	84	1	3	110374
+kit	15	Liverpool	6400015	83	1	3	9
+kit	15	Lazio	6400016	83	1	3	46
+kit	15	Milan	6400017	83	1	3	47
+kit	15	Roma	6400018	83	1	3	52
+kit	15	FC Porto 	6400019	83	1	3	236
+kit	15	Valencia CF	6400020	83	1	3	461
+kit	15	Newcastle United	6400021	82	1	3	13
+kit	15	FC Schalke 04	6400022	82	1	3	34
+kit	15	Fulham	6400023	82	1	3	144
+kit	15	VfL Wolfsburg	6400024	82	1	3	175
+kit	15	SL Benfica	6400025	82	1	3	234
+kit	15	Galatasaray SK	6400026	82	1	3	325
+kit	15	Zenit St. Petersburg	6400027	82	1	3	100769
+kit	15	Everton	6400028	81	1	3	7
+kit	15	Bayer 04 Leverkusen	6400029	81	1	3	32
+kit	15	AS Monaco	6400030	81	1	3	69
+kit	15	Olympique de Marseille	6400031	81	1	3	219
+kit	15	Athletic Club de Bilbao	6400032	81	1	3	448
+kit	15	Real Sociedad	6400033	81	1	3	457
+kit	15	Sevilla FC	6400034	81	1	3	481
+kit	15	Swansea City	6400035	81	1	3	1960
+kit	15	Borussia M'gladbach	6400036	80	1	3	23
+kit	15	Hamburger SV	6400037	80	1	3	28
+kit	15	VfB Stuttgart	6400038	80	1	3	36
+kit	15	Atalanta	6400039	80	1	3	39
+kit	15	Udinese	6400040	80	1	3	55
+kit	15	Olympique Lyonnais	6400041	80	1	3	66
+kit	15	CSKA Moskva	6400042	80	1	3	315
+kit	15	Málaga CF	6400043	80	1	3	573
+kit	15	Atlético Mineiro	6400044	80	1	3	1035
+kit	15	Stoke City	6400045	80	1	3	1806
+kit	15	Spartak Moskva	6400046	80	1	3	100767
+kit	15	Shakhtar Donetsk	6400047	80	1	3	101059
+kit	15	Southampton	6400048	79	0	3	17
+kit	15	West Ham United	6400049	79	0	3	19
+kit	15	Parma	6400050	79	0	3	50
+kit	15	LOSC Lille	6400051	79	0	3	65
+kit	15	Sunderland	6400052	79	0	3	106
+kit	15	West Bromwich Albion	6400053	79	0	3	109
+kit	15	Sporting CP	6400054	79	0	3	237
+kit	15	Ajax	6400055	79	0	3	245
+kit	15	PSV	6400056	79	0	3	247
+kit	15	Olympiacos CFP	6400057	79	0	3	280
+kit	15	Dinamo Moskva	6400058	79	0	3	312
+kit	15	Real Betis Balompié	6400059	79	0	3	449
+kit	15	Hannover 96	6400060	79	0	3	485
+kit	15	Cruzeiro	6400061	79	0	3	568
+kit	15	São Paulo	6400062	79	0	3	598
+kit	15	Corinthians	6400063	79	0	3	1041
+kit	15	Internacional	6400064	79	0	3	1048
+kit	15	Grêmio	6400065	79	0	3	1629
+kit	15	AS Saint-Etienne	6400066	79	0	3	1819
+kit	15	Eintracht Frankfurt	6400067	79	0	3	1824
+kit	15	Cagliari	6400068	79	0	3	1842
+kit	15	Braga	6400069	79	0	3	1896
+kit	15	1899 Hoffenheim	6400070	79	0	3	10029
+kit	15	Anzhi Makhachkala	6400071	79	0	3	100766
+kit	15	Catania	6400072	79	0	3	110364
+kit	15	Genoa	6400073	79	0	3	110556
+kit	15	Aston Villa	6400074	78	0	3	2
+kit	15	Queens Park Rangers	6400075	78	0	3	15
+kit	15	Werder Bremen	6400076	78	0	3	38
+kit	15	Girondins de Bordeaux	6400077	78	0	3	59
+kit	15	Montpellier HSC	6400078	78	0	3	70
+kit	15	Stade Rennais	6400079	78	0	3	74
+kit	15	Bologna	6400080	78	0	3	189
+kit	15	RCD Espanyol	6400081	78	0	3	452
+kit	15	Botafogo	6400082	78	0	3	517
+kit	15	Fluminense	6400083	78	0	3	567
+kit	15	Flamengo	6400084	78	0	3	1043
+kit	15	Norwich City	6400085	78	0	3	1792
+kit	15	Getafe CF	6400086	78	0	3	1860
+kit	15	Lokomotiv Moskva	6400087	78	0	3	100765
+kit	15	Rubin Kazan	6400088	78	0	3	110227
+kit	15	Newell's Old Boys	6400089	78	0	3	110396
+kit	15	SC Freiburg	6400090	77	0	3	25
+kit	15	Torino	6400091	77	0	3	54
+kit	15	Hertha BSC	6400092	77	0	3	166
+kit	15	1. FSV Mainz 05	6400093	77	0	3	169
+kit	15	1. FC Nürnberg	6400094	77	0	3	171
+kit	15	Chievo Verona	6400095	77	0	3	192
+kit	15	Feyenoord	6400096	77	0	3	246
+kit	15	Palmeiras	6400097	77	0	3	383
+kit	15	PAOK FC	6400098	77	0	3	393
+kit	15	RC Celta de Vigo	6400099	77	0	3	450
+kit	15	Real Valladolid	6400100	77	0	3	462
+kit	15	Elche CF	6400101	77	0	3	468
+kit	15	CA Osasuna	6400102	77	0	3	479
+kit	15	Rayo Vallecano	6400103	77	0	3	480
+kit	15	Villarreal CF	6400104	77	0	3	483
+kit	15	Vasco da Gama	6400105	77	0	3	569
+kit	15	Palermo	6400106	77	0	3	1843
+kit	15	Levante UD	6400107	77	0	3	1853
+kit	15	Boca Juniors	6400108	77	0	3	1877
+kit	15	Wigan Athletic	6400109	77	0	3	1917
+kit	15	Vélez Sarsfield	6400110	77	0	3	101088
+kit	15	Granada CF	6400111	77	0	3	110832
+kit	15	OGC Nice	6400112	76	0	3	72
+kit	15	Celtic	6400113	76	0	3	78
+kit	15	Hellas Verona	6400114	76	0	3	206
+kit	15	FC Lorient	6400115	76	0	3	217
+kit	15	Anderlecht	6400116	76	0	3	229
+kit	15	Standard Liège	6400117	76	0	3	232
+kit	15	Santos	6400118	76	0	3	1053
+kit	15	Reading	6400119	76	0	3	1793
+kit	15	Toulouse FC	6400120	76	0	3	1809
+kit	15	Sampdoria	6400121	76	0	3	1837
+kit	15	Hull City	6400122	76	0	3	1952
+kit	15	Cardiff City	6400123	76	0	3	1961
+kit	15	Tigres U.A.N.L.	6400124	76	0	3	1970
+kit	15	FC Augsburg	6400125	76	0	3	100409
+kit	15	Coritiba	6400126	76	0	3	111044
+kit	15	Bolton Wanderers	6400127	75	0	3	4
+kit	15	1. FC Kaiserslautern	6400128	75	0	3	29
+kit	15	FC Sochaux	6400129	75	0	3	226
+kit	15	Club Brugge	6400130	75	0	3	231
+kit	15	RCD Mallorca	6400131	75	0	3	453
+kit	15	Al Hilal (Riyadh)	6400132	75	0	3	605
+kit	15	RC Genk	6400133	75	0	3	673
+kit	15	FC København	6400134	75	0	3	819
+kit	15	Monterrey	6400135	75	0	3	1032
+kit	15	Crystal Palace	6400136	75	0	3	1799
+kit	15	Brighton & Hove Albion	6400137	75	0	3	1808
+kit	15	UD Almería	6400138	75	0	3	1861
+kit	15	América	6400139	75	0	3	1879
+kit	15	AZ	6400140	75	0	3	1906
+kit	15	FC Twente	6400141	75	0	3	1908
+kit	15	Vitesse	6400142	75	0	3	1909
+kit	15	Estudiantes de La Plata	6400143	75	0	3	101083
+kit	15	Racing Club de Avellaneda	6400144	75	0	3	101085
+kit	15	Kuban Krasnodar	6400145	75	0	3	110089
+kit	15	Portuguesa	6400146	75	0	3	111292
+kit	15	Nottingham Forest	6400147	74	1	3	14
+kit	15	1. FC Köln	6400148	74	1	3	31
+kit	15	SC Bastia	6400149	74	1	3	58
+kit	15	Pescara	6400150	74	1	3	200
+kit	15	Real Zaragoza	6400151	74	1	3	244
+kit	15	Stade de Reims	6400152	74	1	3	379
+kit	15	FC Basel	6400153	74	1	3	896
+kit	15	San Lorenzo de Almagro	6400154	74	1	3	1013
+kit	15	Monarcas Morelia	6400155	74	1	3	1028
+kit	15	Atlético Paranaense	6400156	74	1	3	1039
+kit	15	Bahia	6400157	74	1	3	1598
+kit	15	Vitória	6400158	74	1	3	1719
+kit	15	Watford 	6400159	74	1	3	1795
+kit	15	Siena	6400160	74	1	3	1838
+kit	15	River Plate	6400161	74	1	3	1876
+kit	15	Cruz Azul	6400162	74	1	3	1878
+kit	15	Panathinaikos FC	6400163	74	1	3	1884
+kit	15	Atlético Nacional	6400164	74	1	3	101100
+kit	15	Santos Laguna	6400165	74	1	3	110144
+kit	15	Club Atlético Colón	6400166	74	1	3	110406
+kit	15	Valenciennes FC	6400167	74	1	3	110456
+kit	15	Eintracht Braunschweig	6400168	74	1	3	110500
+kit	15	Fortuna Düsseldorf	6400169	74	1	3	110636
+kit	15	Orlando Pirates	6400170	74	1	3	110930
+kit	15	Goiás	6400171	74	1	3	111042
+kit	15	Criciúma	6400172	74	1	3	111046
+kit	15	Náutico	6400173	74	1	3	111050
+kit	15	Seattle Sounders	6400174	74	1	3	111144
+kit	15	Évian Thonon Gaillard FC	6400175	74	1	3	111271
+kit	15	FC Krasnodar	6400176	74	1	3	112218
+kit	15	Blackburn Rovers	6400177	73	1	3	3
+kit	15	Leeds United	6400178	73	1	3	8
+kit	15	Middlesbrough	6400179	73	1	3	12
+kit	15	FC Nantes	6400180	73	1	3	71
+kit	15	Derby County	6400181	73	1	3	91
+kit	15	Leicester City	6400182	73	1	3	95
+kit	15	Millwall	6400183	73	1	3	97
+kit	15	Wolverhampton Wanderers	6400184	73	1	3	110
+kit	15	Red Bull Salzburg	6400185	73	1	3	191
+kit	15	RC Deportivo	6400186	73	1	3	242
+kit	15	AC Ajaccio	6400187	73	1	3	614
+kit	15	AA Gent	6400188	73	1	3	674
+kit	15	Rio Ave	6400189	73	1	3	744
+kit	15	Livorno	6400190	73	1	3	1844
+kit	15	Guadalajara	6400191	73	1	3	1880
+kit	15	Toluca	6400192	73	1	3	1882
+kit	15	Paços de Ferreira	6400193	73	1	3	1892
+kit	15	FC Utrecht	6400194	73	1	3	1903
+kit	15	SC Heerenveen	6400195	73	1	3	1913
+kit	15	Lokeren	6400196	73	1	3	2007
+kit	15	SV Zulte-Waregem	6400197	73	1	3	15005
+kit	15	Universidad de Chile	6400198	73	1	3	15029
+kit	15	Pachuca	6400199	73	1	3	110147
+kit	15	Lanús	6400200	73	1	3	110395
+kit	15	León	6400201	73	1	3	110781
+kit	15	Kaizer Chiefs	6400202	73	1	3	110929
+kit	15	Ponte Preta	6400203	73	1	3	111043
+kit	15	Montreal Impact	6400204	73	1	3	111139
+kit	15	Tijuana	6400205	73	1	3	111678
+kit	15	Sassuolo	6400206	73	1	3	111974
+kit	15	TSV 1860 München	6400207	72	1	3	33
+kit	15	En Avant Guingamp	6400208	72	1	3	62
+kit	15	Birmingham City	6400209	72	1	3	88
+kit	15	Energie Cottbus	6400210	72	1	3	162
+kit	15	SpVgg Greuther Fürth	6400211	72	1	3	165
+kit	15	Austria Wien	6400212	72	1	3	256
+kit	15	Rosenborg BK	6400213	72	1	3	298
+kit	15	Stade Brestois	6400214	72	1	3	378
+kit	15	Molde FK	6400215	72	1	3	417
+kit	15	Real Sporting de Gijón	6400216	72	1	3	459
+kit	15	UD Las Palmas	6400217	72	1	3	472
+kit	15	New York Red Bulls	6400218	72	1	3	689
+kit	15	Sporting KC	6400219	72	1	3	696
+kit	15	Los Angeles Galaxy	6400220	72	1	3	697
+kit	15	FC Seoul	6400221	72	1	3	982
+kit	15	1. FC Union Berlin	6400222	72	1	3	1831
+kit	15	Legia Warszawa	6400223	72	1	3	1871
+kit	15	U.N.A.M.	6400224	72	0	3	1881
+kit	15	Nacional	6400225	72	0	3	1891
+kit	15	Marítimo	6400226	72	0	3	1893
+kit	15	Académica	6400227	72	0	3	1901
+kit	15	Blackpool	6400228	72	0	3	1926
+kit	15	Estoril	6400229	72	0	3	10020
+kit	15	Deportivo Cali	6400230	72	0	3	101102
+kit	15	Independiente Santa Fe	6400231	72	0	3	101104
+kit	15	Atlas	6400232	72	0	3	101114
+kit	15	Atlante	6400233	72	0	3	101116
+kit	15	Girona FC	6400234	72	0	3	110062
+kit	15	Terek Grozny	6400235	72	0	3	110109
+kit	15	Puebla	6400236	72	0	3	110152
+kit	15	FC Rostov	6400237	72	0	3	110231
+kit	15	FC St. Pauli	6400238	72	0	3	110329
+kit	15	Arsenal de Sarandi	6400239	72	0	3	110394
+kit	15	FC Ingolstadt 04	6400240	72	0	3	111239
+kit	15	Al Shabab (Riyadh)	6400241	72	0	3	111674
+kit	15	Club Atlético Tigre	6400242	72	0	3	111715
+kit	15	Deportes Tolima	6400243	72	0	3	111722
+kit	15	Al Ahli (Jeddah)	6400244	72	0	3	112387
+kit	15	AJ Auxerre	6400245	71	0	3	57
+kit	15	Ipswich Town	6400246	71	0	3	94
+kit	15	VfL Bochum	6400247	71	0	3	160
+kit	15	Brescia	6400248	71	0	3	190
+kit	15	ES Troyes AC	6400249	71	0	3	294
+kit	15	Malmö FF	6400250	71	0	3	320
+kit	15	Grasshopper Club Zürich	6400251	71	0	3	322
+kit	15	Helsingborgs IF	6400252	71	0	3	432
+kit	15	RC Recreativo	6400253	71	0	3	571
+kit	15	ADO Den Haag	6400254	71	0	3	650
+kit	15	Vitória Setúbal	6400255	71	0	3	665
+kit	15	Chicago Fire	6400256	71	0	3	693
+kit	15	FC Dallas	6400257	71	0	3	695
+kit	15	IF Elfsborg	6400258	71	0	3	700
+kit	15	Lech Poznań	6400259	71	0	3	873
+kit	15	BSC Young Boys	6400260	71	0	3	900
+kit	15	Strømsgodset Toppfotball	6400261	71	0	3	922
+kit	15	Suwon Samsung Bluewings	6400262	71	0	3	983
+kit	15	Jeonbuk Hyundai Motors	6400263	71	0	3	1477
+kit	15	Sheffield Wednesday	6400264	71	0	3	1807
+kit	15	AS Nancy	6400265	71	0	3	1823
+kit	15	Vitória Guimarães	6400266	71	0	3	1887
+kit	15	Roda JC Kerkrade	6400267	71	0	3	1902
+kit	15	FC Groningen	6400268	71	0	3	1915
+kit	15	Huddersfield Town	6400269	71	0	3	1939
+kit	15	SD Ponferradina	6400270	71	0	3	2023
+kit	15	Heracles Almelo	6400271	71	0	3	100634
+kit	15	Krylya Sovetov Samara	6400272	71	0	3	100764
+kit	15	AD Alcorcón	6400273	71	0	3	100831
+kit	15	Hércules CF	6400274	71	0	3	100879
+kit	15	Junior Barranquilla	6400275	71	0	3	101101
+kit	15	Querétaro	6400276	71	0	3	110150
+kit	15	Rosario Central	6400277	71	0	3	110580
+kit	15	Spezia	6400278	71	0	3	110741
+kit	15	Padova	6400279	71	0	3	110912
+kit	15	Cesena	6400280	71	0	3	110915
+kit	15	Universidad Católica	6400281	71	0	3	110975
+kit	15	Belgrano de Córdoba	6400282	71	0	3	111022
+kit	15	Real Salt Lake	6400283	71	0	3	111065
+kit	15	Godoy Cruz	6400284	71	0	3	111706
+kit	15	All Boys	6400285	71	0	3	111717
+kit	15	San Jose Earthquakes	6400286	71	0	3	111928
+kit	15	Al Nassr (Riyadh)	6400287	71	0	3	112139
+kit	15	Arouca	6400288	71	0	3	112513
+kit	15	Chiapas FC	6400289	71	0	3	112679
+kit	15	Racing Club de Lens	6400290	70	0	3	64
+kit	15	Doncaster Rovers	6400291	70	0	3	142
+kit	15	Reggina	6400292	70	0	3	203
+kit	15	Sturm Graz	6400293	70	0	3	209
+kit	15	SM Caen	6400294	70	0	3	210
+kit	15	Rapid Wien	6400295	70	0	3	254
+kit	15	Tromsø IL	6400296	70	0	3	418
+kit	15	AIK	6400297	70	0	3	433
+kit	15	Dynamo Dresden	6400298	70	0	3	503
+kit	15	Ternana	6400299	70	0	3	570
+kit	15	Colorado Rapids	6400300	70	0	3	694
+kit	15	Houston Dynamo	6400301	70	0	3	698
+kit	15	BK Häcken	6400302	70	0	3	711
+kit	15	Vålerenga Fotball	6400303	70	0	3	920
+kit	15	Ulsan Hyundai FC	6400304	70	0	3	1473
+kit	15	Pohang Steelers	6400305	70	0	3	1474
+kit	15	Modena	6400306	70	0	3	1744
+kit	15	Mons	6400307	70	0	3	1747
+kit	15	FC Nordsjælland	6400308	70	0	3	1788
+kit	15	Burnley	6400309	70	0	3	1796
+kit	15	Gil Vicente	6400310	70	0	3	1888
+kit	15	Belenenses	6400311	70	0	3	1889
+kit	15	NAC Breda	6400312	70	0	3	1904
+kit	15	NEC	6400313	70	0	3	1910
+kit	15	PEC Zwolle	6400314	70	0	3	1914
+kit	15	Bournemouth	6400315	70	0	3	1943
+kit	15	SC Paderborn 07	6400316	70	0	3	10030
+kit	15	KV Kortrijk	6400317	70	0	3	100081
+kit	15	OH Leuven	6400318	70	0	3	100087
+kit	15	Vancouver Whitecaps	6400319	70	0	3	101112
+kit	15	Tiburones Rojos de Veracruz	6400320	70	0	3	110145
+kit	15	Amkar Perm	6400321	70	0	3	110234
+kit	15	Atlético de Rafaela	6400322	70	0	3	110392
+kit	15	Olimpo Bahía Blanca	6400323	70	0	3	110398
+kit	15	FSV Frankfurt	6400324	70	0	3	110596
+kit	15	KV Mechelen	6400325	70	0	3	110724
+kit	15	Waasland-Beveren	6400326	70	0	3	110913
+kit	15	Unión Española	6400327	70	0	3	110977
+kit	15	Colo Colo	6400328	70	0	3	110980
+kit	15	Argentinos Juniors	6400329	70	0	3	111019
+kit	15	Portland Timbers	6400330	70	0	3	111140
+kit	15	Olhanense	6400331	70	0	3	111540
+kit	15	CD O'Higgins	6400332	70	0	3	112116
+kit	15	Philadelphia Union	6400333	70	0	3	112134
+kit	15	FC Volga Nizhniy Novgorod	6400334	70	0	3	112217
+kit	15	Novara	6400335	70	0	3	112225
+kit	15	Charlton Athletic	6400336	69	0	3	89
+kit	15	Lierse	6400337	69	0	3	239
+kit	15	Aarhus GF	6400338	69	0	3	271
+kit	15	Viking FK	6400339	69	0	3	300
+kit	15	IFK Göteborg	6400340	69	0	3	319
+kit	15	Erzgebirge Aue	6400341	69	0	3	506
+kit	15	Al Ittihad (Jeddah)	6400342	69	0	3	607
+kit	15	Charleroi	6400343	69	0	3	670
+kit	15	Columbus Crew	6400344	69	0	3	687
+kit	15	D.C. United	6400345	69	0	3	688
+kit	15	New England Revolution	6400346	69	0	3	691
+kit	15	Aalborg BK	6400347	69	0	3	820
+kit	15	FC Zürich	6400348	69	0	3	894
+kit	15	Seongnam Ilhwa Chunma	6400349	69	0	3	981
+kit	15	Jeju United FC	6400350	69	0	3	1478
+kit	15	Empoli	6400351	69	0	3	1746
+kit	15	Cercle Brugge	6400352	69	0	3	1750
+kit	15	Aalesunds FK	6400353	69	0	3	1755
+kit	15	Karlsruher SC	6400354	69	0	3	1832
+kit	15	Real Murcia CF	6400355	69	0	3	1855
+kit	15	RKC Waalwijk	6400356	69	0	3	1905
+kit	15	Bristol City	6400357	69	0	3	1919
+kit	15	Barnsley	6400358	69	0	3	1932
+kit	15	CE Sabadell FC	6400359	69	0	3	15021
+kit	15	Gimnasia y Esgrima La Plata	6400360	69	0	3	101084
+kit	15	Independiente	6400361	69	0	3	110093
+kit	15	SV Sandhausen	6400362	69	0	3	110178
+kit	15	Tom Tomsk	6400363	69	0	3	110233
+kit	15	FC Barcelona B	6400364	69	0	3	110704
+kit	15	Real Madrid Castilla	6400365	69	0	3	110710
+kit	15	FC Sion	6400366	69	0	3	110770
+kit	15	CD Cobreloa	6400367	69	0	3	110979
+kit	15	Śląsk Wrocław	6400368	69	0	3	111092
+kit	15	FC Ural	6400369	69	0	3	111264
+kit	15	CD Huachipato	6400370	69	0	3	111327
+kit	15	Toronto FC	6400371	69	0	3	111651
+kit	15	Deportivo Pasto	6400372	69	0	3	111723
+kit	15	Juve Stabia	6400373	69	0	3	112124
+kit	15	Varese	6400374	69	0	3	112237
+kit	15	Al Fateh (Al Ahsa)	6400375	69	0	3	112390
+kit	15	Deportes Iquique	6400376	69	0	3	112531
+kit	15	Itagüí	6400377	69	0	3	112578
+kit	15	FC Metz	6400378	64	1	3	68
+kit	15	Aberdeen	6400379	64	1	3	77
+kit	15	Motherwell	6400380	64	1	3	83
+kit	15	Arminia Bielefeld	6400381	64	1	3	159
+kit	15	CD Tenerife	6400382	64	1	3	260
+kit	15	Brøndby IF	6400383	64	1	3	269
+kit	15	Odense Boldklub	6400384	64	1	3	272
+kit	15	Górnik Zabrze	6400385	64	1	3	420
+kit	15	Deportivo Alavés	6400386	64	1	3	463
+kit	15	SD Eibar	6400387	64	1	3	467
+kit	15	CD Numancia	6400388	64	1	3	477
+kit	15	VfR Aalen	6400389	64	1	3	550
+kit	15	Inverness Caledonian Thistle	6400390	64	1	3	620
+kit	15	SC Cambuur	6400391	64	1	3	647
+kit	15	FC Luzern	6400392	64	1	3	897
+kit	15	SK Brann	6400393	64	1	3	919
+kit	15	Angers SCO	6400394	64	1	3	1530
+kit	15	Randers FC	6400395	64	1	3	1786
+kit	15	Milton Keynes Dons	6400396	64	1	3	1798
+kit	15	Coventry City	6400397	64	1	3	1800
+kit	15	Preston North End	6400398	64	1	3	1801
+kit	15	Córdoba CF	6400399	64	1	3	1867
+kit	15	Wisła Kraków	6400400	64	1	3	1873
+kit	15	Peterborough United	6400401	64	1	3	1938
+kit	15	St. Johnstone	6400402	64	1	3	100804
+kit	15	Millonarios FC	6400403	64	1	3	101105
+kit	15	CD Mirandés	6400404	64	1	3	110069
+kit	15	Quilmes Atlético Club	6400405	64	1	3	110554
+kit	15	Dijon Football	6400406	64	1	3	110569
+kit	15	Crotone	6400407	64	1	3	110734
+kit	15	Jagiellonia Białystok	6400408	64	1	3	110745
+kit	15	Zagłębie Lubin	6400409	64	1	3	110749
+kit	15	Incheon United FC	6400410	64	1	3	110765
+kit	15	CD Lugo	6400411	64	1	3	110831
+kit	15	Santiago Wanderers	6400412	64	1	3	110976
+kit	15	Chivas USA	6400413	64	1	3	111070
+kit	15	Cúcuta Deportivo	6400414	64	1	3	111721
+kit	15	Al Ettifaq (Dammam)	6400415	64	1	3	112096
+kit	15	Latina	6400416	64	1	3	112487
+kit	15	Envigado FC	6400417	64	1	3	112526
+kit	15	Deportes Antofagasta	6400418	64	1	3	112533
+kit	15	Kilmarnock	6400419	64	1	3	82
+kit	15	Dundee United	6400420	64	1	3	181
+kit	15	Lillestrøm SK	6400421	64	1	3	299
+kit	15	Yeovil Town	6400422	64	1	3	346
+kit	15	Ross County	6400423	64	1	3	631
+kit	15	Djurgårdens IF	6400424	64	1	3	710
+kit	15	SV Ried	6400425	64	1	3	780
+kit	15	Ruch Chorzów	6400426	64	1	3	874
+kit	15	Kalmar FF	6400427	64	1	3	1439
+kit	15	Esbjerg fB	6400428	64	1	3	1445
+kit	15	Busan I'Park	6400429	64	1	3	1476
+kit	15	FC Midtjylland	6400430	64	1	3	1516
+kit	15	FC Thun	6400431	64	1	3	1715
+kit	15	Le Havre AC	6400432	64	1	3	1738
+kit	15	Sheffield United	6400433	64	1	3	1794
+kit	15	Rotherham United	6400434	64	1	3	1797
+kit	15	Bradford City	6400435	64	1	3	1804
+kit	15	Chamois Niortais FC	6400436	64	1	3	1813
+kit	15	FC Istres	6400437	64	1	3	1820
+kit	15	Bari	6400438	64	1	3	1848
+kit	15	Chesterfield	6400439	64	1	3	1924
+kit	15	Brentford	6400440	64	1	3	1925
+kit	15	Colchester United	6400441	64	1	3	1935
+kit	15	Notts County	6400442	64	1	3	1937
+kit	15	Leyton Orient	6400443	64	1	3	1958
+kit	15	Avellino	6400444	64	1	3	2038
+kit	15	Go Ahead Eagles	6400445	64	1	3	100632
+kit	15	Independiente Medellín	6400446	64	1	3	101103
+kit	15	Tours FC	6400447	64	1	3	110326
+kit	15	Korona Kielce	6400448	64	0	3	111083
+kit	15	Piast Gliwice	6400449	64	0	3	111086
+kit	15	Lechia Gdańsk	6400450	64	0	3	111091
+kit	15	Brisbane Roar	6400451	64	0	3	111395
+kit	15	Central Coast Mariners	6400452	64	0	3	111396
+kit	15	GyeongNam FC	6400453	64	0	3	111588
+kit	15	AC Arles-Avignon	6400454	64	0	3	111989
+kit	15	Cittadella	6400455	64	0	3	111993
+kit	15	Virtus Lanciano	6400456	64	0	3	112020
+kit	15	Rangers de Talca	6400457	64	0	3	112110
+kit	15	Melbourne Heart	6400458	64	0	3	112224
+kit	15	Western Sydney Wanderers	6400459	64	0	3	112427
+kit	15	Atlético Huila	6400460	64	0	3	112528
+kit	15	Everton de Viña del Mar	6400461	64	0	3	112584
+kit	15	Ñublense	6400462	64	0	3	112585
+kit	15	Hibernian	6400463	64	0	3	81
+kit	15	LB Châteauroux	6400464	64	0	3	212
+kit	15	Nîmes Olympique	6400465	64	0	3	224
+kit	15	AEK Athens	6400466	64	0	3	278
+kit	15	Stevenage	6400467	64	0	3	361
+kit	15	Real Jaén CF	6400468	64	0	3	471
+kit	15	KV Oostende	6400469	64	0	3	682
+kit	15	IFK Norrköping	6400470	64	0	3	702
+kit	15	Odds Ballklubb	6400471	64	0	3	1456
+kit	15	Chunnam Dragons	6400472	64	0	3	1475
+kit	15	IK Start	6400473	64	0	3	1524
+kit	15	Partick Thistle	6400474	64	0	3	1754
+kit	15	Gillingham	6400475	64	0	3	1802
+kit	15	US Créteil-Lusitanos	6400476	64	0	3	1812
+kit	15	Stade Lavallois	6400477	64	0	3	1814
+kit	15	Clermont Foot	6400478	64	0	3	1815
+kit	15	Hønefoss BK	6400479	64	0	3	1841
+kit	15	Swindon Town	6400480	64	0	3	1934
+kit	15	Tranmere Rovers	6400481	64	0	3	15048
+kit	15	St. Mirren	6400482	64	0	3	100805
+kit	15	Audax Italiano	6400483	64	0	3	101097
+kit	15	Pogoń Szczecin	6400484	64	0	3	110746
+kit	15	Crawley Town	6400485	64	0	3	110890
+kit	15	Cobresal	6400486	64	0	3	110978
+kit	15	CSD Palestino	6400487	64	0	3	111328
+kit	15	Adelaide United	6400488	64	0	3	111393
+kit	15	Newcastle Jets	6400489	64	0	3	111398
+kit	15	Perth Glory	6400490	64	0	3	111399
+kit	15	Sydney FC	6400491	64	0	3	111400
+kit	15	Åtvidabergs FF	6400492	64	0	3	111835
+kit	15	Carpi	6400493	64	0	3	112409
+kit	15	Zawisza Bydgoszcz	6400494	64	0	3	112512
+kit	15	Unión La Calera	6400495	64	0	3	112535
+kit	15	Rangers	6400496	64	0	3	86
+kit	15	Crewe Alexandra	6400497	64	0	3	121
+kit	15	Widzew Łódź	6400498	64	0	3	301
+kit	15	FC Aarau	6400499	64	0	3	434
+kit	15	FC St. Gallen	6400500	64	0	3	898
+kit	15	Daejeon Citizen	6400501	64	0	3	980
+kit	15	FK Haugesund	6400502	64	0	3	1463
+kit	15	Portsmouth	6400503	64	0	3	1790
+kit	15	Walsall	6400504	64	0	3	1803
+kit	15	FC Lausanne-Sport	6400505	64	0	3	1862
+kit	15	Oldham Athletic	6400506	64	0	3	1920
+kit	15	Port Vale	6400507	64	0	3	1928
+kit	15	Cheltenham Town	6400508	64	0	3	1936
+kit	15	Bury	6400509	64	0	3	1945
+kit	15	Scunthorpe United	6400510	64	0	3	1949
+kit	15	Wacker Innsbruck	6400511	64	0	3	2045
+kit	15	Daegu FC	6400512	64	0	3	2056
+kit	15	Cracovia	6400513	64	0	3	110747
+kit	15	Podbeskidzie Bielsko-Biała	6400514	64	0	3	111087
+kit	15	Gefle IF	6400515	64	0	3	111277
+kit	15	Melbourne Victory	6400516	64	0	3	111397
+kit	15	IF Brommapojkarna	6400517	64	0	3	111705
+kit	15	Wellington Phoenix	6400518	64	0	3	111766
+kit	15	Wolfsberger AC	6400519	64	0	3	111822
+kit	15	Gangwon FC	6400520	64	0	3	112115
+kit	15	Sarpsborg 08 FF	6400521	64	0	3	112199
+kit	15	Universidad de Concepción	6400522	64	0	3	112534
+kit	15	Heart of Midlothian	6400523	64	0	3	80
+kit	15	Shrewsbury Town	6400524	64	0	3	127
+kit	15	Shamrock Rovers	6400525	64	0	3	306
+kit	15	Viborg FF	6400526	64	0	3	1443
+kit	15	SønderjyskE	6400527	64	0	3	1447
+kit	15	Carlisle United	6400528	64	0	3	1480
+kit	15	Östers IF	6400529	64	0	3	1870
+kit	15	Plymouth Argyle	6400530	64	0	3	1929
+kit	15	Northampton Town	6400531	64	0	3	1930
+kit	15	Oxford United	6400532	64	0	3	1951
+kit	15	Southend United	6400533	64	0	3	1954
+kit	15	Burton Albion	6400534	64	0	3	15015
+kit	15	Once Caldas	6400535	64	0	3	101106
+kit	15	SC Wiener Neustadt	6400536	64	0	3	111373
+kit	15	Admira Wacker	6400537	64	0	3	111821
+kit	15	Mjällby AIF	6400538	64	0	3	112072
+kit	15	Fleetwood Town	6400539	64	0	3	112260
+kit	15	Syrianska FC	6400540	64	0	3	112267
+kit	15	Sandnes Ulf	6400541	64	0	3	112374
+kit	15	Al Faisaly (Harmah)	6400542	64	0	3	112389
+kit	15	Al Taawoun (Buraidah)	6400543	64	0	3	112393
+kit	15	Najran SC	6400544	64	0	3	112395
+kit	15	Al Shoulla (Al Kharj)	6400545	64	0	3	112407
+kit	15	Exeter City	6400546	63	0	3	143
+kit	15	Halmstads BK	6400547	63	0	3	321
+kit	15	Sligo Rovers	6400548	63	0	3	563
+kit	15	Wycombe Wanderers	6400549	63	0	3	1933
+kit	15	Hartlepool United	6400550	63	0	3	1941
+kit	15	Torquay United	6400551	63	0	3	1946
+kit	15	Rochdale	6400552	63	0	3	1955
+kit	15	Bristol Rovers	6400553	63	0	3	1962
+kit	15	AFC Wimbledon	6400554	63	0	3	112259
+kit	15	Trapani	6400555	63	0	3	112410
+kit	15	CA Bastia	6400556	63	0	3	112549
+kit	15	Alianza Petrolera	6400557	63	0	3	112579
+kit	15	Morecambe	6400558	62	0	3	357
+kit	15	Dagenham & Redbridge	6400559	62	0	3	373
+kit	15	St. Patrick's Athletic	6400560	62	0	3	423
+kit	15	Sogndal Fotball	6400561	62	0	3	1465
+kit	15	Mansfield Town	6400562	62	0	3	1940
+kit	15	York City	6400563	62	0	3	1948
+kit	15	Accrington Stanley	6400564	62	0	3	110313
+kit	15	SV Grödig	6400565	62	0	3	112022
+kit	15	Newport County	6400566	62	0	3	112254
+kit	15	Al Raed (Buraidah)	6400567	62	0	3	112392
+kit	15	FC Vestsjælland	6400568	62	0	3	112424
+kit	15	Patriotas Boyacá	6400569	62	0	3	112527
+kit	15	Derry City	6400570	61	0	3	445
+kit	15	Dundalk FC	6400571	61	0	3	837
+kit	15	Limerick FC	6400572	61	0	3	111285
+kit	15	Cork City	6400573	60	0	3	422
+kit	15	Shelbourne	6400574	60	0	3	834
+kit	15	Drogheda United	6400575	60	0	3	1572
+kit	15	Boyacá Chicó	6400576	60	0	3	112019
+kit	15	Bohemian FC	6400577	59	0	3	305
+kit	15	Deportes Quindío	6400578	59	0	3	112525
+kit	15	Al Nahdha (Dammam)	6400579	59	0	3	112676
+kit	15	Bray Wanderers	6400580	58	0	3	838
+kit	15	La Equidad	6400581	58	0	3	112523
+kit	15	Al Orubah (Skaka)	6400582	58	0	3	112675
+kit	15	U.C.D.	6400583	57	0	3	111132
+kit	15	ICE BREAKER AWAY	6400584	99	0	3	7201
+kit	15	FUT LEGENDS	6400585	99	0	3	112658
+badge	241	FC Barcelona	6000000	89	1	1	241
+badge	243	Real Madrid	6000001	89	1	1	243
+badge	21	Bayern München	6000002	88	1	1	21
+badge	10	Manchester City	6000003	87	1	1	10
+badge	11	Manchester United	6000004	87	1	1	11
+badge	45	Juventus	6000005	87	1	1	45
+badge	5	Chelsea	6000006	86	1	1	5
+badge	22	Borussia Dortmund	6000007	86	1	1	22
+badge	18	Tottenham Hotspur	6000008	85	1	1	18
+badge	73	Paris Saint-Germain	6000009	85	1	1	73
+badge	240	Atlético de Madrid	6000010	85	1	1	240
+badge	1	Arsenal	6000011	84	1	1	1
+badge	44	Inter	6000012	84	1	1	44
+badge	48	Napoli	6000013	84	1	1	48
+badge	110374	Fiorentina	6000014	84	1	1	110374
+badge	9	Liverpool	6000015	83	1	1	9
+badge	46	Lazio	6000016	83	1	1	46
+badge	47	Milan	6000017	83	1	1	47
+badge	52	Roma	6000018	83	1	1	52
+badge	236	FC Porto 	6000019	83	1	1	236
+badge	461	Valencia CF	6000020	83	1	1	461
+badge	13	Newcastle United	6000021	82	1	1	13
+badge	34	FC Schalke 04	6000022	82	1	1	34
+badge	144	Fulham	6000023	82	1	1	144
+badge	175	VfL Wolfsburg	6000024	82	1	1	175
+badge	234	SL Benfica	6000025	82	1	1	234
+badge	325	Galatasaray SK	6000026	82	1	1	325
+badge	100769	Zenit St. Petersburg	6000027	82	1	1	100769
+badge	7	Everton	6000028	81	1	1	7
+badge	32	Bayer 04 Leverkusen	6000029	81	1	1	32
+badge	69	AS Monaco	6000030	81	1	1	69
+badge	219	Olympique de Marseille	6000031	81	1	1	219
+badge	448	Athletic Club de Bilbao	6000032	81	1	1	448
+badge	457	Real Sociedad	6000033	81	1	1	457
+badge	481	Sevilla FC	6000034	81	1	1	481
+badge	1960	Swansea City	6000035	81	1	1	1960
+badge	23	Borussia M'gladbach	6000036	80	1	1	23
+badge	28	Hamburger SV	6000037	80	1	1	28
+badge	36	VfB Stuttgart	6000038	80	1	1	36
+badge	39	Atalanta	6000039	80	1	1	39
+badge	55	Udinese	6000040	80	1	1	55
+badge	66	Olympique Lyonnais	6000041	80	1	1	66
+badge	315	CSKA Moskva	6000042	80	1	1	315
+badge	573	Málaga CF	6000043	80	1	1	573
+badge	1035	Atlético Mineiro	6000044	80	1	1	1035
+badge	1806	Stoke City	6000045	80	1	1	1806
+badge	100767	Spartak Moskva	6000046	80	1	1	100767
+badge	101059	Shakhtar Donetsk	6000047	80	1	1	101059
+badge	17	Southampton	6000048	79	0	1	17
+badge	19	West Ham United	6000049	79	0	1	19
+badge	50	Parma	6000050	79	0	1	50
+badge	65	LOSC Lille	6000051	79	0	1	65
+badge	106	Sunderland	6000052	79	0	1	106
+badge	109	West Bromwich Albion	6000053	79	0	1	109
+badge	237	Sporting CP	6000054	79	0	1	237
+badge	245	Ajax	6000055	79	0	1	245
+badge	247	PSV	6000056	79	0	1	247
+badge	280	Olympiacos CFP	6000057	79	0	1	280
+badge	312	Dinamo Moskva	6000058	79	0	1	312
+badge	449	Real Betis Balompié	6000059	79	0	1	449
+badge	485	Hannover 96	6000060	79	0	1	485
+badge	568	Cruzeiro	6000061	79	0	1	568
+badge	598	São Paulo	6000062	79	0	1	598
+badge	1041	Corinthians	6000063	79	0	1	1041
+badge	1048	Internacional	6000064	79	0	1	1048
+badge	1629	Grêmio	6000065	79	0	1	1629
+badge	1819	AS Saint-Etienne	6000066	79	0	1	1819
+badge	1824	Eintracht Frankfurt	6000067	79	0	1	1824
+badge	1842	Cagliari	6000068	79	0	1	1842
+badge	1896	Braga	6000069	79	0	1	1896
+badge	10029	1899 Hoffenheim	6000070	79	0	1	10029
+badge	100766	Anzhi Makhachkala	6000071	79	0	1	100766
+badge	110364	Catania	6000072	79	0	1	110364
+badge	110556	Genoa	6000073	79	0	1	110556
+badge	2	Aston Villa	6000074	78	0	1	2
+badge	15	Queens Park Rangers	6000075	78	0	1	15
+badge	38	Werder Bremen	6000076	78	0	1	38
+badge	59	Girondins de Bordeaux	6000077	78	0	1	59
+badge	70	Montpellier HSC	6000078	78	0	1	70
+badge	74	Stade Rennais	6000079	78	0	1	74
+badge	189	Bologna	6000080	78	0	1	189
+badge	452	RCD Espanyol	6000081	78	0	1	452
+badge	517	Botafogo	6000082	78	0	1	517
+badge	567	Fluminense	6000083	78	0	1	567
+badge	1043	Flamengo	6000084	78	0	1	1043
+badge	1792	Norwich City	6000085	78	0	1	1792
+badge	1860	Getafe CF	6000086	78	0	1	1860
+badge	100765	Lokomotiv Moskva	6000087	78	0	1	100765
+badge	110227	Rubin Kazan	6000088	78	0	1	110227
+badge	110396	Newell's Old Boys	6000089	78	0	1	110396
+badge	25	SC Freiburg	6000090	77	0	1	25
+badge	54	Torino	6000091	77	0	1	54
+badge	166	Hertha BSC	6000092	77	0	1	166
+badge	169	1. FSV Mainz 05	6000093	77	0	1	169
+badge	171	1. FC Nürnberg	6000094	77	0	1	171
+badge	192	Chievo Verona	6000095	77	0	1	192
+badge	246	Feyenoord	6000096	77	0	1	246
+badge	383	Palmeiras	6000097	77	0	1	383
+badge	393	PAOK FC	6000098	77	0	1	393
+badge	450	RC Celta de Vigo	6000099	77	0	1	450
+badge	462	Real Valladolid	6000100	77	0	1	462
+badge	468	Elche CF	6000101	77	0	1	468
+badge	479	CA Osasuna	6000102	77	0	1	479
+badge	480	Rayo Vallecano	6000103	77	0	1	480
+badge	483	Villarreal CF	6000104	77	0	1	483
+badge	569	Vasco da Gama	6000105	77	0	1	569
+badge	1843	Palermo	6000106	77	0	1	1843
+badge	1853	Levante UD	6000107	77	0	1	1853
+badge	1877	Boca Juniors	6000108	77	0	1	1877
+badge	1917	Wigan Athletic	6000109	77	0	1	1917
+badge	101088	Vélez Sarsfield	6000110	77	0	1	101088
+badge	110832	Granada CF	6000111	77	0	1	110832
+badge	72	OGC Nice	6000112	76	0	1	72
+badge	78	Celtic	6000113	76	0	1	78
+badge	206	Hellas Verona	6000114	76	0	1	206
+badge	217	FC Lorient	6000115	76	0	1	217
+badge	229	Anderlecht	6000116	76	0	1	229
+badge	232	Standard Liège	6000117	76	0	1	232
+badge	1053	Santos	6000118	76	0	1	1053
+badge	1793	Reading	6000119	76	0	1	1793
+badge	1809	Toulouse FC	6000120	76	0	1	1809
+badge	1837	Sampdoria	6000121	76	0	1	1837
+badge	1952	Hull City	6000122	76	0	1	1952
+badge	1961	Cardiff City	6000123	76	0	1	1961
+badge	1970	Tigres U.A.N.L.	6000124	76	0	1	1970
+badge	100409	FC Augsburg	6000125	76	0	1	100409
+badge	111044	Coritiba	6000126	76	0	1	111044
+badge	4	Bolton Wanderers	6000127	75	0	1	4
+badge	29	1. FC Kaiserslautern	6000128	75	0	1	29
+badge	226	FC Sochaux	6000129	75	0	1	226
+badge	231	Club Brugge	6000130	75	0	1	231
+badge	453	RCD Mallorca	6000131	75	0	1	453
+badge	605	Al Hilal (Riyadh)	6000132	75	0	1	605
+badge	673	RC Genk	6000133	75	0	1	673
+badge	819	FC København	6000134	75	0	1	819
+badge	1032	Monterrey	6000135	75	0	1	1032
+badge	1799	Crystal Palace	6000136	75	0	1	1799
+badge	1808	Brighton & Hove Albion	6000137	75	0	1	1808
+badge	1861	UD Almería	6000138	75	0	1	1861
+badge	1879	América	6000139	75	0	1	1879
+badge	1906	AZ	6000140	75	0	1	1906
+badge	1908	FC Twente	6000141	75	0	1	1908
+badge	1909	Vitesse	6000142	75	0	1	1909
+badge	101083	Estudiantes de La Plata	6000143	75	0	1	101083
+badge	101085	Racing Club de Avellaneda	6000144	75	0	1	101085
+badge	110089	Kuban Krasnodar	6000145	75	0	1	110089
+badge	111292	Portuguesa	6000146	75	0	1	111292
+badge	14	Nottingham Forest	6000147	74	1	1	14
+badge	31	1. FC Köln	6000148	74	1	1	31
+badge	58	SC Bastia	6000149	74	1	1	58
+badge	200	Pescara	6000150	74	1	1	200
+badge	244	Real Zaragoza	6000151	74	1	1	244
+badge	379	Stade de Reims	6000152	74	1	1	379
+badge	896	FC Basel	6000153	74	1	1	896
+badge	1013	San Lorenzo de Almagro	6000154	74	1	1	1013
+badge	1028	Monarcas Morelia	6000155	74	1	1	1028
+badge	1039	Atlético Paranaense	6000156	74	1	1	1039
+badge	1598	Bahia	6000157	74	1	1	1598
+badge	1719	Vitória	6000158	74	1	1	1719
+badge	1795	Watford 	6000159	74	1	1	1795
+badge	1838	Siena	6000160	74	1	1	1838
+badge	1876	River Plate	6000161	74	1	1	1876
+badge	1878	Cruz Azul	6000162	74	1	1	1878
+badge	1884	Panathinaikos FC	6000163	74	1	1	1884
+badge	101100	Atlético Nacional	6000164	74	1	1	101100
+badge	110144	Santos Laguna	6000165	74	1	1	110144
+badge	110406	Club Atlético Colón	6000166	74	1	1	110406
+badge	110456	Valenciennes FC	6000167	74	1	1	110456
+badge	110500	Eintracht Braunschweig	6000168	74	1	1	110500
+badge	110636	Fortuna Düsseldorf	6000169	74	1	1	110636
+badge	110930	Orlando Pirates	6000170	74	1	1	110930
+badge	111042	Goiás	6000171	74	1	1	111042
+badge	111046	Criciúma	6000172	74	1	1	111046
+badge	111050	Náutico	6000173	74	1	1	111050
+badge	111144	Seattle Sounders	6000174	74	1	1	111144
+badge	111271	Évian Thonon Gaillard FC	6000175	74	1	1	111271
+badge	112218	FC Krasnodar	6000176	74	1	1	112218
+badge	3	Blackburn Rovers	6000177	73	1	1	3
+badge	8	Leeds United	6000178	73	1	1	8
+badge	12	Middlesbrough	6000179	73	1	1	12
+badge	71	FC Nantes	6000180	73	1	1	71
+badge	91	Derby County	6000181	73	1	1	91
+badge	95	Leicester City	6000182	73	1	1	95
+badge	97	Millwall	6000183	73	1	1	97
+badge	110	Wolverhampton Wanderers	6000184	73	1	1	110
+badge	191	Red Bull Salzburg	6000185	73	1	1	191
+badge	242	RC Deportivo	6000186	73	1	1	242
+badge	614	AC Ajaccio	6000187	73	1	1	614
+badge	674	AA Gent	6000188	73	1	1	674
+badge	744	Rio Ave	6000189	73	1	1	744
+badge	1844	Livorno	6000190	73	1	1	1844
+badge	1880	Guadalajara	6000191	73	1	1	1880
+badge	1882	Toluca	6000192	73	1	1	1882
+badge	1892	Paços de Ferreira	6000193	73	1	1	1892
+badge	1903	FC Utrecht	6000194	73	1	1	1903
+badge	1913	SC Heerenveen	6000195	73	1	1	1913
+badge	2007	Lokeren	6000196	73	1	1	2007
+badge	15005	SV Zulte-Waregem	6000197	73	1	1	15005
+badge	15029	Universidad de Chile	6000198	73	1	1	15029
+badge	110147	Pachuca	6000199	73	1	1	110147
+badge	110395	Lanús	6000200	73	1	1	110395
+badge	110781	León	6000201	73	1	1	110781
+badge	110929	Kaizer Chiefs	6000202	73	1	1	110929
+badge	111043	Ponte Preta	6000203	73	1	1	111043
+badge	111139	Montreal Impact	6000204	73	1	1	111139
+badge	111678	Tijuana	6000205	73	1	1	111678
+badge	111974	Sassuolo	6000206	73	1	1	111974
+badge	33	TSV 1860 München	6000207	72	1	1	33
+badge	62	En Avant Guingamp	6000208	72	1	1	62
+badge	88	Birmingham City	6000209	72	1	1	88
+badge	162	Energie Cottbus	6000210	72	1	1	162
+badge	165	SpVgg Greuther Fürth	6000211	72	1	1	165
+badge	256	Austria Wien	6000212	72	1	1	256
+badge	298	Rosenborg BK	6000213	72	1	1	298
+badge	378	Stade Brestois	6000214	72	1	1	378
+badge	417	Molde FK	6000215	72	1	1	417
+badge	459	Real Sporting de Gijón	6000216	72	1	1	459
+badge	472	UD Las Palmas	6000217	72	1	1	472
+badge	689	New York Red Bulls	6000218	72	1	1	689
+badge	696	Sporting KC	6000219	72	1	1	696
+badge	697	Los Angeles Galaxy	6000220	72	1	1	697
+badge	982	FC Seoul	6000221	72	1	1	982
+badge	1831	1. FC Union Berlin	6000222	72	1	1	1831
+badge	1871	Legia Warszawa	6000223	72	1	1	1871
+badge	1881	U.N.A.M.	6000224	72	0	1	1881
+badge	1891	Nacional	6000225	72	0	1	1891
+badge	1893	Marítimo	6000226	72	0	1	1893
+badge	1901	Académica	6000227	72	0	1	1901
+badge	1926	Blackpool	6000228	72	0	1	1926
+badge	10020	Estoril	6000229	72	0	1	10020
+badge	101102	Deportivo Cali	6000230	72	0	1	101102
+badge	101104	Independiente Santa Fe	6000231	72	0	1	101104
+badge	101114	Atlas	6000232	72	0	1	101114
+badge	101116	Atlante	6000233	72	0	1	101116
+badge	110062	Girona FC	6000234	72	0	1	110062
+badge	110109	Terek Grozny	6000235	72	0	1	110109
+badge	110152	Puebla	6000236	72	0	1	110152
+badge	110231	FC Rostov	6000237	72	0	1	110231
+badge	110329	FC St. Pauli	6000238	72	0	1	110329
+badge	110394	Arsenal de Sarandi	6000239	72	0	1	110394
+badge	111239	FC Ingolstadt 04	6000240	72	0	1	111239
+badge	111674	Al Shabab (Riyadh)	6000241	72	0	1	111674
+badge	111715	Club Atlético Tigre	6000242	72	0	1	111715
+badge	111722	Deportes Tolima	6000243	72	0	1	111722
+badge	112387	Al Ahli (Jeddah)	6000244	72	0	1	112387
+badge	57	AJ Auxerre	6000245	71	0	1	57
+badge	94	Ipswich Town	6000246	71	0	1	94
+badge	160	VfL Bochum	6000247	71	0	1	160
+badge	190	Brescia	6000248	71	0	1	190
+badge	294	ES Troyes AC	6000249	71	0	1	294
+badge	320	Malmö FF	6000250	71	0	1	320
+badge	322	Grasshopper Club Zürich	6000251	71	0	1	322
+badge	432	Helsingborgs IF	6000252	71	0	1	432
+badge	571	RC Recreativo	6000253	71	0	1	571
+badge	650	ADO Den Haag	6000254	71	0	1	650
+badge	665	Vitória Setúbal	6000255	71	0	1	665
+badge	693	Chicago Fire	6000256	71	0	1	693
+badge	695	FC Dallas	6000257	71	0	1	695
+badge	700	IF Elfsborg	6000258	71	0	1	700
+badge	873	Lech Poznań	6000259	71	0	1	873
+badge	900	BSC Young Boys	6000260	71	0	1	900
+badge	922	Strømsgodset Toppfotball	6000261	71	0	1	922
+badge	983	Suwon Samsung Bluewings	6000262	71	0	1	983
+badge	1477	Jeonbuk Hyundai Motors	6000263	71	0	1	1477
+badge	1807	Sheffield Wednesday	6000264	71	0	1	1807
+badge	1823	AS Nancy	6000265	71	0	1	1823
+badge	1887	Vitória Guimarães	6000266	71	0	1	1887
+badge	1902	Roda JC Kerkrade	6000267	71	0	1	1902
+badge	1915	FC Groningen	6000268	71	0	1	1915
+badge	1939	Huddersfield Town	6000269	71	0	1	1939
+badge	2023	SD Ponferradina	6000270	71	0	1	2023
+badge	100634	Heracles Almelo	6000271	71	0	1	100634
+badge	100764	Krylya Sovetov Samara	6000272	71	0	1	100764
+badge	100831	AD Alcorcón	6000273	71	0	1	100831
+badge	100879	Hércules CF	6000274	71	0	1	100879
+badge	101101	Junior Barranquilla	6000275	71	0	1	101101
+badge	110150	Querétaro	6000276	71	0	1	110150
+badge	110580	Rosario Central	6000277	71	0	1	110580
+badge	110741	Spezia	6000278	71	0	1	110741
+badge	110912	Padova	6000279	71	0	1	110912
+badge	110915	Cesena	6000280	71	0	1	110915
+badge	110975	Universidad Católica	6000281	71	0	1	110975
+badge	111022	Belgrano de Córdoba	6000282	71	0	1	111022
+badge	111065	Real Salt Lake	6000283	71	0	1	111065
+badge	111706	Godoy Cruz	6000284	71	0	1	111706
+badge	111717	All Boys	6000285	71	0	1	111717
+badge	111928	San Jose Earthquakes	6000286	71	0	1	111928
+badge	112139	Al Nassr (Riyadh)	6000287	71	0	1	112139
+badge	112513	Arouca	6000288	71	0	1	112513
+badge	112679	Chiapas FC	6000289	71	0	1	112679
+badge	64	Racing Club de Lens	6000290	70	0	1	64
+badge	142	Doncaster Rovers	6000291	70	0	1	142
+badge	203	Reggina	6000292	70	0	1	203
+badge	209	Sturm Graz	6000293	70	0	1	209
+badge	210	SM Caen	6000294	70	0	1	210
+badge	254	Rapid Wien	6000295	70	0	1	254
+badge	418	Tromsø IL	6000296	70	0	1	418
+badge	433	AIK	6000297	70	0	1	433
+badge	503	Dynamo Dresden	6000298	70	0	1	503
+badge	570	Ternana	6000299	70	0	1	570
+badge	694	Colorado Rapids	6000300	70	0	1	694
+badge	698	Houston Dynamo	6000301	70	0	1	698
+badge	711	BK Häcken	6000302	70	0	1	711
+badge	920	Vålerenga Fotball	6000303	70	0	1	920
+badge	1473	Ulsan Hyundai FC	6000304	70	0	1	1473
+badge	1474	Pohang Steelers	6000305	70	0	1	1474
+badge	1744	Modena	6000306	70	0	1	1744
+badge	1747	Mons	6000307	70	0	1	1747
+badge	1788	FC Nordsjælland	6000308	70	0	1	1788
+badge	1796	Burnley	6000309	70	0	1	1796
+badge	1888	Gil Vicente	6000310	70	0	1	1888
+badge	1889	Belenenses	6000311	70	0	1	1889
+badge	1904	NAC Breda	6000312	70	0	1	1904
+badge	1910	NEC	6000313	70	0	1	1910
+badge	1914	PEC Zwolle	6000314	70	0	1	1914
+badge	1943	Bournemouth	6000315	70	0	1	1943
+badge	10030	SC Paderborn 07	6000316	70	0	1	10030
+badge	100081	KV Kortrijk	6000317	70	0	1	100081
+badge	100087	OH Leuven	6000318	70	0	1	100087
+badge	101112	Vancouver Whitecaps	6000319	70	0	1	101112
+badge	110145	Tiburones Rojos de Veracruz	6000320	70	0	1	110145
+badge	110234	Amkar Perm	6000321	70	0	1	110234
+badge	110392	Atlético de Rafaela	6000322	70	0	1	110392
+badge	110398	Olimpo Bahía Blanca	6000323	70	0	1	110398
+badge	110596	FSV Frankfurt	6000324	70	0	1	110596
+badge	110724	KV Mechelen	6000325	70	0	1	110724
+badge	110913	Waasland-Beveren	6000326	70	0	1	110913
+badge	110977	Unión Española	6000327	70	0	1	110977
+badge	110980	Colo Colo	6000328	70	0	1	110980
+badge	111019	Argentinos Juniors	6000329	70	0	1	111019
+badge	111140	Portland Timbers	6000330	70	0	1	111140
+badge	111540	Olhanense	6000331	70	0	1	111540
+badge	112116	CD O'Higgins	6000332	70	0	1	112116
+badge	112134	Philadelphia Union	6000333	70	0	1	112134
+badge	112217	FC Volga Nizhniy Novgorod	6000334	70	0	1	112217
+badge	112225	Novara	6000335	70	0	1	112225
+badge	89	Charlton Athletic	6000336	69	0	1	89
+badge	239	Lierse	6000337	69	0	1	239
+badge	271	Aarhus GF	6000338	69	0	1	271
+badge	300	Viking FK	6000339	69	0	1	300
+badge	319	IFK Göteborg	6000340	69	0	1	319
+badge	506	Erzgebirge Aue	6000341	69	0	1	506
+badge	607	Al Ittihad (Jeddah)	6000342	69	0	1	607
+badge	670	Charleroi	6000343	69	0	1	670
+badge	687	Columbus Crew	6000344	69	0	1	687
+badge	688	D.C. United	6000345	69	0	1	688
+badge	691	New England Revolution	6000346	69	0	1	691
+badge	820	Aalborg BK	6000347	69	0	1	820
+badge	894	FC Zürich	6000348	69	0	1	894
+badge	981	Seongnam Ilhwa Chunma	6000349	69	0	1	981
+badge	1478	Jeju United FC	6000350	69	0	1	1478
+badge	1746	Empoli	6000351	69	0	1	1746
+badge	1750	Cercle Brugge	6000352	69	0	1	1750
+badge	1755	Aalesunds FK	6000353	69	0	1	1755
+badge	1832	Karlsruher SC	6000354	69	0	1	1832
+badge	1855	Real Murcia CF	6000355	69	0	1	1855
+badge	1905	RKC Waalwijk	6000356	69	0	1	1905
+badge	1919	Bristol City	6000357	69	0	1	1919
+badge	1932	Barnsley	6000358	69	0	1	1932
+badge	15021	CE Sabadell FC	6000359	69	0	1	15021
+badge	101084	Gimnasia y Esgrima La Plata	6000360	69	0	1	101084
+badge	110093	Independiente	6000361	69	0	1	110093
+badge	110178	SV Sandhausen	6000362	69	0	1	110178
+badge	110233	Tom Tomsk	6000363	69	0	1	110233
+badge	110704	FC Barcelona B	6000364	69	0	1	110704
+badge	110710	Real Madrid Castilla	6000365	69	0	1	110710
+badge	110770	FC Sion	6000366	69	0	1	110770
+badge	110979	CD Cobreloa	6000367	69	0	1	110979
+badge	111092	Śląsk Wrocław	6000368	69	0	1	111092
+badge	111264	FC Ural	6000369	69	0	1	111264
+badge	111327	CD Huachipato	6000370	69	0	1	111327
+badge	111651	Toronto FC	6000371	69	0	1	111651
+badge	111723	Deportivo Pasto	6000372	69	0	1	111723
+badge	112124	Juve Stabia	6000373	69	0	1	112124
+badge	112237	Varese	6000374	69	0	1	112237
+badge	112390	Al Fateh (Al Ahsa)	6000375	69	0	1	112390
+badge	112531	Deportes Iquique	6000376	69	0	1	112531
+badge	112578	Itagüí	6000377	69	0	1	112578
+badge	68	FC Metz	6000378	64	1	1	68
+badge	77	Aberdeen	6000379	64	1	1	77
+badge	83	Motherwell	6000380	64	1	1	83
+badge	159	Arminia Bielefeld	6000381	64	1	1	159
+badge	260	CD Tenerife	6000382	64	1	1	260
+badge	269	Brøndby IF	6000383	64	1	1	269
+badge	272	Odense Boldklub	6000384	64	1	1	272
+badge	420	Górnik Zabrze	6000385	64	1	1	420
+badge	463	Deportivo Alavés	6000386	64	1	1	463
+badge	467	SD Eibar	6000387	64	1	1	467
+badge	477	CD Numancia	6000388	64	1	1	477
+badge	550	VfR Aalen	6000389	64	1	1	550
+badge	620	Inverness Caledonian Thistle	6000390	64	1	1	620
+badge	647	SC Cambuur	6000391	64	1	1	647
+badge	897	FC Luzern	6000392	64	1	1	897
+badge	919	SK Brann	6000393	64	1	1	919
+badge	1530	Angers SCO	6000394	64	1	1	1530
+badge	1786	Randers FC	6000395	64	1	1	1786
+badge	1798	Milton Keynes Dons	6000396	64	1	1	1798
+badge	1800	Coventry City	6000397	64	1	1	1800
+badge	1801	Preston North End	6000398	64	1	1	1801
+badge	1867	Córdoba CF	6000399	64	1	1	1867
+badge	1873	Wisła Kraków	6000400	64	1	1	1873
+badge	1938	Peterborough United	6000401	64	1	1	1938
+badge	100804	St. Johnstone	6000402	64	1	1	100804
+badge	101105	Millonarios FC	6000403	64	1	1	101105
+badge	110069	CD Mirandés	6000404	64	1	1	110069
+badge	110554	Quilmes Atlético Club	6000405	64	1	1	110554
+badge	110569	Dijon Football	6000406	64	1	1	110569
+badge	110734	Crotone	6000407	64	1	1	110734
+badge	110745	Jagiellonia Białystok	6000408	64	1	1	110745
+badge	110749	Zagłębie Lubin	6000409	64	1	1	110749
+badge	110765	Incheon United FC	6000410	64	1	1	110765
+badge	110831	CD Lugo	6000411	64	1	1	110831
+badge	110976	Santiago Wanderers	6000412	64	1	1	110976
+badge	111070	Chivas USA	6000413	64	1	1	111070
+badge	111721	Cúcuta Deportivo	6000414	64	1	1	111721
+badge	112096	Al Ettifaq (Dammam)	6000415	64	1	1	112096
+badge	112487	Latina	6000416	64	1	1	112487
+badge	112526	Envigado FC	6000417	64	1	1	112526
+badge	112533	Deportes Antofagasta	6000418	64	1	1	112533
+badge	82	Kilmarnock	6000419	64	1	1	82
+badge	181	Dundee United	6000420	64	1	1	181
+badge	299	Lillestrøm SK	6000421	64	1	1	299
+badge	346	Yeovil Town	6000422	64	1	1	346
+badge	631	Ross County	6000423	64	1	1	631
+badge	710	Djurgårdens IF	6000424	64	1	1	710
+badge	780	SV Ried	6000425	64	1	1	780
+badge	874	Ruch Chorzów	6000426	64	1	1	874
+badge	1439	Kalmar FF	6000427	64	1	1	1439
+badge	1445	Esbjerg fB	6000428	64	1	1	1445
+badge	1476	Busan I'Park	6000429	64	1	1	1476
+badge	1516	FC Midtjylland	6000430	64	1	1	1516
+badge	1715	FC Thun	6000431	64	1	1	1715
+badge	1738	Le Havre AC	6000432	64	1	1	1738
+badge	1794	Sheffield United	6000433	64	1	1	1794
+badge	1797	Rotherham United	6000434	64	1	1	1797
+badge	1804	Bradford City	6000435	64	1	1	1804
+badge	1813	Chamois Niortais FC	6000436	64	1	1	1813
+badge	1820	FC Istres	6000437	64	1	1	1820
+badge	1848	Bari	6000438	64	1	1	1848
+badge	1924	Chesterfield	6000439	64	1	1	1924
+badge	1925	Brentford	6000440	64	1	1	1925
+badge	1935	Colchester United	6000441	64	1	1	1935
+badge	1937	Notts County	6000442	64	1	1	1937
+badge	1958	Leyton Orient	6000443	64	1	1	1958
+badge	2038	Avellino	6000444	64	1	1	2038
+badge	100632	Go Ahead Eagles	6000445	64	1	1	100632
+badge	101103	Independiente Medellín	6000446	64	1	1	101103
+badge	110326	Tours FC	6000447	64	1	1	110326
+badge	111083	Korona Kielce	6000448	64	0	1	111083
+badge	111086	Piast Gliwice	6000449	64	0	1	111086
+badge	111091	Lechia Gdańsk	6000450	64	0	1	111091
+badge	111395	Brisbane Roar	6000451	64	0	1	111395
+badge	111396	Central Coast Mariners	6000452	64	0	1	111396
+badge	111588	GyeongNam FC	6000453	64	0	1	111588
+badge	111989	AC Arles-Avignon	6000454	64	0	1	111989
+badge	111993	Cittadella	6000455	64	0	1	111993
+badge	112020	Virtus Lanciano	6000456	64	0	1	112020
+badge	112110	Rangers de Talca	6000457	64	0	1	112110
+badge	112224	Melbourne Heart	6000458	64	0	1	112224
+badge	112427	Western Sydney Wanderers	6000459	64	0	1	112427
+badge	112528	Atlético Huila	6000460	64	0	1	112528
+badge	112584	Everton de Viña del Mar	6000461	64	0	1	112584
+badge	112585	Ñublense	6000462	64	0	1	112585
+badge	81	Hibernian	6000463	64	0	1	81
+badge	212	LB Châteauroux	6000464	64	0	1	212
+badge	224	Nîmes Olympique	6000465	64	0	1	224
+badge	278	AEK Athens	6000466	64	0	1	278
+badge	361	Stevenage	6000467	64	0	1	361
+badge	471	Real Jaén CF	6000468	64	0	1	471
+badge	682	KV Oostende	6000469	64	0	1	682
+badge	702	IFK Norrköping	6000470	64	0	1	702
+badge	1456	Odds Ballklubb	6000471	64	0	1	1456
+badge	1475	Chunnam Dragons	6000472	64	0	1	1475
+badge	1524	IK Start	6000473	64	0	1	1524
+badge	1754	Partick Thistle	6000474	64	0	1	1754
+badge	1802	Gillingham	6000475	64	0	1	1802
+badge	1812	US Créteil-Lusitanos	6000476	64	0	1	1812
+badge	1814	Stade Lavallois	6000477	64	0	1	1814
+badge	1815	Clermont Foot	6000478	64	0	1	1815
+badge	1841	Hønefoss BK	6000479	64	0	1	1841
+badge	1934	Swindon Town	6000480	64	0	1	1934
+badge	15048	Tranmere Rovers	6000481	64	0	1	15048
+badge	100805	St. Mirren	6000482	64	0	1	100805
+badge	101097	Audax Italiano	6000483	64	0	1	101097
+badge	110746	Pogoń Szczecin	6000484	64	0	1	110746
+badge	110890	Crawley Town	6000485	64	0	1	110890
+badge	110978	Cobresal	6000486	64	0	1	110978
+badge	111328	CSD Palestino	6000487	64	0	1	111328
+badge	111393	Adelaide United	6000488	64	0	1	111393
+badge	111398	Newcastle Jets	6000489	64	0	1	111398
+badge	111399	Perth Glory	6000490	64	0	1	111399
+badge	111400	Sydney FC	6000491	64	0	1	111400
+badge	111835	Åtvidabergs FF	6000492	64	0	1	111835
+badge	112409	Carpi	6000493	64	0	1	112409
+badge	112512	Zawisza Bydgoszcz	6000494	64	0	1	112512
+badge	112535	Unión La Calera	6000495	64	0	1	112535
+badge	86	Rangers	6000496	64	0	1	86
+badge	121	Crewe Alexandra	6000497	64	0	1	121
+badge	301	Widzew Łódź	6000498	64	0	1	301
+badge	434	FC Aarau	6000499	64	0	1	434
+badge	898	FC St. Gallen	6000500	64	0	1	898
+badge	980	Daejeon Citizen	6000501	64	0	1	980
+badge	1463	FK Haugesund	6000502	64	0	1	1463
+badge	1790	Portsmouth	6000503	64	0	1	1790
+badge	1803	Walsall	6000504	64	0	1	1803
+badge	1862	FC Lausanne-Sport	6000505	64	0	1	1862
+badge	1920	Oldham Athletic	6000506	64	0	1	1920
+badge	1928	Port Vale	6000507	64	0	1	1928
+badge	1936	Cheltenham Town	6000508	64	0	1	1936
+badge	1945	Bury	6000509	64	0	1	1945
+badge	1949	Scunthorpe United	6000510	64	0	1	1949
+badge	2045	Wacker Innsbruck	6000511	64	0	1	2045
+badge	2056	Daegu FC	6000512	64	0	1	2056
+badge	110747	Cracovia	6000513	64	0	1	110747
+badge	111087	Podbeskidzie Bielsko-Biała	6000514	64	0	1	111087
+badge	111277	Gefle IF	6000515	64	0	1	111277
+badge	111397	Melbourne Victory	6000516	64	0	1	111397
+badge	111705	IF Brommapojkarna	6000517	64	0	1	111705
+badge	111766	Wellington Phoenix	6000518	64	0	1	111766
+badge	111822	Wolfsberger AC	6000519	64	0	1	111822
+badge	112115	Gangwon FC	6000520	64	0	1	112115
+badge	112199	Sarpsborg 08 FF	6000521	64	0	1	112199
+badge	112534	Universidad de Concepción	6000522	64	0	1	112534
+badge	80	Heart of Midlothian	6000523	64	0	1	80
+badge	127	Shrewsbury Town	6000524	64	0	1	127
+badge	306	Shamrock Rovers	6000525	64	0	1	306
+badge	1443	Viborg FF	6000526	64	0	1	1443
+badge	1447	SønderjyskE	6000527	64	0	1	1447
+badge	1480	Carlisle United	6000528	64	0	1	1480
+badge	1870	Östers IF	6000529	64	0	1	1870
+badge	1929	Plymouth Argyle	6000530	64	0	1	1929
+badge	1930	Northampton Town	6000531	64	0	1	1930
+badge	1951	Oxford United	6000532	64	0	1	1951
+badge	1954	Southend United	6000533	64	0	1	1954
+badge	15015	Burton Albion	6000534	64	0	1	15015
+badge	101106	Once Caldas	6000535	64	0	1	101106
+badge	111373	SC Wiener Neustadt	6000536	64	0	1	111373
+badge	111821	Admira Wacker	6000537	64	0	1	111821
+badge	112072	Mjällby AIF	6000538	64	0	1	112072
+badge	112260	Fleetwood Town	6000539	64	0	1	112260
+badge	112267	Syrianska FC	6000540	64	0	1	112267
+badge	112374	Sandnes Ulf	6000541	64	0	1	112374
+badge	112389	Al Faisaly (Harmah)	6000542	64	0	1	112389
+badge	112393	Al Taawoun (Buraidah)	6000543	64	0	1	112393
+badge	112395	Najran SC	6000544	64	0	1	112395
+badge	112407	Al Shoulla (Al Kharj)	6000545	64	0	1	112407
+badge	143	Exeter City	6000546	63	0	1	143
+badge	321	Halmstads BK	6000547	63	0	1	321
+badge	563	Sligo Rovers	6000548	63	0	1	563
+badge	1933	Wycombe Wanderers	6000549	63	0	1	1933
+badge	1941	Hartlepool United	6000550	63	0	1	1941
+badge	1946	Torquay United	6000551	63	0	1	1946
+badge	1955	Rochdale	6000552	63	0	1	1955
+badge	1962	Bristol Rovers	6000553	63	0	1	1962
+badge	112259	AFC Wimbledon	6000554	63	0	1	112259
+badge	112410	Trapani	6000555	63	0	1	112410
+badge	112549	CA Bastia	6000556	63	0	1	112549
+badge	112579	Alianza Petrolera	6000557	63	0	1	112579
+badge	357	Morecambe	6000558	62	0	1	357
+badge	373	Dagenham & Redbridge	6000559	62	0	1	373
+badge	423	St. Patrick's Athletic	6000560	62	0	1	423
+badge	1465	Sogndal Fotball	6000561	62	0	1	1465
+badge	1940	Mansfield Town	6000562	62	0	1	1940
+badge	1948	York City	6000563	62	0	1	1948
+badge	110313	Accrington Stanley	6000564	62	0	1	110313
+badge	112022	SV Grödig	6000565	62	0	1	112022
+badge	112254	Newport County	6000566	62	0	1	112254
+badge	112392	Al Raed (Buraidah)	6000567	62	0	1	112392
+badge	112424	FC Vestsjælland	6000568	62	0	1	112424
+badge	112527	Patriotas Boyacá	6000569	62	0	1	112527
+badge	445	Derry City	6000570	61	0	1	445
+badge	837	Dundalk FC	6000571	61	0	1	837
+badge	111285	Limerick FC	6000572	61	0	1	111285
+badge	422	Cork City	6000573	60	0	1	422
+badge	834	Shelbourne	6000574	60	0	1	834
+badge	1572	Drogheda United	6000575	60	0	1	1572
+badge	112019	Boyacá Chicó	6000576	60	0	1	112019
+badge	305	Bohemian FC	6000577	59	0	1	305
+badge	112525	Deportes Quindío	6000578	59	0	1	112525
+badge	112676	Al Nahdha (Dammam)	6000579	59	0	1	112676
+badge	838	Bray Wanderers	6000580	58	0	1	838
+badge	112523	La Equidad	6000581	58	0	1	112523
+badge	112675	Al Orubah (Skaka)	6000582	58	0	1	112675
+badge	111132	U.C.D.	6000583	57	0	1	111132
+badge	7200	ICE BREAKER HOME	6000584	99	0	1	7200
+badge	7201	ICE BREAKER AWAY	6000585	99	0	1	7201
+badge	112658	FUT LEGENDS	6000586	99	0	1	112658
