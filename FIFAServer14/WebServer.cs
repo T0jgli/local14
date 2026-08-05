@@ -1012,7 +1012,24 @@ internal sealed class WebServer
             ClubStore.Mutate(data =>
             {
                 int newId = data.Squads.Count > 0 ? data.Squads.Max(s => s.Id) + 1 : 0;
+                string name = null, formation = null;
+                try
+                {
+                    using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
+                    var root = doc.RootElement;
+                    if (root.TryGetProperty("id", out var idEl) && idEl.ValueKind == System.Text.Json.JsonValueKind.Number
+                        && idEl.TryGetInt32(out int wantId) && wantId >= 0 && data.Squads.All(s => s.Id != wantId))
+                        newId = wantId;
+                    if (root.TryGetProperty("squadName", out var nEl) && nEl.ValueKind == System.Text.Json.JsonValueKind.String)
+                        name = nEl.GetString();
+                    if (root.TryGetProperty("formation", out var fEl) && fEl.ValueKind == System.Text.Json.JsonValueKind.String)
+                        formation = fEl.GetString();
+                }
+                catch (Exception ex) { _log.LogWarning("Squad POST body parse failed: {0}", ex.Message); }
+
                 created = new Squad { Id = newId };
+                if (!string.IsNullOrWhiteSpace(name)) created.Name = name;
+                if (!string.IsNullOrWhiteSpace(formation)) created.Formation = formation;
                 data.Squads.Add(created);
             });
             return ("application/json; charset=utf-8", BuildFullSquadJson(created));
@@ -1116,17 +1133,25 @@ internal sealed class WebServer
         if (System.Text.RegularExpressions.Regex.IsMatch(path, @"squad/(\d+)") && req.HttpMethod == "GET")
         {
             int getId = int.Parse(System.Text.RegularExpressions.Regex.Match(path, @"squad/(\d+)").Groups[1].Value);
-            var data = ClubStore.Get();
-            var target = data.Squads.FirstOrDefault(s => s.Id == getId) ?? new Squad { Id = getId };
+            Squad target = null;
+            ClubStore.Mutate(data =>
+            {
+                target = data.Squads.FirstOrDefault(s => s.Id == getId);
+                if (target != null && data.ActiveSquadId != getId)
+                {
+                    data.ActiveSquadId = getId;
+                    _log.LogInformation("[FUT] active squad -> {0} (loaded/equipped)", getId);
+                }
+            });
+            target ??= new Squad { Id = getId };
             return ("application/json; charset=utf-8", BuildFullSquadJson(target));
         }
 
         if (path.EndsWith("/squad/active"))
         {
             var data = ClubStore.Get();
-            var active = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId && s.Slots.Count > 0)
+            var active = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
                 ?? data.Squads.FirstOrDefault(s => s.Slots.Count > 0)
-                ?? data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
                 ?? (data.Squads.Count > 0 ? data.Squads[0] : new Squad { Id = 0 });
             return ("application/json; charset=utf-8", BuildFullSquadJson(active));
         }
