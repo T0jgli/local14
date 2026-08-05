@@ -2,7 +2,7 @@
 
 <img width="256" height="256" alt="c39712e5243e23372f53b2990ab42afe" src="https://github.com/user-attachments/assets/bcc9f83d-1865-4bb5-9967-5a0392f23c9d" />
 
-A backend server for FIFA 14 PC's online mode to access FUT.
+A backend server for a game called "FIFA 14" PC's online mode to access Ultimate team.
 
 ## Features
 
@@ -32,7 +32,6 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 
 - Transfermarket
 - tots cards
-- WC Mode
 - missing staff cards
 - missing consumables
 - divisions
@@ -73,5 +72,6 @@ This project is an unofficial, community-developed backend. It is not affiliated
 ## Credits
  
 - MYorderlyHuman on discord (Helped soo much in understanding of the architecture)
+- Toniboi on discord (Helped with tournaments)
 - [BlazeSDK](https://github.com/Aim4kill/BlazeSDK) By [@Aim4kill](https://github.com/Aim4kill)
 - [Zamboni3](https://github.com/ZamboniDevelopment/Zamboni3) By [@ZamboniDevelopment](https://github.com/ZamboniDevelopment)
