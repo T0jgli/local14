@@ -1,4 +1,4 @@
-# FIFAServer14
+# Impulsum14
 
 <img width="256" height="256" alt="c39712e5243e23372f53b2990ab42afe" src="https://github.com/user-attachments/assets/bcc9f83d-1865-4bb5-9967-5a0392f23c9d" />
 
@@ -58,7 +58,7 @@ A backend server for FIFA 14 PC's online mode to access FUT.
 ```sh
 dotnet restore
 dotnet build
-dotnet run --project FIFAServer14
+dotnet run --project Impulsum14
 ```
 (You can also compile using visual studio)
 
