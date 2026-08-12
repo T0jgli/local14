@@ -19,7 +19,7 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 - POW/EASFC/EASW web service (Base)
 - EA CDN recreation
 - FUT Hub
-- FUT DB (90% done)
+- FUT DB (95% done)
 - Packs
 - Proper Pack Weights
 - Squad saving
@@ -31,7 +31,6 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 ## TODO
 
 - Transfermarket
-- tots cards
 - missing staff cards
 - missing consumables
 - divisions
@@ -73,5 +72,6 @@ This project is an unofficial, community-developed backend. It is not affiliated
  
 - MYorderlyHuman on discord (Helped soo much in understanding of the architecture)
 - Toniboi on discord (Helped with tournaments)
+- Draz on discord (Helped with Manager cards and cert bypass)
 - [BlazeSDK](https://github.com/Aim4kill/BlazeSDK) By [@Aim4kill](https://github.com/Aim4kill)
 - [Zamboni3](https://github.com/ZamboniDevelopment/Zamboni3) By [@ZamboniDevelopment](https://github.com/ZamboniDevelopment)

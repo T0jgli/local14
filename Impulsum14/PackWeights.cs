@@ -123,8 +123,9 @@ internal static class PackWeights
         foreach (var t in Sheet[g])
             penalty += (t.Threshold - Value(p, t.Stat)) * t.Multiplier;
 
-        weight += System.Math.Min(0.0, penalty);  
-        if (p.Rating > 84) weight /= 4.0; 
+        weight += System.Math.Min(0.0, penalty);
+        if (p.Rating > 81)
+            weight /= System.Math.Pow(2.0, (p.Rating - 81) / 2.5);
         return System.Math.Max(1, (int)System.Math.Ceiling(weight));
     }
 }

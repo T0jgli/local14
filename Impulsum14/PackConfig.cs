@@ -100,7 +100,7 @@ internal static class PackConfig
         },
     };
 
-    private static PackDefinition PlayersPack(int size, int rareCount, double specialPct,
+    private static PackDefinition PlayersPack(int size, int rareCount,
                                               LevelVariant[] levels = null) => new()
     {
         Size = size,
@@ -110,7 +110,6 @@ internal static class PackConfig
         Guarantees = new[]
         {
             new Guarantee("rarePlayer", 100, ItemTypes.Player, Rare: true, Tier: PackConfig.Gold, Special: false),
-            new Guarantee("specialCard", specialPct, ItemTypes.Player, Rare: true, Tier: null, Special: true),
         },
     };
 
@@ -121,14 +120,14 @@ internal static class PackConfig
         [200] = Standard(Silver, 1, gold: false),   // Silver Pack
         [203] = Standard(Silver, 3, gold: false),   // Premium Silver Pack
         [300] = Standard(Gold,   1, gold: true),    // Gold Pack
-        [304] = WithSpecialChance(Standard(Gold, 3, gold: true), 1.5), 
-        [405] = PlayersPack(12, 8, 5, new[]            //30k pack              
+        [304] = Standard(Gold,   3, gold: true),    // Premium Gold Pack
+        [405] = PlayersPack(12, 8, new[]            //30k pack
         {
             new LevelVariant(80, Gold: 12, Silver: 0, Bronze: 0),
             new LevelVariant(20, Gold: 11, Silver: 1, Bronze: 0),
         }),
-        [406] = PlayersPack(24, 24, 7.0),   // 50k pack
-        [404] = new()                        // 100k pack
+        [406] = PlayersPack(24, 24),   // 50k pack
+        [404] = new()                  // 100k pack
         {
             Size = 30,
             Levels = new[] { new LevelVariant(1, Gold: 30, Silver: 0, Bronze: 0) },
@@ -137,23 +136,8 @@ internal static class PackConfig
             Guarantees = new[]
             {
                 new Guarantee("rarePlayer", 100, ItemTypes.Player, Rare: true, Tier: Gold, Special: false),
-
-                new Guarantee("specialCard", 12.0, ItemTypes.Player, Rare: true, Tier: null, Special: true),
             },
-            MinPlayerRating = 76,
+            MinPlayerRating = 75,  
         },
     };
-
-    private static PackDefinition WithSpecialChance(PackDefinition d, double pct) => new()
-    {
-        Size = d.Size,
-        Levels = d.Levels,
-        Classes = d.Classes,
-        Types = d.Types,
-        Wildcards = d.Wildcards,
-        Tradeable = d.Tradeable,
-        Guarantees = d.Guarantees.Append(
-            new Guarantee("specialCard", pct, ItemTypes.Player, Rare: true, Tier: null, Special: true)).ToArray(),
-    };
-
 }

@@ -25,11 +25,6 @@ internal static class PackEngine
     private static readonly Dictionary<(int Tier, bool Rare), RealPlayer[]> PlayerPools =
         BuildPlayerPools();
 
-    private static readonly Dictionary<int, RealPlayer[]> SpecialPoolByTier =
-        Enumerable.Range(0, 3).ToDictionary(
-            t => t,
-            t => SpecialCards.All.Where(p => PackConfig.TierOf(p.Rating) == t).ToArray());
-
     private static Dictionary<(int, bool), RealPlayer[]> BuildPlayerPools()
     {
         var pools = new Dictionary<(int, bool), RealPlayer[]>();
@@ -46,8 +41,34 @@ internal static class PackEngine
         public string Type = ItemTypes.Player;
         public int Tier;
         public bool Rare;
-        public bool ForceSpecial;
-        public int? ForcedTier;  
+        public int? ForcedTier;
+    }
+
+    private const int SubK = 25;
+    private const int SpecialFloor = 5;
+
+    private static int SpecialWeight(int rating) => System.Math.Max(SpecialFloor, 99 - rating);
+
+    private static readonly Dictionary<int, RealPlayer[]> SpecialsByBase =
+        SpecialCards.All.GroupBy(p => p.Id).ToDictionary(g => g.Key, g => g.ToArray());
+
+    private static (RealPlayer Card, bool IsSpecial) Substitute(RealPlayer basePlayer, int tier, System.Random rnd)
+    {
+        if (!SpecialsByBase.TryGetValue(basePlayer.Id, out var all)) return (basePlayer, false);
+        var options = all.Where(s => PackConfig.TierOf(s.Rating) == tier).ToArray();
+        if (options.Length == 0) return (basePlayer, false);
+
+        int stayBase = SubK * PackWeights.Of(basePlayer);   
+        int total = stayBase;
+        foreach (var s in options) total += SpecialWeight(s.Rating);
+        int roll = rnd.Next(total) - stayBase;
+        if (roll < 0) return (basePlayer, false);
+        foreach (var s in options)
+        {
+            roll -= SpecialWeight(s.Rating);
+            if (roll < 0) return (s, true);
+        }
+        return (options[options.Length - 1], true);
     }
 
     internal static List<PackPick> Open(int packId, System.Random rnd, out bool gotSpecial)
@@ -66,24 +87,46 @@ internal static class PackEngine
 
         var drawnPlayerIds = new HashSet<int>();
         var drawnOther = new HashSet<(string, long)>();
-        var picks = new List<PackPick>(slots.Count);
+        var picks = new PackPick[slots.Count];
+        var isSpec = new bool[slots.Count];
 
-        foreach (var slot in slots)
+        for (int i = 0; i < slots.Count; i++)
         {
-            if (slot.Type == ItemTypes.Player)
+            if (slots[i].Type == ItemTypes.Player)
             {
-                var (pick, isSpecial) = FillPlayer(def, slot, drawnPlayerIds, rnd);
-                if (isSpecial) gotSpecial = true;
+                var (pick, isSpecial) = FillPlayer(def, slots[i], drawnPlayerIds, rnd);
+                if (isSpecial) { gotSpecial = true; isSpec[i] = true; }
                 drawnPlayerIds.Add(pick.Id);
-                picks.Add(PackPick.OfPlayer(pick));
+                picks[i] = PackPick.OfPlayer(pick);
             }
             else
             {
-                picks.Add(FillNonPlayer(slot, drawnOther, rnd));
+                picks[i] = FillNonPlayer(slots[i], drawnOther, rnd);
             }
         }
 
-        return picks;
+        if (gotSpecial)
+        {
+            int cap = int.MaxValue;
+            for (int i = 0; i < slots.Count; i++)
+                if (isSpec[i]) cap = System.Math.Min(cap, picks[i].Player.Rating);
+
+            for (int i = 0; i < slots.Count; i++)
+            {
+                if (isSpec[i] || slots[i].Type != ItemTypes.Player || picks[i].Player.Rating <= cap)
+                    continue;
+                int tier = slots[i].ForcedTier ?? slots[i].Tier;
+                var capped = PlayerPool(tier, slots[i].Rare, def.MinPlayerRating)
+                    .Where(p => p.Rating <= cap && !drawnPlayerIds.Contains(p.Id)).ToArray();
+                if (capped.Length == 0) continue;   // can't satisfy the cap; leave the card as-is
+                drawnPlayerIds.Remove(picks[i].Player.Id);
+                var repl = PackLottery.Draw(capped, PackWeights.Of, rnd);
+                drawnPlayerIds.Add(repl.Id);
+                picks[i] = PackPick.OfPlayer(repl);
+            }
+        }
+
+        return new List<PackPick>(picks);
     }
 
     private static List<Slot> BuildSlots(PackDefinition def, TypeVariant type, LevelVariant level, ClassVariant cls, System.Random rnd)
@@ -130,34 +173,22 @@ internal static class PackEngine
     {
         foreach (var g in def.Guarantees)
         {
-            if (g.Special)
+            if (rnd.NextDouble() * 100.0 >= g.ChancePct) continue;
+
+            var typeSlots = slots.Where(s => s.Type == g.ItemType).ToList();
+            if (typeSlots.Count == 0) continue;
+
+            if (g.Rare && !typeSlots.Any(s => s.Rare))
             {
-                var rareGold = slots.Where(s => s.Type == g.ItemType && s.Rare && !s.ForceSpecial
-                                                && (s.ForcedTier ?? s.Tier) == PackConfig.Gold).ToList();
-                if (rareGold.Count == 0) continue;
-                double perSlot = g.ChancePct / 100.0 / rareGold.Count;
-                foreach (var s in rareGold)
-                    if (rnd.NextDouble() < perSlot) s.ForceSpecial = true;
+                var target = typeSlots[rnd.Next(typeSlots.Count)];
+                var donor = slots.FirstOrDefault(s => s.Rare && s.Type != g.ItemType);
+                if (donor != null) donor.Rare = false;
+                target.Rare = true;
             }
-            else
+            if (g.Tier is int t)
             {
-                if (rnd.NextDouble() * 100.0 >= g.ChancePct) continue;
-
-                var typeSlots = slots.Where(s => s.Type == g.ItemType).ToList();
-                if (typeSlots.Count == 0) continue; 
-
-                if (g.Rare && !typeSlots.Any(s => s.Rare))
-                {
-                    var target = typeSlots[rnd.Next(typeSlots.Count)];
-                    var donor = slots.FirstOrDefault(s => s.Rare && s.Type != g.ItemType && !s.ForceSpecial);
-                    if (donor != null) donor.Rare = false;
-                    target.Rare = true;
-                }
-                if (g.Tier is int t)
-                {
-                    var target = typeSlots.FirstOrDefault(s => s.Rare) ?? typeSlots[0];
-                    target.ForcedTier = t;
-                }
+                var target = typeSlots.FirstOrDefault(s => s.Rare) ?? typeSlots[0];
+                target.ForcedTier = t;
             }
         }
     }
@@ -166,20 +197,10 @@ internal static class PackEngine
     {
         int tier = slot.ForcedTier ?? slot.Tier;
 
-        if (slot.ForceSpecial)
-        {
-            var sp = SpecialPoolByTier.TryGetValue(tier, out var arr) && arr.Length > 0
-                ? arr : SpecialPoolByTier[PackConfig.Gold];
-            if (sp.Length > 0)
-            {
-                var chosen = PackLottery.DrawExcluding(sp, PackWeights.Of, p => drawnIds.Contains(p.Id), rnd);
-                return (chosen, true);
-            }
-        }
-
         var pool = PlayerPool(tier, slot.Rare, def.MinPlayerRating);
         var pick = PackLottery.DrawExcluding(pool, PackWeights.Of, p => drawnIds.Contains(p.Id), rnd);
-        return (pick, false);
+
+        return Substitute(pick, tier, rnd);
     }
 
     private static RealPlayer[] PlayerPool(int tier, bool rare, int minRating)
@@ -190,7 +211,7 @@ internal static class PackEngine
         if (minRating > 0)
         {
             var floored = pool.Where(p => p.Rating >= minRating).ToArray();
-            if (floored.Length >= 8) pool = floored; 
+            if (floored.Length >= 8) pool = floored;
         }
         return pool;
     }
@@ -226,11 +247,11 @@ internal static class PackEngine
             {
                 string family = slot.Type switch
                 {
-                    ItemTypes.Contract => "Contract",
+                    ItemTypes.Contract => rnd.NextDouble() < 0.90 ? "ContractPlayer" : "ContractStaff",
                     ItemTypes.Fitness  => "Fitness",
                     ItemTypes.Training => "Training",
                     ItemTypes.Healing  => "Health",
-                    _                  => "Contract",
+                    _                  => "ContractPlayer",
                 };
                 var inst = PickConsumable(family, tierWord, slot.Rare, rnd);
                 return PackPick.OfConsumable(inst);
