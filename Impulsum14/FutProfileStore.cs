@@ -77,6 +77,7 @@ internal sealed class FutProfile
     public int OfflineDivision { get; set; } = 10;       // starting division for FUT offline Seasons
     public int TrophiesWon { get; set; } = 0;            // FUT offline tournament cups won (unlocks higher cups)
     public FutSeason Season { get; set; } = new();
+    public string SeasonSaveBlob { get; set; } = "";     // client's encoded season save (captured, never advertised back)
     // In-progress offline tournaments, keyed by tournament id -> the client's saved bracket state.
     public Dictionary<int, SavedTournament> SavedTournaments { get; set; } = new();
     public Dictionary<int, int> PacksSinceSpecial { get; set; } = new();
@@ -113,6 +114,7 @@ internal static class FutProfileStore
             _profile.OfflineDivision = 10;
             _profile.TrophiesWon = 0;
             _profile.Season = new FutSeason();
+            _profile.SeasonSaveBlob = "";
             _profile.SavedTournaments = new();
             Save();
         }

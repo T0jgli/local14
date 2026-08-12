@@ -196,6 +196,13 @@ internal sealed class WebServer
                 && int.TryParse(System.IO.Path.GetFileNameWithoutExtension(rel), out int trophyId)
                 && trophyId >= 8200000)
             {
+                if (trophyId >= 8202000)
+                {
+                    string sjson = Seasons.TrophyJson(trophyId - 8202000);
+                    _log.LogInformation("      -> season trophy item json {0} entry={1}", rel, trophyId - 8202000);
+                    return BuildBytes("200 OK", "application/json; charset=utf-8",
+                                      System.Text.Encoding.UTF8.GetBytes(sjson), extra, keepAlive);
+                }
                 int tourneyId = trophyId - 8200000;   // trophyResourceId 8200000+S -> tournamentId S
                 Tournaments.ActiveTournamentId = tourneyId;
                 string tjson = Tournaments.TrophyJson(tourneyId);
@@ -424,15 +431,27 @@ internal sealed class WebServer
 
         if (path.Contains("/season") || path.Contains("/division/"))
         {
-            if (path.Contains("/division/") && path.Contains("reset"))
+            if (path.Contains("/squad/unlock"))
+                return ("application/json; charset=utf-8", "{}");
+
+            if (path.Contains("reset"))
             {
                 int nd = Seasons.ParseResetDivision(path);
                 if (nd >= 0) FutProfileStore.Mutate(p => p.OfflineDivision = nd);
                 return ("application/json; charset=utf-8",
                         Seasons.ResetJson(nd >= 0 ? nd : FutProfileStore.Get().OfflineDivision));
             }
-            if (path.Contains("season/user"))
+
+            if (path.Contains("season/history"))
+                return ("application/json; charset=utf-8", Seasons.HistoryJson());
+
+            if (path.EndsWith("/user") || path.Contains("season/user"))
+            {
+                if (req.HttpMethod is "PUT" or "POST")
+                    FutProfileStore.Mutate(p => Seasons.CaptureSave(p, req.Body));
                 return ("application/json; charset=utf-8", Seasons.UserJson(FutProfileStore.Get()));
+            }
+
             // The division ladder catalog (season/list, and any other season GET).
             return ("application/json; charset=utf-8", Seasons.ListJson());
         }
@@ -1375,7 +1394,8 @@ internal sealed class WebServer
             ",\"teamName\":\"" + Esc(prof.Club.Name) + "\",\"clubName\":\"" + Esc(prof.Club.Name) + "\"," +
             "\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\",\"clubId\":" + prof.Club.TeamId +
             ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
-            ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + est + ",\"divisionOnline\":1,\"lastAccessTime\":1400000000," +
+            ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + est + ",\"divisionOnline\":1" +
+            ",\"divisionOffline\":" + prof.OfflineDivision + ",\"lastAccessTime\":1400000000," +
             "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
         string clubListEntries = prof.Club.Established ? clubList : "";
         string persona =
