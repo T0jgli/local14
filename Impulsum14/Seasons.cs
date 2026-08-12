@@ -58,7 +58,8 @@ internal static class Seasons
         int div = online ? entryId - 100 : entryId;
         int design = 1100 + (11 - div);   // div 11 -> 1100 (bottom) .. div 0 -> 1111 (top)
         string label = (online ? "Online Division " : "Division ") + div;
-        return "{\"tournamentId\":" + entryId + ",\"tournamentType\":0,\"assetName\":\"trophy_" + design +
+        int trophyId = 8202000 + entryId;
+        return "{\"tournamentId\":" + trophyId + ",\"tournamentType\":0,\"assetName\":\"trophy_" + design +
                "_gold\",\"silName\":\"trophy_" + design + "_dark\",\"locString\":[{\"lang\":\"ENG_US\",\"label\":\"" +
                label + "\"}]}";
     }
