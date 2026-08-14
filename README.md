@@ -35,10 +35,17 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 - divisions
 - manager challenges
 - minor bug fixes
-
+- missing small features
+  
 ## Known Bugs
 
 - Fitness coaches and Physios crashes the game
+- Tournaments doesn't keep the underway status and reset
+- Divisions is broken
+- Coins dont show unless you go into store
+- Manager quests dont give you rewards like packs
+- Applying Consumables are finicky
+
 
 ## SDK
 
