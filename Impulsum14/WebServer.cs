@@ -852,7 +852,8 @@ internal sealed class WebServer
             }
             soldSb.Append(']');
             return ("application/json; charset=utf-8",
-                    "{\"totalCredits\":" + balance + ",\"items\":" + soldSb + "}");
+                    "{\"totalCredits\":" + balance + ",\"currencies\":" + CurrenciesJson(balance) +
+                    ",\"items\":" + soldSb + "}");
         }
 
         if (path.EndsWith("/item") && req.HttpMethod == "GET")
@@ -1283,6 +1284,7 @@ internal sealed class WebServer
                     "{\"isReturningUser\":" + (prof.IsReturningUser ? "true" : "false") +
                     ",\"established\":" + (prof.Club.Established ? "true" : "false") +
                     ",\"coins\":" + prof.Coins + ",\"credits\":" + prof.Coins +
+                    ",\"currencies\":" + CurrenciesJson(prof.Coins) +
                     ",\"clubName\":\"" + Esc(prof.Club.Name) + "\",\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\"" +
                     ",\"userAccountInfo\":" + UserAccountInfoJson(BlazePersonaId) + "}");
         }

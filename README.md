@@ -42,7 +42,6 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 - Fitness coaches and Physios crashes the game
 - Tournaments doesn't keep the underway status and reset
 - Divisions is broken
-- Coins dont show unless you go into store
 - Manager quests dont give you rewards like packs
 - Applying Consumables are finicky
 
@@ -81,6 +80,6 @@ This project is an unofficial, community-developed backend. It is not affiliated
  
 - MYorderlyHuman on discord (Helped soo much in understanding of the architecture)
 - Toniboi on discord (Helped with tournaments)
-- Draz on discord (Helped with Manager cards and cert bypass)
+- Draz on discord (Helped with Manager cards and cert bypass and coin fix)
 - [BlazeSDK](https://github.com/Aim4kill/BlazeSDK) By [@Aim4kill](https://github.com/Aim4kill)
 - [Zamboni3](https://github.com/ZamboniDevelopment/Zamboni3) By [@ZamboniDevelopment](https://github.com/ZamboniDevelopment)
