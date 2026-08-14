@@ -36,6 +36,10 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 - manager challenges
 - minor bug fixes
 
+## Known Bugs
+
+- Fitness coaches and Physios crashes the game
+
 ## SDK
 
 | Project | Description |
