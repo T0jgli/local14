@@ -13,7 +13,7 @@ internal static class ItemTypes
     internal const string Fitness  = "fitness";
     internal const string Training  = "training";
     internal const string Healing  = "healing";
-    internal const string Position = "position";   // position-change modifier (a rare consumable)
+    internal const string Position = "position"; 
     internal const string Wildcard = "wildcard";
 }
 internal readonly record struct LevelVariant(int Weight, int Gold, int Silver, int Bronze);

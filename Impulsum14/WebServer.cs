@@ -354,6 +354,7 @@ internal sealed class WebServer
             long balME = FutProfileStore.Get().Coins;
             if (credited)
             {
+                ApplyMatchConsequences();  
                 if (isWin && Tournaments.CurrentMatchTournamentId is int tid && Tournaments.CurrentRound >= Tournaments.NumRounds)
                 {
                     tournamentCoins = Tournaments.AwardCoins(tid);
@@ -539,10 +540,10 @@ internal sealed class WebServer
         if (path.EndsWith("/pilesize"))
         {
             var data = ClubStore.Get();
-            int clubPlayers = data.Inventory.Count;        
-            int activeSquad = data.Inventory.Count(c => c.Pile == 7); 
+            int clubPlayers = data.Inventory.Count;
+            int activeSquad = data.Inventory.Count(c => c.Pile == 7);
             int tradePile   = data.Inventory.Count(c => c.Pile == 3);
-            int consumables = data.Consumables.Count;
+            int consumables = AvailableConsumables().Count;   // catalog + owned, matches /club/consumables/
             string entries =
                 "[{\"key\":1,\"value\":0},{\"key\":2,\"value\":0},{\"key\":3,\"value\":" + tradePile +
                 "},{\"key\":4,\"value\":0},{\"key\":6,\"value\":" + clubPlayers +
@@ -591,11 +592,17 @@ internal sealed class WebServer
                     "\"maximumTradePileSize\":100,\"total\":0}");
         }
 
-        if (path.Contains("/club/consumables/"))
+        if (path.EndsWith("/club/stats/consumables"))
+            return ("application/json; charset=utf-8", ConsumableStatsJson());
+
+        if (path.Contains("/club/consumables"))
         {
             int cCount = int.TryParse(req.QueryString["count"], out int ccl) ? ccl : 500;
             int cOff = int.TryParse(req.QueryString["start"], out int coff) ? coff : 0;
-            var cons = ClubStore.Get().Consumables.Skip(cOff).Take(cCount).ToArray();
+            string tab = path[(path.LastIndexOf('/') + 1)..].ToLowerInvariant();
+            var filter = ConsumableTabFilter(tab);
+            var src = filter == null ? AvailableConsumables() : AvailableConsumables().Where(filter).ToList();
+            var cons = src.Skip(cOff).Take(cCount).ToArray();
             long dnow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var dsb = new StringBuilder("[");
             for (int i = 0; i < cons.Length; i++)
@@ -634,9 +641,23 @@ internal sealed class WebServer
             int offset = int.TryParse(req.QueryString["start"], out int off) ? off : 0;
 
             string typeFilter = (req.QueryString["type"] ?? "players").ToLowerInvariant();
-            if (typeFilter == "equippables")
+            if (typeFilter is "equippables" or "badge" or "kit" or "ball" or "stadium")
             {
-                var cosmetics = ClubStore.Get().Cosmetics.Skip(offset).Take(countLimit).ToArray();
+                string cosmeticsLevel = (req.QueryString["level"] ?? "").ToLowerInvariant();
+                int cosmeticsLeague = int.TryParse(req.QueryString["league"], out int clg) ? clg : -1;
+                int cosmeticsTeam = int.TryParse(req.QueryString["team"], out int ctm) ? ctm : -1;
+                var cosmetics = ClubStore.Get().Cosmetics
+                    .Where(c => typeFilter == "equippables" || c.Type == typeFilter)
+                    .Where(c => cosmeticsLevel switch
+                    {
+                        "bronze" => c.Rating < 65,
+                        "silver" => c.Rating is >= 65 and < 75,
+                        "gold" => c.Rating >= 75,
+                        _ => true,
+                    })
+                    .Where(c => cosmeticsLeague == -1 || TeamLeagues.LeagueOf(c.TeamId) == cosmeticsLeague)
+                    .Where(c => cosmeticsTeam == -1 || c.TeamId == cosmeticsTeam)
+                    .Skip(offset).Take(countLimit).ToArray();
                 long cnow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 var csb = new StringBuilder("[");
                 for (int i = 0; i < cosmetics.Length; i++)
@@ -649,15 +670,28 @@ internal sealed class WebServer
             }
             if (typeFilter == "manager")
             {
+                int mgrNation = int.TryParse(req.QueryString["nation"], out int mnf) ? mnf : -1;
+                int mgrLeague = int.TryParse(req.QueryString["league"], out int mlf) ? mlf : -1;
+                string mgrLevel = (req.QueryString["level"] ?? "").ToLowerInvariant();
                 long mnow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 return ("application/json; charset=utf-8",
-                    "{\"itemData\":" + ManagerItemsJson(offset, countLimit, mnow, 6) + "}");
+                    "{\"itemData\":" + ManagerItemsJson(offset, countLimit, mnow, 6, mgrNation, mgrLeague, mgrLevel) + "}");
             }
-            if (typeFilter == "staff")
+            if (typeFilter == "staff" || typeFilter == "headcoach" || typeFilter == "gkcoach"
+                || typeFilter == "physio" || typeFilter == "fitnesscoach")
             {
+                string staffTypeFilter = typeFilter switch
+                {
+                    "headcoach" => "headCoach",
+                    "gkcoach" => "GKCoach",
+                    "fitnesscoach" => "fitnessCoach",
+                    "physio" => "physio",
+                    _ => null, // "staff": all managers + staff
+                };
+                string staffLevel = (req.QueryString["level"] ?? "").ToLowerInvariant();
                 long snow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 return ("application/json; charset=utf-8",
-                    "{\"itemData\":" + AllStaffItemsJson(offset, countLimit, snow, 6) + "}");
+                    "{\"itemData\":" + StaffItemsJson(offset, countLimit, snow, 6, staffTypeFilter, staffLevel) + "}");
             }
 
             string posFilter = req.QueryString["position"] ?? "any";
@@ -731,6 +765,27 @@ internal sealed class WebServer
         {
             string nc = _lastPackItemList.Length > 0 ? _lastPackItemList : "[]";
             return ("application/json; charset=utf-8", "{\"itemList\":" + nc + "}");
+        }
+
+        if (path.Contains("/item/resource/") && (req.HttpMethod == "POST" || req.HttpMethod == "PUT"))
+        {
+            long applyRes = 0;
+            int lastSlash = path.LastIndexOf('/');
+            if (lastSlash >= 0) long.TryParse(path[(lastSlash + 1)..], out applyRes);
+            var applyTargets = new List<long>();
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
+                if (doc.RootElement.TryGetProperty("apply", out var arr)
+                    && arr.ValueKind == System.Text.Json.JsonValueKind.Array)
+                    foreach (var el in arr.EnumerateArray())
+                        if (el.TryGetProperty("id", out var idEl)
+                            && idEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+                            applyTargets.Add(idEl.GetInt64());
+            }
+            catch (Exception ex) { _log.LogWarning("[FUT] consumable apply body parse failed: {0}", ex.Message); }
+            var changedIds = ApplyConsumable(applyRes, applyTargets);
+            return ("application/json; charset=utf-8", AppliedItemsJson(applyRes, changedIds));
         }
 
         if (path.Contains("/delete/") && path.EndsWith("/item") && req.HttpMethod == "POST")
@@ -1459,6 +1514,26 @@ internal sealed class WebServer
         int resourceId = player.CardId;
         int rareflag = player.Rare;
         int[] attrs = { player.Pace, player.Shooting, player.Passing, player.Dribbling, player.Defending, player.Physical };
+
+        int contract = 7, fitness = 99, playStyle = 250, injuryGames = 0, training = 0;
+        string position = player.Position, injuryType = "none";
+        if (ClubStore.Get().PlayerMods.TryGetValue(id, out var mod) && mod != null)
+        {
+            if (mod.PlayStyle >= 0) playStyle = mod.PlayStyle;
+            if (!string.IsNullOrEmpty(mod.Position)) position = mod.Position;
+            if (mod.Contract >= 0) contract = mod.Contract;
+            if (mod.Fitness >= 0) fitness = mod.Fitness;
+            if (mod.AttrBoost != null)
+                for (int a = 0; a < 6 && a < mod.AttrBoost.Length; a++)
+                    attrs[a] = Math.Clamp(attrs[a] + mod.AttrBoost[a], 1, 99);
+            if (mod.TrainingFlag > 0) training = mod.TrainingFlag;   // flags an active "next match" boost
+            if (!string.IsNullOrEmpty(mod.Injury) && mod.InjuryGames > 0)
+            {
+                injuryType = mod.Injury;
+                injuryGames = mod.InjuryGames;
+            }
+        }
+
         var attrList = new StringBuilder("[");
         for (int a = 0; a < 6; a++)
         {
@@ -1471,14 +1546,305 @@ internal sealed class WebServer
             "\"untradeable\":false,\"assetId\":" + assetId + ",\"rating\":" + rating + "," +
             "\"itemType\":\"player\",\"dream\":false,\"resourceId\":" + resourceId + ",\"owners\":1," +
             "\"discardValue\":" + (rating * 4) + ",\"itemState\":\"free\",\"cardsubtypeid\":3," +
-            "\"lastSalePrice\":0,\"morale\":50,\"fitness\":99,\"injuryType\":\"none\",\"injuryGames\":0," +
-            "\"preferredPosition\":\"" + player.Position + "\",\"statsList\":" + zeroStats +
-            ",\"lifetimeStats\":" + zeroStats + ",\"training\":0,\"contract\":7,\"suspension\":0," +
+            "\"lastSalePrice\":0,\"morale\":50,\"fitness\":" + fitness + ",\"injuryType\":\"" + injuryType + "\",\"injuryGames\":" + injuryGames + "," +
+            "\"preferredPosition\":\"" + position + "\",\"statsList\":" + zeroStats +
+            ",\"lifetimeStats\":" + zeroStats + ",\"training\":" + training + ",\"contract\":" + contract + ",\"suspension\":0," +
             "\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000,\"attributeList\":" + attrList +
-            ",\"teamid\":" + player.TeamId + ",\"rareflag\":" + rareflag + ",\"playStyle\":250," +
+            ",\"teamid\":" + player.TeamId + ",\"rareflag\":" + rareflag + ",\"playStyle\":" + playStyle + "," +
             "\"leagueId\":1,\"assists\":0,\"lifetimeAssists\":0," +
             "\"loyaltyBonus\":1,\"pile\":" + pile + ",\"loans\":0,\"nation\":" + player.NationId +
             ",\"resourceGameYear\":2014,\"amount\":0}";
+    }
+
+    private static List<ConsumableItem> AvailableConsumables()
+    {
+        var owned = ClubStore.Get().Consumables;
+        var ownedRes = new HashSet<long>(owned.Select(c => c.ResourceId));
+        var list = new List<ConsumableItem>(owned);
+        foreach (var c in ConsumableItems.Catalog)
+            if (!ownedRes.Contains(c.ResourceId)) list.Add(c);
+        return list;
+    }
+
+    private static Func<ConsumableItem, bool> ConsumableTabFilter(string tab)
+    {
+        const StringComparison OIC = StringComparison.OrdinalIgnoreCase;
+        static bool Is(string it, string p) => (it ?? "").StartsWith(p, StringComparison.OrdinalIgnoreCase);
+        if (tab.Contains("contract")) return c => Is(c.ItemType, "Contract");
+        if (tab.Contains("fitness")) return c => Is(c.ItemType, "Fitness");
+        if (tab.Contains("heal") || tab.Contains("health")) return c => Is(c.ItemType, "Health");
+        if (tab.Contains("position")) return c => Is(c.ItemType, "TrainingPlayerPos");
+        if (tab.Contains("chem") || tab.Contains("style") || tab.Contains("playstyle"))
+            return c => string.Equals(c.ItemType, "playStyle", OIC);
+        if (tab.Contains("manager") || tab.Contains("league") || tab.Contains("staff"))
+            return c => string.Equals(c.ItemType, "managerLeagueModifier", OIC);
+        if (tab.Contains("training"))
+            return c => (Is(c.ItemType, "TrainingPlayer") || Is(c.ItemType, "TrainingGk"))
+                        && !Is(c.ItemType, "TrainingPlayerPos");
+        return null;   // bare /consumables or an unrecognised tab -> the whole catalog
+    }
+
+    private static List<long> ApplyConsumable(long resourceId, List<long> targets)
+    {
+        var changed = new List<long>();
+        if (resourceId <= 0) return changed;
+        var c = ConsumableItems.Catalog.FirstOrDefault(x => x.ResourceId == resourceId);
+        if (c.ResourceId != resourceId)
+        {
+            Console.WriteLine($"[FUT] apply consumable: unknown resourceId {resourceId}");
+            return changed;
+        }
+        ConsumableItems.Effects.TryGetValue(resourceId, out var def);
+        bool teamFitness = def.Category == "fitness"
+                           && string.Equals(def.Kind, "Squad", StringComparison.OrdinalIgnoreCase);
+        var applyTo = teamFitness ? ActiveSquadItemIds() : targets;
+        if (applyTo == null || applyTo.Count == 0) return changed;
+
+        ClubStore.Mutate(data =>
+        {
+            foreach (long tid in applyTo)
+            {
+                int pi = data.Inventory.FindIndex(x => x.ItemId == tid);
+                if (pi < 0) continue;   // not an owned player (e.g. a manager) -> skip
+                int rating = data.Inventory[pi].Player.Rating;
+                if (!data.PlayerMods.TryGetValue(tid, out var mod) || mod == null)
+                {
+                    mod = new PlayerMod();
+                    data.PlayerMods[tid] = mod;
+                }
+                ApplyEffect(mod, rating, c);
+                changed.Add(tid);
+            }
+        });
+        Console.WriteLine($"[FUT] applied consumable {resourceId} ({def.Category}/{def.Kind}) to {changed.Count} player(s)");
+        return changed;
+    }
+
+    private static string AppliedItemsJson(long resourceId, List<long> changedIds)
+    {
+        var data = ClubStore.Get();
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var rnd = new Random();
+        var sb = new StringBuilder("[");
+        int n = 0;
+        foreach (long tid in changedIds)
+        {
+            int pi = data.Inventory.FindIndex(x => x.ItemId == tid);
+            if (pi < 0) continue;
+            if (n++ > 0) sb.Append(',');
+            sb.Append(BuildRealPlayerItem(rnd, data.Inventory[pi].Player, tid, now, data.Inventory[pi].Pile));
+        }
+        sb.Append(']');
+        return "{\"success\":true,\"resourceId\":" + resourceId + ",\"itemData\":" + sb + "}";
+    }
+
+    private static void ApplyEffect(PlayerMod mod, int targetRating, ConsumableItem c)
+    {
+        if (string.Equals(c.ItemType, "playStyle", StringComparison.OrdinalIgnoreCase))
+        {
+            mod.PlayStyle = c.SubType;
+            return;
+        }
+        if (!ConsumableItems.Effects.TryGetValue(c.ResourceId, out var def))
+            return;   // no modifier def and not a chem style -> nothing to apply
+
+        switch (def.Category)
+        {
+            case "contract":   // gain depends on the TARGET player's quality tier
+            {
+                int gain = targetRating <= 64 ? def.Bronze : targetRating <= 74 ? def.Silver : def.Gold;
+                int cur = mod.Contract >= 0 ? mod.Contract : 7;
+                mod.Contract = Math.Min(99, cur + Math.Max(0, gain));
+                break;
+            }
+            case "fitness":
+            {
+                int cur = mod.Fitness >= 0 ? mod.Fitness : 99;
+                mod.Fitness = Math.Min(99, cur + Math.Max(0, def.Amount));
+                break;
+            }
+            case "healing":            // reduce the injury only if the card's body part matches
+            {
+                if (mod.InjuryGames > 0
+                    && (string.Equals(def.Kind, "All", StringComparison.OrdinalIgnoreCase)
+                        || InjuryMatches(mod.Injury, def.Kind)))
+                {
+                    mod.InjuryGames = Math.Max(0, mod.InjuryGames - Math.Max(1, def.Amount));
+                    if (mod.InjuryGames == 0) mod.Injury = "";
+                }
+                break;
+            }
+            case "position":
+            {
+                string pos = NewPositionFromKind(def.Kind);
+                if (pos.Length > 0) mod.Position = pos;
+                break;
+            }
+            case "chemstyle":
+                mod.PlayStyle = def.CardSubtypeId != 0 ? def.CardSubtypeId : c.SubType;
+                break;
+            case "training":
+            case "gktraining":
+            {
+                int amount = Math.Max(0, def.Amount);
+                int idx = AttrIndexForKind(def.Kind);        // -1 = ALL, -2 = unmapped
+                if (idx == -1) for (int a = 0; a < 6; a++) mod.AttrBoost[a] = amount;
+                else if (idx >= 0) mod.AttrBoost[idx] = amount;   // one active boost per attribute (replace)
+                if (idx >= -1) mod.TrainingFlag = c.SubType;  // flag the active "next match" boost
+                break;
+            }
+        }
+    }
+
+    private static string NewPositionFromKind(string kind)
+    {
+        if (string.IsNullOrEmpty(kind)) return "";
+        var parts = kind.Split(new[] { '→', '>', '-' }, StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length >= 2 ? parts[^1].Trim().ToUpperInvariant() : "";
+    }
+
+    private static int AttrIndexForKind(string kind) => (kind ?? "").ToUpperInvariant() switch
+    {
+        "ALL" => -1,
+        "PAC" or "DIV" => 0,
+        "SHO" or "HAN" => 1,
+        "PAS" or "KIC" => 2,
+        "DRI" or "REF" => 3,
+        "DEF" or "SPD" => 4,
+        "PHY" or "POS" => 5,
+        _ => -2,
+    };
+
+    private static List<long> ActiveSquadItemIds()
+    {
+        var data = ClubStore.Get();
+        var sq = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
+                 ?? data.Squads.FirstOrDefault();
+        if (sq == null) return new List<long>();
+        return sq.Slots.Values.Where(v => v > 0).Distinct().ToList();
+    }
+
+    private static List<long> ActiveSquadStarterIds()
+    {
+        var data = ClubStore.Get();
+        var sq = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
+                 ?? data.Squads.FirstOrDefault();
+        if (sq == null) return new List<long>();
+        return sq.Slots.Where(kv => kv.Key < 11 && kv.Value > 0).Select(kv => kv.Value).Distinct().ToList();
+    }
+
+    private static List<long> ActiveSquadBenchIds()
+    {
+        var data = ClubStore.Get();
+        var sq = data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId)
+                 ?? data.Squads.FirstOrDefault();
+        if (sq == null) return new List<long>();
+        return sq.Slots.Where(kv => kv.Key >= 11 && kv.Key <= 17 && kv.Value > 0)
+                       .Select(kv => kv.Value).Distinct().ToList();
+    }
+
+    private static readonly (string Kind, string[] Tokens)[] InjuryGroups =
+    {
+        ("Head",      new[] { "head", "concussion" }),
+        ("Arm",       new[] { "wrist", "hand", "elbow" }),
+        ("UpperBody", new[] { "shoulder", "back", "rib" }),
+        ("Knee",      new[] { "knee" }),
+        ("Leg",       new[] { "hamstring", "thigh", "calf", "groin" }),
+        ("Foot",      new[] { "ankle", "toe", "foot" }),
+    };
+
+    private static void ApplyMatchConsequences()
+    {
+        var xi = ActiveSquadStarterIds();
+        var bench = ActiveSquadBenchIds();
+        if (xi.Count == 0 && bench.Count == 0) return;
+        var rnd = new Random();
+        int played = 0, benched = 0;
+        ClubStore.Mutate(data =>
+        {
+            PlayerMod ModFor(long tid)
+            {
+                if (data.Inventory.FindIndex(x => x.ItemId == tid) < 0) return null;   // owned players only
+                if (!data.PlayerMods.TryGetValue(tid, out var m) || m == null)
+                {
+                    m = new PlayerMod();
+                    data.PlayerMods[tid] = m;
+                }
+                return m;
+            }
+            foreach (long tid in xi)
+            {
+                var mod = ModFor(tid);
+                if (mod == null) continue;
+                mod.Contract = Math.Max(0, (mod.Contract >= 0 ? mod.Contract : 7) - 1);
+                mod.Fitness = Math.Max(0, (mod.Fitness >= 0 ? mod.Fitness : 99) - rnd.Next(8, 13));
+                if (mod.TrainingFlag > 0) { System.Array.Clear(mod.AttrBoost, 0, mod.AttrBoost.Length); mod.TrainingFlag = 0; }
+                played++;
+            }
+            foreach (long tid in bench)
+            {
+                var mod = ModFor(tid);
+                if (mod == null) continue;
+                mod.Contract = Math.Max(0, (mod.Contract >= 0 ? mod.Contract : 7) - 1);   // rostered -> contract only
+                benched++;
+            }
+        });
+        Console.WriteLine($"[FUT] match consequences: {played} played (fitness+contract), {benched} subs (contract)");
+    }
+
+    private static bool InjuryMatches(string injury, string cardKind)
+    {
+        if (string.IsNullOrEmpty(injury)) return false;
+        foreach (var (kind, tokens) in InjuryGroups)
+            if (string.Equals(kind, cardKind, StringComparison.OrdinalIgnoreCase))
+                return System.Array.Exists(tokens, t => string.Equals(t, injury, StringComparison.OrdinalIgnoreCase));
+        return false;
+    }
+
+    private static string ConsumableStatsJson()
+    {
+        int contractPlayer = 0, contractManager = 0, fitnessPlayer = 0, fitnessTeam = 0, healing = 0;
+        int trainingPlayer = 0, trainingGk = 0, position = 0, playStyle = 0, managerLeague = 0, formation = 0;
+        foreach (var c in AvailableConsumables())
+        {
+            string t = c.ItemType ?? "";
+            if (t.StartsWith("ContractStaff", StringComparison.OrdinalIgnoreCase)) contractManager++;
+            else if (t.StartsWith("Contract", StringComparison.OrdinalIgnoreCase)) contractPlayer++;
+            else if (t.StartsWith("FitnessTeam", StringComparison.OrdinalIgnoreCase)) fitnessTeam++;
+            else if (t.StartsWith("Fitness", StringComparison.OrdinalIgnoreCase)) fitnessPlayer++;
+            else if (t.StartsWith("Health", StringComparison.OrdinalIgnoreCase)) healing++;
+            else if (t.StartsWith("TrainingPlayerPos", StringComparison.OrdinalIgnoreCase)) position++;
+            else if (t.StartsWith("TrainingGk", StringComparison.OrdinalIgnoreCase)) trainingGk++;
+            else if (t.StartsWith("TrainingPlayer", StringComparison.OrdinalIgnoreCase)) trainingPlayer++;
+            else if (t.Equals("playStyle", StringComparison.OrdinalIgnoreCase)) playStyle++;
+            else if (t.Equals("managerLeagueModifier", StringComparison.OrdinalIgnoreCase)) managerLeague++;
+            else if (t.Equals("formation", StringComparison.OrdinalIgnoreCase)) formation++;
+        }
+        int total = AvailableConsumables().Count;
+        var members = new (string Key, int Val)[]
+        {
+            ("consumablesContractPlayer", contractPlayer),
+            ("consumablesContractManager", contractManager),
+            ("consumablesFitnessPlayer", fitnessPlayer),
+            ("consumablesFitnessTeam", fitnessTeam),
+            ("consumablesHealing", healing),
+            ("consumablesTrainingPlayer", trainingPlayer),
+            ("consumablesTrainingGk", trainingGk),
+            ("consumablesTrainingPlayerPlayStyle", playStyle),
+            ("consumablesTrainingGkPlayStyle", playStyle),
+            ("consumablesPosition", position),
+            ("consumablesTrainingManager", managerLeague),
+            ("consumablesTrainingManagerLeagueModifier", managerLeague),
+            ("consumablesFormationManager", formation),
+            ("consumablesContract", contractPlayer + contractManager),
+            ("consumablesFitness", fitnessPlayer + fitnessTeam),
+            ("consumablesTraining", trainingPlayer + trainingGk),
+            ("consumables", total),
+        };
+        var scalars = string.Join(",", members.Select(x => "\"" + x.Key + "\":" + x.Val));
+        var entries = "[" + string.Join(",", members.Select(x =>
+            "{\"contextId\":6,\"contextValue\":0,\"type\":\"" + x.Key + "\",\"typeValue\":" + x.Val + "}")) + "]";
+        return "{" + scalars + ",\"stat\":" + entries + ",\"entries\":" + entries + "}";
     }
 
     internal static string BuildManagerItem(Manager m, long id, long timestamp, int pile, int rareflag = 1)
@@ -1500,9 +1866,19 @@ internal sealed class WebServer
 
     internal const long ManagerItemIdBase = 640_000L;
 
-    private static string ManagerItemsJson(int offset, int countLimit, long now, int pile)
+    private static string ManagerItemsJson(int offset, int countLimit, long now, int pile, int nationFilter = -1, int leagueFilter = -1, string levelFilter = "")
     {
-        var page = ClubStore.Get().Managers.Skip(offset).Take(countLimit).ToArray();
+        var page = ClubStore.Get().Managers
+            .Where(m => (nationFilter == -1 || m.NationId == nationFilter)
+                && (leagueFilter == -1 || m.LeagueId == leagueFilter)
+                && levelFilter switch
+                {
+                    "bronze" => m.Rating < 65,
+                    "silver" => m.Rating is >= 65 and < 75,
+                    "gold" => m.Rating >= 75,
+                    _ => true,
+                })
+            .Skip(offset).Take(countLimit).ToArray();
         var sb = new StringBuilder("[");
         for (int i = 0; i < page.Length; i++)
         {
@@ -1530,6 +1906,23 @@ internal sealed class WebServer
             attrList = sb.ToString();
         }
         int amount = boost ? s.Amount : 0;
+
+        string extra = "";
+        if (s.ItemType == "physio")
+        {
+            // physio DB: attribute (body part 0-6) + amount (heal). Put amount on the matching Attribute slot.
+            var a = new int[6];
+            if (s.Attr >= 0 && s.Attr < 6) a[s.Attr] = s.Amount;
+            extra = ",\"Attribute1\":" + a[0] + ",\"Attribute2\":" + a[1] + ",\"Attribute3\":" + a[2] +
+                    ",\"Attribute4\":" + a[3] + ",\"Attribute5\":" + a[4] + ",\"Attribute6\":" + a[5] +
+                    ",\"statBonus\":" + s.Amount + ",\"bonus\":" + s.Amount;
+        }
+        else if (s.ItemType == "fitnessCoach")
+        {
+            // fitnessCoach DB: amount + posbonus + fieldpos (no attribute).
+            extra = ",\"statBonus\":" + s.Amount + ",\"bonus\":" + s.PosBonus + ",\"posMods\":" + s.PosBonus +
+                    ",\"position\":" + s.FieldPos + ",\"gkPositioning\":" + s.FieldPos;
+        }
         return "{\"id\":" + id + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
             "\"untradeable\":false,\"assetId\":" + s.ResourceId + ",\"rating\":" + s.Rating + "," +
             "\"itemType\":\"" + Esc(s.ItemType) + "\",\"dream\":false,\"resourceId\":" + s.ResourceId + ",\"owners\":1," +
@@ -1540,20 +1933,39 @@ internal sealed class WebServer
             "\"attributeList\":" + attrList + ",\"teamid\":0,\"rareflag\":" + s.Rare + ",\"playStyle\":0," +
             "\"leagueId\":0,\"leagueid\":0,\"assists\":0,\"lifetimeAssists\":0,\"loyaltyBonus\":1," +
             "\"pile\":" + pile + ",\"loans\":0,\"nation\":0,\"nationid\":0," +
-            "\"resourceGameYear\":2014,\"amount\":" + amount + "}";
+            "\"resourceGameYear\":2014,\"amount\":" + amount + extra + "}";
     }
 
     internal const long StaffItemIdBase = 650_000L;
 
-    private static string AllStaffItemsJson(int offset, int countLimit, long now, int pile)
+    private static string StaffItemsJson(int offset, int countLimit, long now, int pile, string typeFilter = null, string levelFilter = "")
     {
         var data = ClubStore.Get();
         var all = new List<string>(data.Managers.Count + data.Staff.Count);
-        for (int i = 0; i < data.Managers.Count; i++)
-            all.Add(BuildManagerItem(data.Managers[i], ManagerItemIdBase + i, now, pile));
-        for (int i = 0; i < data.Staff.Count; i++)
-            all.Add(BuildStaffItem(data.Staff[i], StaffItemIdBase + i, now, pile));
-
+        if (typeFilter == null)
+        {
+            for (int i = 0; i < data.Managers.Count; i++)
+                all.Add(BuildManagerItem(data.Managers[i], ManagerItemIdBase + i, now, pile));
+            for (int i = 0; i < data.Staff.Count; i++)
+                all.Add(BuildStaffItem(data.Staff[i], StaffItemIdBase + i, now, pile));
+        }
+        else
+        {
+            for (int i = 0; i < data.Staff.Count; i++)
+            {
+                var s = data.Staff[i];
+                if (!string.Equals(s.ItemType, typeFilter, StringComparison.OrdinalIgnoreCase)) continue;
+                bool levelOk = levelFilter switch
+                {
+                    "bronze" => s.Rating < 65,
+                    "silver" => s.Rating is >= 65 and < 75,
+                    "gold" => s.Rating >= 75,
+                    _ => true,
+                };
+                if (!levelOk) continue;
+                all.Add(BuildStaffItem(s, StaffItemIdBase + i, now, pile));
+            }
+        }
         var page = all.Skip(offset).Take(countLimit);
         return "[" + string.Join(",", page) + "]";
     }

@@ -68,6 +68,44 @@ internal static class ConsumableItems
         return list;
     }
 
+    internal readonly record struct ConsumableDef(
+        string Category, string Kind, int Amount, int Bronze, int Silver, int Gold, int CardSubtypeId);
+
+    internal static readonly Dictionary<long, ConsumableDef> Effects = LoadEffects();
+
+    private static Dictionary<long, ConsumableDef> LoadEffects()
+    {
+        var dict = new Dictionary<long, ConsumableDef>();
+        string path = Path.Combine(AppContext.BaseDirectory, "FUTDB", "consumable_mods.tsv");
+        // # resourceId  category  kind  amount  bronze  silver  gold  subtype
+        try
+        {
+            foreach (string line in File.ReadLines(path))
+            {
+                if (line.Length == 0 || line[0] == '#') continue;
+                string[] c = line.Split('\t');
+                if (c.Length < 8 || !long.TryParse(c[0], out long rid)) continue;
+                dict[rid] = new ConsumableDef(
+                    c[1], c[2],
+                    int.TryParse(c[3], out int am) ? am : 0,
+                    int.TryParse(c[4], out int br) ? br : 0,
+                    int.TryParse(c[5], out int si) ? si : 0,
+                    int.TryParse(c[6], out int go) ? go : 0,
+                    int.TryParse(c[7], out int st) ? st : 0);
+            }
+            Console.WriteLine($"[Consumables] loaded {dict.Count} modifier defs from {path}");
+        }
+        catch (FileNotFoundException)
+        {
+            Console.WriteLine($"[Consumables] no {path}; consumable effects will use approximations");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Consumables] modifier table load failed: {ex.GetType().Name}: {ex.Message}");
+        }
+        return dict;
+    }
+
     internal static string CanonicalType(string rawItemType)
     {
         string t = rawItemType ?? "";
@@ -79,11 +117,21 @@ internal static class ConsumableItems
         return t;
     }
 
+    internal static string WireItemType(string rawItemType)
+    {
+        string t = rawItemType ?? "";
+        if (t.StartsWith("Contract", StringComparison.OrdinalIgnoreCase)
+            || t.StartsWith("Fitness", StringComparison.OrdinalIgnoreCase)
+            || t.StartsWith("Health", StringComparison.OrdinalIgnoreCase))
+            return "development";
+        return "training";
+    }
+
     public static string BuildJson(ConsumableItem it, long timestamp)
     {
         return
             "{\"id\":" + it.ItemId + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
-            "\"untradeable\":false,\"assetId\":0,\"rating\":0,\"itemType\":\"" + Esc(CanonicalType(it.ItemType)) + "\"," +
+            "\"untradeable\":false,\"assetId\":0,\"rating\":0,\"itemType\":\"" + WireItemType(it.ItemType) + "\"," +
             "\"resourceId\":" + it.ResourceId + ",\"owners\":1,\"discardValue\":0," +
             "\"itemState\":\"free\",\"cardsubtypeid\":" + it.SubType + ",\"lastSalePrice\":0," +
             "\"statsList\":[],\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":0," +

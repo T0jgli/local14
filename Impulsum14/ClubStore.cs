@@ -13,9 +13,22 @@ internal sealed class ClubData
     public int ActiveSquadId { get; set; } = 0;
     public bool Seeded { get; set; } = false;
     public bool AllPlayersSeeded { get; set; } = false;
-    public bool StaffSeeded { get; set; } = false;   
-    public int StaffVersion { get; set; } = 0;   
-    public int ConsumablesVersion { get; set; } = 0; 
+    public bool StaffSeeded { get; set; } = false;
+    public int StaffVersion { get; set; } = 0;
+    public int ConsumablesVersion { get; set; } = 0;
+    public Dictionary<long, PlayerMod> PlayerMods { get; set; } = new();
+}
+
+internal sealed class PlayerMod
+{
+    public int PlayStyle { get; set; } = -1;      
+    public string Position { get; set; } = "";     
+    public int Contract { get; set; } = -1;       
+    public int Fitness { get; set; } = -1;  
+    public int[] AttrBoost { get; set; } = new int[6]; 
+    public int TrainingFlag { get; set; } = 0;    
+    public string Injury { get; set; } = "";      
+    public int InjuryGames { get; set; } = 0;      
 }
 
 internal static class ClubStore
