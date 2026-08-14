@@ -8,10 +8,14 @@ internal sealed class ClubData
     public List<CosmeticItem> Cosmetics { get; set; } = new();
     public List<ConsumableItem> Consumables { get; set; } = new();
     public List<Manager> Managers { get; set; } = new();
+    public List<StaffCard> Staff { get; set; } = new();
     public List<Squad> Squads { get; set; } = new();
     public int ActiveSquadId { get; set; } = 0;
     public bool Seeded { get; set; } = false;
     public bool AllPlayersSeeded { get; set; } = false;
+    public bool StaffSeeded { get; set; } = false;   
+    public int StaffVersion { get; set; } = 0;   
+    public int ConsumablesVersion { get; set; } = 0; 
 }
 
 internal static class ClubStore
@@ -34,6 +38,7 @@ internal static class ClubStore
             SeedSpecials();
             SeedCosmetics();
             SeedConsumables();
+            SeedStaff();
             return;
         }
 
@@ -42,14 +47,18 @@ internal static class ClubStore
             lock (_lock)
             {
                 bool had = _data.Inventory.Count > 0 || _data.Squads.Count > 0 || _data.Cosmetics.Count > 0
-                           || _data.Consumables.Count > 0;
+                           || _data.Consumables.Count > 0 || _data.Staff.Count > 0;
                 _data.Inventory.Clear();
                 _data.Cosmetics.Clear();
                 _data.Consumables.Clear();
+                _data.Staff.Clear();
                 _data.Squads.Clear();
                 _data.ActiveSquadId = 0;
                 _data.AllPlayersSeeded = false;
                 _data.Seeded = false;
+                _data.StaffSeeded = false;
+                _data.StaffVersion = 0;
+                _data.ConsumablesVersion = 0;
                 if (had) Save();
             }
             Console.WriteLine("[Club] empty club (fresh account / cleared stale seed)");
@@ -83,6 +92,7 @@ internal static class ClubStore
             _data.Inventory.Clear();
             _data.Cosmetics.Clear();
             _data.Consumables.Clear();
+            _data.Staff.Clear();
             _data.Squads.Clear();
             var club = FutProfileStore.Get().Club;
             long newBadge = club.ActiveBadgeId;
@@ -210,6 +220,8 @@ internal static class ClubStore
         }
     }
 
+    private const int CurrentConsumablesVersion = 1;
+
     private static void SeedConsumables()
     {
         lock (_lock)
@@ -217,9 +229,25 @@ internal static class ClubStore
             var catalog = ConsumableItems.Catalog;
             _data.Consumables.Clear();
             _data.Consumables.AddRange(catalog);
+            _data.ConsumablesVersion = CurrentConsumablesVersion;
             if (catalog.Length > 0)
                 Console.WriteLine($"[Club] consumables: {catalog.Length}");
             Save();
+        }
+    }
+
+    private static void MigrateConsumables()
+    {
+        lock (_lock)
+        {
+            if (_data.ConsumablesVersion >= CurrentConsumablesVersion || ConsumableItems.Catalog.Length == 0)
+                return;
+            int had = _data.Consumables.Count;
+            _data.Consumables.Clear();
+            _data.Consumables.AddRange(ConsumableItems.Catalog);
+            _data.ConsumablesVersion = CurrentConsumablesVersion;
+            Save();
+            Console.WriteLine($"[Club] consumables re-seeded to full catalog: {had} -> {_data.Consumables.Count}");
         }
     }
 
@@ -233,6 +261,47 @@ internal static class ClubStore
             if (catalog.Length > 0)
                 Console.WriteLine($"[Club] club items: {catalog.Length}");
             Save();
+        }
+    }
+
+    private const int CurrentStaffVersion = 7;
+    private const int StarterStaffPerKind = 5;
+
+    private static void SeedStaff()
+    {
+        lock (_lock)
+        {
+            var catalog = Staff.All;
+            _data.Staff.Clear();
+            _data.Staff.AddRange(catalog);
+            _data.StaffSeeded = true;
+            _data.StaffVersion = CurrentStaffVersion;
+            if (catalog.Length > 0)
+                Console.WriteLine($"[Club] staff (full debug catalog): {catalog.Length}");
+            Save();
+        }
+    }
+
+    private static void GrantStarterStaff(Random rnd)
+    {
+        foreach (var kind in Staff.All.Select(s => s.ItemType).Distinct())
+            _data.Staff.AddRange(Staff.All.Where(s => s.ItemType == kind)
+                                          .OrderBy(_ => rnd.Next())
+                                          .Take(StarterStaffPerKind));
+        _data.StaffSeeded = true;
+        _data.StaffVersion = CurrentStaffVersion;
+    }
+
+    private static void MigrateStaff()
+    {
+        lock (_lock)
+        {
+            if (_data.StaffVersion >= CurrentStaffVersion || Staff.All.Length == 0) return;
+            int had = _data.Staff.Count;
+            _data.Staff.Clear();
+            GrantStarterStaff(new Random());
+            Save();
+            Console.WriteLine($"[Club] staff reset to starter set: {had} -> {_data.Staff.Count}");
         }
     }
 

@@ -19,7 +19,7 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 - POW/EASFC/EASW web service (Base)
 - EA CDN recreation
 - FUT Hub
-- FUT DB (95% done)
+- FUT DB (99% done)
 - Packs
 - Proper Pack Weights
 - Squad saving
@@ -30,13 +30,11 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 
 ## TODO
 
+- legends
 - Transfermarket
-- missing staff cards
-- missing consumables
 - divisions
 - manager challenges
 - minor bug fixes
-- missing cdn files
 
 ## SDK
 

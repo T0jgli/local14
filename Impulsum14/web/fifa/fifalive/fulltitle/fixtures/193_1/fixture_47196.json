@@ -1,0 +1,707 @@
+{
+	"awayteamid": 5,
+	"hometeamid": 10,
+	"awayformation": 4,
+	"homeformation": 16,
+
+	"awayplayerroles": {
+		"captainid": 13732,
+		"penaltytakerid": 183277,
+		"freekicktakerid": 183277,
+		"longkicktakerid": 183277,
+		"leftcornerkicktakerid": 180403,
+		"rightcornerkicktakerid": 180403
+	},
+
+	"homeplayerroles": {
+		"captainid": 139720,
+		"penaltytakerid": 153079,
+		"freekicktakerid": 20289,
+		"longkicktakerid": 165239,
+		"leftcornerkicktakerid": 165239,
+		"rightcornerkicktakerid": 165239
+	},
+
+	"players": {
+		"player": [
+			{
+				"playerid": 48940,
+				"ishometeam": false,
+				"positionid": 0,
+				"jerseynumber": 1,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 178372,
+				"ishometeam": false,
+				"positionid": 3,
+				"jerseynumber": 2,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 164468,
+				"ishometeam": false,
+				"positionid": 4,
+				"jerseynumber": 24,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 13732,
+				"ishometeam": false,
+				"positionid": 6,
+				"jerseynumber": 26,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 184432,
+				"ishometeam": false,
+				"positionid": 7,
+				"jerseynumber": 28,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 179944,
+				"ishometeam": false,
+				"positionid": 9,
+				"jerseynumber": 4,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 191202,
+				"ishometeam": false,
+				"positionid": 11,
+				"jerseynumber": 21,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 180403,
+				"ishometeam": false,
+				"positionid": 12,
+				"jerseynumber": 22,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 183277,
+				"ishometeam": false,
+				"positionid": 16,
+				"jerseynumber": 17,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 188152,
+				"ishometeam": false,
+				"positionid": 18,
+				"jerseynumber": 11,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 49369,
+				"ishometeam": false,
+				"positionid": 25,
+				"jerseynumber": 9,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 684,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 23,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 5471,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 8,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 193130,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 14,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 9676,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 29,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 34079,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 3,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 184943,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 7,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 209331,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 15,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 201122,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 33,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 164477,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 12,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 177134,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 19,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 208920,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 27,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 199767,
+				"ishometeam": false,
+				"positionid": 28,
+				"jerseynumber": 16,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 169708,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 51,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 211506,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 78,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 211504,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 47,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 204914,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 53,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 213666,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 63,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 213661,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 32,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 204846,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 46,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 198351,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 72,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 211505,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 71,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 204231,
+				"ishometeam": false,
+				"positionid": 29,
+				"jerseynumber": 73,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 150724,
+				"ishometeam": true,
+				"positionid": 0,
+				"jerseynumber": 1,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 142784,
+				"ishometeam": true,
+				"positionid": 3,
+				"jerseynumber": 5,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 139720,
+				"ishometeam": true,
+				"positionid": 4,
+				"jerseynumber": 4,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 134979,
+				"ishometeam": true,
+				"positionid": 6,
+				"jerseynumber": 26,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 185103,
+				"ishometeam": true,
+				"positionid": 7,
+				"jerseynumber": 13,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 165239,
+				"ishometeam": true,
+				"positionid": 12,
+				"jerseynumber": 8,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 20289,
+				"ishometeam": true,
+				"positionid": 13,
+				"jerseynumber": 42,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 135507,
+				"ishometeam": true,
+				"positionid": 15,
+				"jerseynumber": 25,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 168542,
+				"ishometeam": true,
+				"positionid": 16,
+				"jerseynumber": 21,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 180930,
+				"ishometeam": true,
+				"positionid": 24,
+				"jerseynumber": 10,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 153079,
+				"ishometeam": true,
+				"positionid": 26,
+				"jerseynumber": 16,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 192613,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 30,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 152554,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 22,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 138412,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 7,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 146439,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 9,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 146536,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 15,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 161754,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 14,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 181820,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 35,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 138726,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 6,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 169721,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 2,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 205362,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 33,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 183465,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 17,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 197837,
+				"ishometeam": true,
+				"positionid": 28,
+				"jerseynumber": 38,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 212692,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 64,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 196941,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 43,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 50660,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 29,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 211501,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 81,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 216320,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 66,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 216322,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 76,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 216321,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 75,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 205162,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 51,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 216325,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 56,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			},
+			{
+				"playerid": 209750,
+				"ishometeam": true,
+				"positionid": 29,
+				"jerseynumber": 48,
+				"suspendedred": 0,
+				"suspendedyellow": 0,
+				"injured": 0,
+				"intlduty": 0
+			}
+		]
+	},
+
+	"rewards": {
+		"xp": {
+			"amateur": 100,
+			"semipro": 150,
+			"pro": 200,
+			"worldclass": 250,
+			"legendary": 300
+		},
+
+		"coins": {
+			"amateur": 50,
+			"semipro": 60,
+			"pro": 70,
+			"worldclass": 80,
+			"legendary": 90
+		}
+	}
+}

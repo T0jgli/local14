@@ -657,7 +657,7 @@ internal sealed class WebServer
             {
                 long snow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 return ("application/json; charset=utf-8",
-                    "{\"itemData\":" + ManagerItemsJson(offset, countLimit, snow, 6) + "}");
+                    "{\"itemData\":" + AllStaffItemsJson(offset, countLimit, snow, 6) + "}");
             }
 
             string posFilter = req.QueryString["position"] ?? "any";
@@ -960,6 +960,13 @@ internal sealed class WebServer
                                 long id = Interlocked.Increment(ref _nextPackExtraId);
                                 drawn.Add((id, BuildManagerItem(pick.Manager, id, nowUnix, 6, pick.ManagerRareFlag)));
                                 data.Managers.Add(pick.Manager);
+                                break;
+                            }
+                            case PackPick.ItemKind.Staff:
+                            {
+                                long id = Interlocked.Increment(ref _nextPackExtraId);
+                                drawn.Add((id, BuildStaffItem(pick.Staff, id, nowUnix, 6)));
+                                data.Staff.Add(pick.Staff);
                                 break;
                             }
                         }
@@ -1505,6 +1512,50 @@ internal sealed class WebServer
         }
         sb.Append(']');
         return sb.ToString();
+    }
+
+    internal static string BuildStaffItem(StaffCard s, long id, long timestamp, int pile)
+    {
+        bool boost = s.ItemType == "physio" || s.ItemType == "fitnessCoach";
+        string attrList = "[]";
+        if (boost)
+        {
+            var sb = new StringBuilder("[");
+            for (int a = 0; a <= 6; a++)
+            {
+                if (a > 0) sb.Append(',');
+                sb.Append("{\"value\":" + (a == s.Attr ? s.Amount : 0) + ",\"index\":" + a + "}");
+            }
+            sb.Append(']');
+            attrList = sb.ToString();
+        }
+        int amount = boost ? s.Amount : 0;
+        return "{\"id\":" + id + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
+            "\"untradeable\":false,\"assetId\":" + s.ResourceId + ",\"rating\":" + s.Rating + "," +
+            "\"itemType\":\"" + Esc(s.ItemType) + "\",\"dream\":false,\"resourceId\":" + s.ResourceId + ",\"owners\":1," +
+            "\"discardValue\":" + (s.Rating * 4) + ",\"itemState\":\"free\",\"cardsubtypeid\":" + s.CardSubType + "," +
+            "\"lastSalePrice\":0,\"morale\":0,\"fitness\":0,\"injuryType\":\"none\",\"injuryGames\":0," +
+            "\"preferredPosition\":\"\",\"statsList\":[],\"lifetimeStats\":[],\"training\":0," +
+            "\"contract\":7,\"suspension\":0,\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000," +
+            "\"attributeList\":" + attrList + ",\"teamid\":0,\"rareflag\":" + s.Rare + ",\"playStyle\":0," +
+            "\"leagueId\":0,\"leagueid\":0,\"assists\":0,\"lifetimeAssists\":0,\"loyaltyBonus\":1," +
+            "\"pile\":" + pile + ",\"loans\":0,\"nation\":0,\"nationid\":0," +
+            "\"resourceGameYear\":2014,\"amount\":" + amount + "}";
+    }
+
+    internal const long StaffItemIdBase = 650_000L;
+
+    private static string AllStaffItemsJson(int offset, int countLimit, long now, int pile)
+    {
+        var data = ClubStore.Get();
+        var all = new List<string>(data.Managers.Count + data.Staff.Count);
+        for (int i = 0; i < data.Managers.Count; i++)
+            all.Add(BuildManagerItem(data.Managers[i], ManagerItemIdBase + i, now, pile));
+        for (int i = 0; i < data.Staff.Count; i++)
+            all.Add(BuildStaffItem(data.Staff[i], StaffItemIdBase + i, now, pile));
+
+        var page = all.Skip(offset).Take(countLimit);
+        return "[" + string.Join(",", page) + "]";
     }
 
     private static string BuildFullSquadJson(Squad squad)

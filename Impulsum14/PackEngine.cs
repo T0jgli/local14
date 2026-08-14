@@ -5,18 +5,21 @@ internal readonly record struct PackPick(
     ConsumableItem Consumable,
     CosmeticItem Cosmetic,
     Manager Manager,
-    int ManagerRareFlag)
+    int ManagerRareFlag,
+    StaffCard Staff)
 {
-    internal enum ItemKind { Player, Consumable, Cosmetic, Manager }
+    internal enum ItemKind { Player, Consumable, Cosmetic, Manager, Staff }
 
     internal static PackPick OfPlayer(RealPlayer p) =>
-        new(ItemKind.Player, p, default, default, default, 0);
+        new(ItemKind.Player, p, default, default, default, 0, default);
     internal static PackPick OfConsumable(ConsumableItem c) =>
-        new(ItemKind.Consumable, default, c, default, default, 0);
+        new(ItemKind.Consumable, default, c, default, default, 0, default);
     internal static PackPick OfCosmetic(CosmeticItem c) =>
-        new(ItemKind.Cosmetic, default, default, c, default, 0);
+        new(ItemKind.Cosmetic, default, default, c, default, 0, default);
     internal static PackPick OfManager(Manager m, int rareFlag) =>
-        new(ItemKind.Manager, default, default, default, m, rareFlag);
+        new(ItemKind.Manager, default, default, default, m, rareFlag, default);
+    internal static PackPick OfStaff(StaffCard s) =>
+        new(ItemKind.Staff, default, default, default, default, 0, s);
 }
 
 internal static class PackEngine
@@ -229,6 +232,12 @@ internal static class PackEngine
                 drawnOther.Add((ItemTypes.Manager, m.ResourceId));
                 return PackPick.OfManager(m, slot.Rare ? 1 : 0);
             }
+            case ItemTypes.Staff:
+            {
+                var s = PickStaff(lo, hi, drawnOther, rnd);
+                drawnOther.Add((ItemTypes.Staff, s.ResourceId));
+                return PackPick.OfStaff(s);
+            }
             case ItemTypes.Kit:
             case ItemTypes.Badge:
             case ItemTypes.Ball:
@@ -266,6 +275,16 @@ internal static class PackEngine
                                            && !drawn.Contains((ItemTypes.Manager, m.ResourceId))).ToArray();
         if (pool.Length == 0) pool = Managers.All.Where(m => m.Rating >= lo && m.Rating <= hi).ToArray();
         if (pool.Length == 0) pool = Managers.All;
+        return pool[rnd.Next(pool.Length)];
+    }
+
+    private static StaffCard PickStaff(int lo, int hi, HashSet<(string, long)> drawn, System.Random rnd)
+    {
+        if (Staff.All.Length == 0) return default;
+        var pool = Staff.All.Where(s => s.Rating >= lo && s.Rating <= hi
+                                        && !drawn.Contains((ItemTypes.Staff, s.ResourceId))).ToArray();
+        if (pool.Length == 0) pool = Staff.All.Where(s => s.Rating >= lo && s.Rating <= hi).ToArray();
+        if (pool.Length == 0) pool = Staff.All;
         return pool[rnd.Next(pool.Length)];
     }
 

@@ -100,3 +100,69 @@ TrainingPlayerPosCAM_CF	107	5003075	Player CAM-CF	1
 TrainingPlayerPosCF_CAM	108	5003076	Player CF-CAM	1
 TrainingPlayerPosCF_ST	109	5003077	Player CF-ST	1
 TrainingPlayerPosST_CF	110	5003078	Player ST-CF	1
+
+playStyle	250	5003095	Basic	0
+playStyle	251	5003096	Sniper	0
+playStyle	252	5003097	Finisher	0
+playStyle	253	5003098	Deadeye	0
+playStyle	254	5003099	Marksman	0
+playStyle	255	5003100	Hawk	0
+playStyle	256	5003101	Artist	0
+playStyle	257	5003102	Architect	0
+playStyle	258	5003103	Powerhouse	0
+playStyle	259	5003104	Maestro	0
+playStyle	260	5003105	Engine	0
+playStyle	261	5003106	Sentinel	0
+playStyle	262	5003107	Guardian	0
+playStyle	263	5003108	Gladiator	0
+playStyle	264	5003109	Backbone	0
+playStyle	265	5003110	Anchor	0
+playStyle	266	5003111	Hunter	0
+playStyle	267	5003112	Catalyst	0
+playStyle	268	5003113	Shadow	0
+playStyle	269	5003114	Wall	0
+playStyle	270	5003115	Shield	0
+playStyle	271	5003116	Cat	0
+playStyle	272	5003117	Glove	0
+playStyle	273	5003118	Gk Basic	0
+managerLeagueModifier	300	5003119	Denmark Superliga (1)	0
+managerLeagueModifier	301	5003120	Belgium Jupiler Pro League (1)	0
+managerLeagueModifier	302	5003121	Brazil Campeonato Brasileiro (1)	0
+managerLeagueModifier	303	5003122	Holland Eredivisie (1)	0
+managerLeagueModifier	304	5003123	England Premier League (1)	0
+managerLeagueModifier	305	5003124	England League Championship (2)	0
+managerLeagueModifier	306	5003125	France Ligue 1 (1)	0
+managerLeagueModifier	307	5003126	France Ligue 2 (2)	0
+managerLeagueModifier	308	5003127	Germany 1. Bundesliga (1)	0
+managerLeagueModifier	309	5003128	Germany 2. Bundesliga  (2)	0
+managerLeagueModifier	310	5003129	Italy Serie A (1)	0
+managerLeagueModifier	311	5003130	Italy Serie B (2)	0
+managerLeagueModifier	312	5003131	USA Major League Soccer (1)	0
+managerLeagueModifier	313	5003132	Norway Tippeligaen (1)	0
+managerLeagueModifier	314	5003133	Scotland Premier League (1)	0
+managerLeagueModifier	315	5003134	Spain Primera Division (1)	0
+managerLeagueModifier	316	5003135	Spain Segunda A (2)	0
+managerLeagueModifier	317	5003136	Sweden Allsvenskan (1)	0
+managerLeagueModifier	318	5003137	England League One (3)	0
+managerLeagueModifier	319	5003138	England League Two (4)	0
+managerLeagueModifier	320	5003139	Greece A'Ethniki (1)	0
+managerLeagueModifier	321	5003140	Rep. Ireland Airtricity League (1)	0
+managerLeagueModifier	322	5003141	Poland T-Mobile Ekstraklasa (1)	0
+managerLeagueModifier	323	5003142	Russia Premier League (1)	0
+managerLeagueModifier	324	5003143	Turkey Süper Lig (1)	0
+managerLeagueModifier	325	5003144	Austria tipp3-Bundesliga (1)	0
+managerLeagueModifier	326	5003145	Korea K League Classic (1)	0
+managerLeagueModifier	327	5003146	League 100	0
+managerLeagueModifier	328	5003147	League 100	0
+managerLeagueModifier	329	5003148	League 100	0
+managerLeagueModifier	330	5003149	League 100	0
+managerLeagueModifier	331	5003150	League 100	0
+managerLeagueModifier	332	5003151	League 100	0
+managerLeagueModifier	333	5003152	League 100	0
+managerLeagueModifier	334	5003153	League 100	0
+managerLeagueModifier	335	5003154	League 100	0
+managerLeagueModifier	336	5003155	League 100	0
+managerLeagueModifier	337	5003156	League 100	0
+managerLeagueModifier	338	5003157	League 100	0
+managerLeagueModifier	339	5003158	League 100	0
+managerLeagueModifier	340	5003159	League 100	0

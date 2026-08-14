@@ -4,6 +4,7 @@ internal static class ItemTypes
 {
     internal const string Player   = "player";
     internal const string Manager  = "manager";
+    internal const string Staff    = "staff";     
     internal const string Kit      = "kit";
     internal const string Badge    = "badge";
     internal const string Ball     = "ball";
@@ -57,14 +58,14 @@ internal static class PackConfig
 
     private static readonly WildcardPool SpecialSlotGold = new("specialGold", new[]
     {
-        (ItemTypes.Kit, 26), (ItemTypes.Badge, 24), (ItemTypes.Ball, 18),
-        (ItemTypes.Manager, 12), (ItemTypes.Stadium, 8), (ItemTypes.Position, 12),
+        (ItemTypes.Kit, 24), (ItemTypes.Badge, 22), (ItemTypes.Ball, 16),
+        (ItemTypes.Manager, 10), (ItemTypes.Staff, 10), (ItemTypes.Stadium, 8), (ItemTypes.Position, 12),
     });
 
     private static readonly WildcardPool SpecialSlot = new("special", new[]
     {
-        (ItemTypes.Kit, 26), (ItemTypes.Badge, 24), (ItemTypes.Ball, 18),
-        (ItemTypes.Manager, 12), (ItemTypes.Stadium, 8),
+        (ItemTypes.Kit, 24), (ItemTypes.Badge, 22), (ItemTypes.Ball, 16),
+        (ItemTypes.Manager, 10), (ItemTypes.Staff, 10), (ItemTypes.Stadium, 8),
     });
 
     private static TypeVariant StandardTypeMix(string wildcardPool) => new(
