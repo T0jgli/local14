@@ -127,7 +127,7 @@ internal static class ConsumableItems
         return "training";
     }
 
-    public static string BuildJson(ConsumableItem it, long timestamp)
+    public static string BuildJson(ConsumableItem it, long timestamp, int pile = 6)
     {
         return
             "{\"id\":" + it.ItemId + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
@@ -135,7 +135,7 @@ internal static class ConsumableItems
             "\"resourceId\":" + it.ResourceId + ",\"owners\":1,\"discardValue\":0," +
             "\"itemState\":\"free\",\"cardsubtypeid\":" + it.SubType + ",\"lastSalePrice\":0," +
             "\"statsList\":[],\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":0," +
-            "\"rareflag\":" + it.RareFlag + ",\"leagueId\":0,\"pile\":6,\"resourceGameYear\":2014," +
+            "\"rareflag\":" + it.RareFlag + ",\"leagueId\":0,\"pile\":" + pile + ",\"resourceGameYear\":2014," +
             "\"count\":1,\"consumableCount\":1,\"name\":\"" + Esc(it.Name) + "\"}";
     }
 

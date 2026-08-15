@@ -506,14 +506,18 @@ internal sealed class WebServer
 
         if (path.EndsWith("/hub"))
         {
-            long coinsHub = FutProfileStore.Get().Coins;
+            var profHub = FutProfileStore.Get();
+            long coinsHub = profHub.Coins;
             string currenciesHub = CurrenciesJson(coinsHub);
             int clubPlayers = ClubStore.Get().Inventory.Count;
             int tradePileCount = ClubStore.Get().Inventory.Count(c => c.Pile == 3);
             string totwHub = ",\"squad\":" + Totw.HubSquadJson();
             return ("application/json; charset=utf-8",
                     "{\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
-                    ",\"userInfo\":{\"personaId\":" + BlazePersonaId + ",\"clubName\":\"" + Esc(FutProfileStore.Get().Club.Name) +
+                    ",\"divisionOnline\":" + profHub.OnlineDivision +
+                    ",\"divisionOffline\":" + profHub.OfflineDivision +
+                    ",\"userInfo\":{\"personaId\":" + BlazePersonaId + ",\"clubName\":\"" + Esc(profHub.Club.Name) +
+                    "\",\"assetId\":" + profHub.Club.BadgeId + ",\"badgeId\":" + profHub.Club.BadgeId +
                     "\",\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
                     ",\"unassignedPileSize\":0,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0}}" +
                     totwHub +
@@ -523,9 +527,19 @@ internal sealed class WebServer
         }
 
         if (path.EndsWith("/clubuser"))
+        {
+            var pcUser = FutProfileStore.Get().Club;
+            var prUser = new StringBuilder();
+            prUser.Append("{\"personaId\":" + FutSquadPersonaId + ",\"clubName\":\"" + Esc(pcUser.Name) +
+                "\",\"clubAbbr\":\"" + Esc(pcUser.Abbr) + "\",\"teamId\":" + pcUser.TeamId);
+            prUser.Append(",\"badge\":" + ClubVisualNode("badge", pcUser.ActiveBadgeId));
+            prUser.Append(",\"homekit\":" + ClubVisualNode("kit", pcUser.ActiveHomeKitId));
+            prUser.Append(",\"awaykit\":" + ClubVisualNode("kit", pcUser.ActiveAwayKitId));
+            prUser.Append('}');
             return ("application/json; charset=utf-8",
-                    "{\"user\":[{\"personaId\":" + FutSquadPersonaId + "}," +
+                    "{\"user\":[" + prUser + "," +
                     "{\"personaId\":" + Totw.ClubPersona + ",\"persona\":\"TOTW\",\"public\":true}]}");
+        }
 
         if (path.Contains("/user/list"))
         {
@@ -769,7 +783,7 @@ internal sealed class WebServer
                 string cosmeticsLevel = (req.QueryString["level"] ?? "").ToLowerInvariant();
                 int cosmeticsLeague = int.TryParse(req.QueryString["league"], out int clg) ? clg : -1;
                 int cosmeticsTeam = int.TryParse(req.QueryString["team"], out int ctm) ? ctm : -1;
-                var cosmetics = ClubStore.Get().Cosmetics
+                var cosmeticsPage = ClubStore.Get().Cosmetics
                     .Where(c => typeFilter == "equippables" || c.Type == typeFilter)
                     .Where(c => cosmeticsLevel switch
                     {
@@ -781,12 +795,25 @@ internal sealed class WebServer
                     .Where(c => cosmeticsLeague == -1 || TeamLeagues.LeagueOf(c.TeamId) == cosmeticsLeague)
                     .Where(c => cosmeticsTeam == -1 || c.TeamId == cosmeticsTeam)
                     .Skip(offset).Take(countLimit).ToArray();
+                var cosClub = FutProfileStore.Get().Club;
                 long cnow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 var csb = new StringBuilder("[");
-                for (int i = 0; i < cosmetics.Length; i++)
+                for (int i = 0; i < cosmeticsPage.Length; i++)
                 {
                     if (i > 0) csb.Append(',');
-                    csb.Append(ClubItems.BuildJson(cosmetics[i], cnow));
+                    var c = cosmeticsPage[i];
+                    if (c.Type == "ball")
+                        Console.WriteLine($"[FUT] BALL BROWSE itemId={c.ItemId} resourceId={c.ResourceId} assetId={c.AssetId}");
+                    string cState = c.Type switch
+                    {
+                        "ball"    => c.ResourceId == cosClub.ActiveBallId ? "activeBall" : "free",
+                        "stadium" => c.ResourceId == cosClub.ActiveStadiumId ? "activeStadium" : "free",
+                        "kit"     => c.ResourceId == cosClub.ActiveHomeKitId ? "activeHomeKit"
+                                   : c.ResourceId == cosClub.ActiveAwayKitId ? "activeAwayKit" : "free",
+                        "badge"   => c.ResourceId == cosClub.ActiveBadgeId ? "activeBadge" : "free",
+                        _         => "free",
+                    };
+                    csb.Append(ClubItems.BuildJson(c, cnow, cState));
                 }
                 csb.Append(']');
                 return ("application/json; charset=utf-8", "{\"itemData\":" + csb + "}");
@@ -877,25 +904,184 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8", "{\"itemList\":" + nc + "}");
         }
 
-        if (path.Contains("/item/resource/") && (req.HttpMethod == "POST" || req.HttpMethod == "PUT"))
+        if ((req.HttpMethod == "POST" || req.HttpMethod == "PUT") &&
+            System.Text.RegularExpressions.Regex.IsMatch(path, @"item/(?:resource/)?\d+/?$"))
         {
-            long applyRes = 0;
-            int lastSlash = path.LastIndexOf('/');
-            if (lastSlash >= 0) long.TryParse(path[(lastSlash + 1)..], out applyRes);
+            var m = System.Text.RegularExpressions.Regex.Match(path, @"item/(?:resource/)?(\d+)/?$");
+            long itemPathNum = 0;
+            long.TryParse(m.Groups[1].Value, out itemPathNum);
+            bool resourceForm = path.Contains("item/resource/", StringComparison.Ordinal);
+
             var applyTargets = new List<long>();
+            var bodyItemData = new List<long>();
+            var bodyItemTypes = new List<string>();
+            string activateSlot = "";
             try
             {
                 using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
-                if (doc.RootElement.TryGetProperty("apply", out var arr)
+                var root = doc.RootElement;
+                if (root.TryGetProperty("activateSlotNumber", out var slotEl)
+                    && slotEl.ValueKind == System.Text.Json.JsonValueKind.String)
+                    activateSlot = slotEl.GetString() ?? "";
+                if (root.TryGetProperty("apply", out var arr)
                     && arr.ValueKind == System.Text.Json.JsonValueKind.Array)
                     foreach (var el in arr.EnumerateArray())
                         if (el.TryGetProperty("id", out var idEl)
                             && idEl.ValueKind == System.Text.Json.JsonValueKind.Number)
                             applyTargets.Add(idEl.GetInt64());
+                if (root.TryGetProperty("itemData", out var itd)
+                    && itd.ValueKind == System.Text.Json.JsonValueKind.Array)
+                    foreach (var el in itd.EnumerateArray())
+                        if (el.TryGetProperty("resourceId", out var rEl)
+                            && rEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+                        {
+                            bodyItemData.Add(rEl.GetInt64());
+                            bodyItemTypes.Add(el.TryGetProperty("itemType", out var tEl)
+                                && tEl.ValueKind == System.Text.Json.JsonValueKind.String
+                                ? tEl.GetString() ?? "" : "");
+                        }
             }
-            catch (Exception ex) { _log.LogWarning("[FUT] consumable apply body parse failed: {0}", ex.Message); }
-            var changedIds = ApplyConsumable(applyRes, applyTargets);
-            return ("application/json; charset=utf-8", AppliedItemsJson(applyRes, changedIds));
+            catch (Exception ex) { _log.LogWarning("[FUT] item apply body parse failed: {0}", ex.Message); }
+
+            if (applyTargets.Count > 0)
+            {
+                var data0 = ClubStore.Get();
+                int owned = resourceForm
+                    ? data0.Consumables.FindIndex(c => c.ResourceId == itemPathNum)
+                    : data0.Consumables.FindIndex(c => c.ItemId == itemPathNum);
+                if (owned < 0 && !resourceForm)
+                    owned = data0.Consumables.FindIndex(c => c.ResourceId == itemPathNum);
+                if (owned < 0)
+                {
+                    Console.WriteLine($"[FUT] consumable apply: no owned copy of {(resourceForm ? "resource " : "item ") + itemPathNum} - the menu offered it but the club has none; consuming nothing");
+                    return ("application/json; charset=utf-8",
+                        "{\"success\":false,\"resourceId\":" + itemPathNum + ",\"itemData\":[]}");
+                }
+                long useResource = data0.Consumables[owned].ResourceId;
+                long usedItemId = data0.Consumables[owned].ItemId;
+                var changedIds = ApplyConsumable(useResource, applyTargets);
+                if (changedIds.Count > 0)
+                    ClubStore.Mutate(d =>
+                    {
+                        int at = d.Consumables.FindIndex(c => c.ResourceId == useResource);
+                        if (at >= 0) d.Consumables.RemoveAt(at);
+                    });
+                lock (_pendingLock)
+                {
+                    _pendingPackItems.RemoveAll(p => p.Id == usedItemId);
+                    _pendingDuplicates.RemoveAll(d => d.NewId == usedItemId);
+                }
+                Console.WriteLine($"[FUT] consumable {useResource} applied to {changedIds.Count} player(s); owned copy {usedItemId} consumed");
+                return ("application/json; charset=utf-8", AppliedItemsJson(useResource, changedIds));
+            }
+
+            Console.WriteLine($"[FUT] BALL PUT receivedItemId={itemPathNum}");
+            CosmeticItem equip = default;
+            string equipSource = "";
+            var data1 = ClubStore.Get();
+
+            if (!resourceForm)
+            {
+                equip = data1.Cosmetics.FirstOrDefault(c => c.ItemId == itemPathNum);
+                if (equip.ItemId != 0) equipSource = "OWNED";
+            }
+            if (equip.ItemId == 0 && ClubItems.TryResolveCatalogId(itemPathNum, out var catByPath))
+            {
+                equip = catByPath;
+                equipSource = "CATALOG";
+            }
+            if (equip.ItemId == 0 && !resourceForm
+                && itemPathNum >= ClubItems.ActiveItemIdBase
+                && itemPathNum < ClubItems.ActiveItemIdBase + 5)
+            {
+                long activeRes = itemPathNum switch
+                {
+                    800001 => FutProfileStore.Get().Club.ActiveStadiumId,
+                    800002 => FutProfileStore.Get().Club.ActiveBallId,
+                    800003 => FutProfileStore.Get().Club.ActiveHomeKitId,
+                    800004 => FutProfileStore.Get().Club.ActiveAwayKitId,
+                    _      => FutProfileStore.Get().Club.ActiveBadgeId,
+                };
+                equip = data1.Cosmetics.FirstOrDefault(c => c.ResourceId == activeRes);
+                if (equip.ItemId == 0)
+                {
+                    var activeCat = ClubItems.Catalog.FirstOrDefault(c => c.ResourceId == activeRes);
+                    if (activeCat.ItemId != 0) equip = activeCat;
+                }
+                if (equip.ItemId != 0) equipSource = "ACTIVE";
+            }
+            if (equip.ItemId == 0 && resourceForm)
+            {
+                equip = data1.Cosmetics.FirstOrDefault(c => c.ResourceId == itemPathNum);
+                if (equip.ItemId != 0) equipSource = "OWNED";
+            }
+            if (equip.ItemId == 0 && bodyItemData.Count > 0)
+            {
+                for (int bi = 0; bi < bodyItemData.Count && equip.ItemId == 0; bi++)
+                {
+                    string ty = string.Equals(bodyItemTypes[bi], "custom", StringComparison.OrdinalIgnoreCase)
+                        ? "badge" : bodyItemTypes[bi];
+                    var ownedByRes = ty.Length == 0
+                        ? data1.Cosmetics.FirstOrDefault(c => c.ResourceId == bodyItemData[bi])
+                        : data1.Cosmetics.FirstOrDefault(c => c.ResourceId == bodyItemData[bi]
+                            && string.Equals(c.Type, ty, StringComparison.OrdinalIgnoreCase));
+                    if (ownedByRes.ItemId != 0) { equip = ownedByRes; equipSource = "OWNED"; }
+                    else
+                    {
+                        var catalogByRes = ty.Length == 0
+                            ? ClubItems.Catalog.FirstOrDefault(c => c.ResourceId == bodyItemData[bi])
+                            : ClubItems.Catalog.FirstOrDefault(c => c.ResourceId == bodyItemData[bi]
+                                && string.Equals(c.Type, ty, StringComparison.OrdinalIgnoreCase));
+                        if (catalogByRes.ItemId != 0) { equip = catalogByRes; equipSource = "CATALOG"; }
+                    }
+                }
+            }
+            if (equip.ItemId == 0)
+            {
+                Console.WriteLine($"[FUT] club item apply: id {itemPathNum} is neither an owned item nor a known catalogue id - doing nothing");
+                return ("application/json; charset=utf-8",
+                    "{\"success\":false,\"resourceId\":" + itemPathNum + ",\"itemData\":[]}");
+            }
+            string equipType = equip.Type;
+            long equipRes = equip.ResourceId;
+            if (equipType == "ball")
+                Console.WriteLine($"[FUT] BALL RESOLVE source={equipSource} itemId={equip.ItemId} resourceId={equipRes} assetId={equip.AssetId}");
+            ClubStore.Mutate(d =>
+            {
+                if (!d.Cosmetics.Any(c => c.ResourceId == equipRes && string.Equals(c.Type, equipType, StringComparison.OrdinalIgnoreCase)))
+                    d.Cosmetics.Add(equip);
+            });
+            FutProfileStore.Mutate(p =>
+            {
+                if (equipType == "badge")
+                {
+                    p.Club.ActiveBadgeId = equipRes;
+                    p.Club.BadgeId = equip.AssetId;   // sync account info (badgeId/assetId in /user, hub, etc.)
+                }
+                else if (equipType == "kit")
+                {
+                    if (string.Equals(activateSlot, "102", StringComparison.Ordinal))
+                        p.Club.ActiveAwayKitId = equipRes;   // slot 102 = away kit
+                    else
+                        p.Club.ActiveHomeKitId = equipRes;
+                }
+                else if (equipType == "stadium") p.Club.ActiveStadiumId = equipRes;
+                else if (equipType == "ball") p.Club.ActiveBallId = equipRes;
+            });
+            lock (_pendingLock)
+            {
+                _pendingPackItems.RemoveAll(p => p.Id == equip.ItemId);
+                _pendingDuplicates.RemoveAll(d => d.NewId == equip.ItemId);
+            }
+            long enow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var equipped = FutProfileStore.Get().Club;
+            Console.WriteLine($"[FUT] ACTIVE CLUB ITEMS LOADED: badge={equipped.ActiveBadgeId} stadium={equipped.ActiveStadiumId} " +
+                $"homeKit={equipped.ActiveHomeKitId} awayKit={equipped.ActiveAwayKitId} ball={equipped.ActiveBallId}");
+            Console.WriteLine($"[FUT] BALL ACTIVE activeBallItemId={equipped.ActiveBallId}");
+            Console.WriteLine($"[FUT] equipped {equipType} {equipRes} (source={equipSource}, slot \"{activateSlot}\")");
+            return ("application/json; charset=utf-8",
+                "{\"success\":true,\"resourceId\":" + equipRes + ",\"itemData\":[" +
+                ClubItems.BuildJson(equip, enow, ClubItems.ActiveStateName(equipType, activateSlot)) + "]}");
         }
 
         if (path.Contains("/delete/") && path.EndsWith("/item") && req.HttpMethod == "POST")
@@ -944,6 +1130,8 @@ internal sealed class WebServer
                     data.Inventory.RemoveAt(idx);
                     data.Listings.Remove(id);   // sold from inventory -> drop any listing
                 }
+                data.Consumables.RemoveAll(c => sold.Contains(c.ItemId));
+                data.Cosmetics.RemoveAll(c => sold.Contains(c.ItemId));
             });
             long balance = 0;
             FutProfileStore.Mutate(p => { p.Coins += earned; balance = p.Coins; });
@@ -1396,6 +1584,8 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8",
                     "{\"isReturningUser\":" + (prof.IsReturningUser ? "true" : "false") +
                     ",\"established\":" + (prof.Club.Established ? "true" : "false") +
+                    ",\"divisionOnline\":" + prof.OnlineDivision +
+                    ",\"divisionOffline\":" + prof.OfflineDivision +
                     ",\"coins\":" + prof.Coins + ",\"credits\":" + prof.Coins +
                     ",\"currencies\":" + CurrenciesJson(prof.Coins) +
                     ",\"clubName\":\"" + Esc(prof.Club.Name) + "\",\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\"" +
@@ -1471,7 +1661,8 @@ internal sealed class WebServer
             var pc = FutProfileStore.Get().Club;
             long nuc = ParseLong(req.QueryString["friendtiertp"], BlazePersonaId);
             long pfycClubId = pc.TeamId;
-            return "{\"users\":[{\"nucId\":" + nuc + ",\"clubId\":" + pfycClubId + ",\"pendingClubId\":0," +
+            return "{\"users\":[{\"nucId\":" + nuc + ",\"clubId\":" + pfycClubId + ",\"assetId\":" +
+                   pc.BadgeId + ",\"badgeId\":" + pc.BadgeId + ",\"pendingClubId\":0," +
                    "\"numChangesAllowed\":0,\"leagueId\":0,\"globalLeagueId\":0}]}";
         }
         if (path.Contains("/pfyc/"))                              return "{}";
@@ -1571,7 +1762,7 @@ internal sealed class WebServer
             ",\"teamName\":\"" + Esc(prof.Club.Name) + "\",\"clubName\":\"" + Esc(prof.Club.Name) + "\"," +
             "\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\",\"clubId\":" + prof.Club.TeamId +
             ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
-            ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + est + ",\"divisionOnline\":1" +
+            ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + est + ",\"divisionOnline\":" + prof.OnlineDivision +
             ",\"divisionOffline\":" + prof.OfflineDivision + ",\"lastAccessTime\":1400000000," +
             "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
         string clubListEntries = prof.Club.Established ? clubList : "";
@@ -1797,6 +1988,7 @@ internal sealed class WebServer
             ",\"lifetimeStats\":" + zeroStats + ",\"training\":" + training + ",\"contract\":" + contract + ",\"suspension\":0," +
             "\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000,\"attributeList\":" + attrList +
             ",\"teamid\":" + player.TeamId + ",\"rareflag\":" + rareflag + ",\"playStyle\":" + playStyle + "," +
+            "\"playstyle\":" + playStyle + "," +
             "\"leagueId\":1,\"assists\":0,\"lifetimeAssists\":0," +
             "\"loyaltyBonus\":1,\"pile\":" + pile + ",\"loans\":0,\"nation\":" + player.NationId +
             ",\"resourceGameYear\":2014,\"amount\":0}";
@@ -1804,12 +1996,7 @@ internal sealed class WebServer
 
     private static List<ConsumableItem> AvailableConsumables()
     {
-        var owned = ClubStore.Get().Consumables;
-        var ownedRes = new HashSet<long>(owned.Select(c => c.ResourceId));
-        var list = new List<ConsumableItem>(owned);
-        foreach (var c in ConsumableItems.Catalog)
-            if (!ownedRes.Contains(c.ResourceId)) list.Add(c);
-        return list;
+        return ClubStore.Get().Consumables;
     }
 
     private static Func<ConsumableItem, bool> ConsumableTabFilter(string tab)
@@ -2050,7 +2237,7 @@ internal sealed class WebServer
     private static string ConsumableStatsJson()
     {
         int contractPlayer = 0, contractManager = 0, fitnessPlayer = 0, fitnessTeam = 0, healing = 0;
-        int trainingPlayer = 0, trainingGk = 0, position = 0, playStyle = 0, managerLeague = 0, formation = 0;
+        int trainingPlayer = 0, trainingGk = 0, position = 0, playerPlayStyle = 0, gkPlayStyle = 0, managerLeague = 0, formation = 0;
         foreach (var c in AvailableConsumables())
         {
             string t = c.ItemType ?? "";
@@ -2062,11 +2249,16 @@ internal sealed class WebServer
             else if (t.StartsWith("TrainingPlayerPos", StringComparison.OrdinalIgnoreCase)) position++;
             else if (t.StartsWith("TrainingGk", StringComparison.OrdinalIgnoreCase)) trainingGk++;
             else if (t.StartsWith("TrainingPlayer", StringComparison.OrdinalIgnoreCase)) trainingPlayer++;
-            else if (t.Equals("playStyle", StringComparison.OrdinalIgnoreCase)) playStyle++;
+            else if (t.Equals("playStyle", StringComparison.OrdinalIgnoreCase))
+            {
+                if (c.SubType >= 269) gkPlayStyle++;
+                else playerPlayStyle++;
+            }
             else if (t.Equals("managerLeagueModifier", StringComparison.OrdinalIgnoreCase)) managerLeague++;
             else if (t.Equals("formation", StringComparison.OrdinalIgnoreCase)) formation++;
         }
         int total = AvailableConsumables().Count;
+        int training = trainingPlayer + trainingGk + position + playerPlayStyle + gkPlayStyle;
         var members = new (string Key, int Val)[]
         {
             ("consumablesContractPlayer", contractPlayer),
@@ -2076,21 +2268,33 @@ internal sealed class WebServer
             ("consumablesHealing", healing),
             ("consumablesTrainingPlayer", trainingPlayer),
             ("consumablesTrainingGk", trainingGk),
-            ("consumablesTrainingPlayerPlayStyle", playStyle),
-            ("consumablesTrainingGkPlayStyle", playStyle),
+            ("consumablesTrainingPlayerPlayStyle", playerPlayStyle),
+            ("consumablesTrainingGkPlayStyle", gkPlayStyle),
             ("consumablesPosition", position),
             ("consumablesTrainingManager", managerLeague),
             ("consumablesTrainingManagerLeagueModifier", managerLeague),
             ("consumablesFormationManager", formation),
             ("consumablesContract", contractPlayer + contractManager),
             ("consumablesFitness", fitnessPlayer + fitnessTeam),
-            ("consumablesTraining", trainingPlayer + trainingGk),
+            ("consumablesTraining", training),
             ("consumables", total),
         };
         var scalars = string.Join(",", members.Select(x => "\"" + x.Key + "\":" + x.Val));
-        var entries = "[" + string.Join(",", members.Select(x =>
-            "{\"contextId\":6,\"contextValue\":0,\"type\":\"" + x.Key + "\",\"typeValue\":" + x.Val + "}")) + "]";
-        return "{" + scalars + ",\"stat\":" + entries + ",\"entries\":" + entries + "}";
+        var statArr = "[" + string.Join(",", members.Select(x =>
+            "{\"contextId\":1,\"contextValue\":0,\"type\":\"" + x.Key + "\",\"typeValue\":" + x.Val + "}")) + "]";
+        long tdnow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var itemSb = new StringBuilder("[");
+        int wn = 0;
+        foreach (var c in AvailableConsumables())
+        {
+            if (wn++ > 0) itemSb.Append(',');
+            itemSb.Append(ConsumableItems.BuildJson(c, tdnow, 7));
+        }
+        itemSb.Append(']');
+        return "{" + scalars + ",\"count\":" + total + ",\"total\":" + total + ",\"numberItems\":" + total +
+            ",\"consumableCount\":" + total + ",\"totalResults\":" + total +
+            ",\"hasConsumables\":" + (total > 0 ? "true" : "false") +
+            ",\"stat\":" + statArr + ",\"entries\":" + statArr + ",\"itemData\":" + itemSb + "}";
     }
 
     internal static string BuildManagerItem(Manager m, long id, long timestamp, int pile, int rareflag = 1)
@@ -2261,6 +2465,15 @@ internal sealed class WebServer
 
         string actives = ActivesJson(now);
 
+        var equipProf = FutProfileStore.Get().Club;
+        long squadStadiumId = ClubItems.Catalog.FirstOrDefault(c => c.Type == "stadium" && c.ResourceId == equipProf.ActiveStadiumId).AssetId;
+        long squadBallItemId = equipProf.ActiveBallId;
+        long squadBallId = ClubItems.Catalog.FirstOrDefault(c => c.Type == "ball" && c.ResourceId == equipProf.ActiveBallId).AssetId;
+        long squadHomeKitId = ClubItems.Catalog.FirstOrDefault(c => c.Type == "kit" && c.ResourceId == equipProf.ActiveHomeKitId).AssetId;
+        long squadAwayKitId = ClubItems.Catalog.FirstOrDefault(c => c.Type == "kit" && c.ResourceId == equipProf.ActiveAwayKitId).AssetId;
+        Console.WriteLine($"[FUT] SQUAD ACTIVE EQUIPPABLES: stadiumId={squadStadiumId} homeKitId={squadHomeKitId} " +
+            $"awayKitId={squadAwayKitId} ballItemId={squadBallItemId} ballId={squadBallId}");
+
         string kicktakers = "[{\"id\":" + captainId + ",\"index\":0},{\"id\":" + captainId + ",\"index\":1}," +
             "{\"id\":" + captainId + ",\"index\":2},{\"id\":" + captainId + ",\"index\":3}," +
             "{\"id\":" + captainId + ",\"index\":4}]";
@@ -2281,6 +2494,15 @@ internal sealed class WebServer
             ",\"squadType\":\"REGULAR_SQUAD\",\"newSquad\":null,\"custom\":null}";
     }
 
+
+    private static string ClubVisualNode(string type, long resourceId)
+    {
+        var item = ClubItems.Catalog.FirstOrDefault(c => c.Type == type && c.ResourceId == resourceId);
+        if (item.ResourceId != resourceId)
+            return "{\"resourceId\":" + resourceId + ",\"teamId\":0,\"categoryId\":0,\"year\":0}";
+        return "{\"resourceId\":" + resourceId + ",\"teamId\":" + item.TeamId + ",\"categoryId\":" +
+               item.Category + ",\"year\":0}";
+    }
 
     private static string ActivesJson(long now)
     {

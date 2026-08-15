@@ -97,7 +97,28 @@ internal static class ClubItems
         }
     }
 
-    public static string BuildJson(CosmeticItem it, long timestamp)
+    internal const long ActiveItemIdBase = 800_001;   // ids of the squad "actives" entries (one per equipment type)
+
+    internal static bool TryResolveCatalogId(long id, out CosmeticItem def)
+    {
+        def = default;
+        long idx = id - CosmeticItemIdBase;
+        if (idx < 0 || idx >= Catalog.Length) return false;
+        var candidate = Catalog[(int)idx];
+        if (candidate.ItemId != id) return false;   // id falls in the linear block only if the entry confirms it
+        def = candidate;
+        return true;
+    }
+
+    internal static string ActiveStateName(string type, string slot) => type switch
+    {
+        "stadium" => "activeStadium",
+        "ball"    => "activeBall",
+        "kit"     => slot == "102" ? "activeAwayKit" : "activeHomeKit",
+        _         => "activeBadge",
+    };
+
+    public static string BuildJson(CosmeticItem it, long timestamp, string itemState = "free", int pile = 6)
     {
         int discard = it.Rating;
         string head =
@@ -105,10 +126,10 @@ internal static class ClubItems
             "\"untradeable\":false,\"assetId\":" + it.AssetId + ",\"rating\":" + it.Rating + "," +
             "\"itemType\":\"" + (it.Type == "badge" ? "custom" : it.Type) + "\"," +
             "\"resourceId\":" + it.ResourceId + ",\"owners\":1,\"discardValue\":" + discard + "," +
-            "\"itemState\":\"free\",\"cardsubtypeid\":" + it.SubType + ",\"lastSalePrice\":0," +
+            "\"itemState\":\"" + itemState + "\",\"cardsubtypeid\":" + it.SubType + ",\"lastSalePrice\":0," +
             "\"statsList\":[],\"lifetimeStats\":[],\"attributeList\":[],\"teamid\":" + it.TeamId +
             ",\"rareflag\":" + it.Rare + "," +
-            "\"leagueId\":0,\"pile\":6,\"resourceGameYear\":2014";
+            "\"leagueId\":0,\"pile\":" + pile + ",\"resourceGameYear\":2014";
         int category = it.Category;
 
         string name = Esc(it.Name);
