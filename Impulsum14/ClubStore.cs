@@ -17,6 +17,20 @@ internal sealed class ClubData
     public int StaffVersion { get; set; } = 0;
     public int ConsumablesVersion { get; set; } = 0;
     public Dictionary<long, PlayerMod> PlayerMods { get; set; } = new();
+    public Dictionary<long, Auction> Listings { get; set; } = new();
+    public long TradeIdSeq { get; set; } = 1_000_000_000;
+    public long MarketBuySeq { get; set; } = 850_000_000;
+}
+
+internal sealed class Auction
+{
+    public long ItemId { get; set; }
+    public long TradeId { get; set; }
+    public int StartingBid { get; set; }
+    public int BuyNowPrice { get; set; }
+    public int CurrentBid { get; set; }
+    public long ExpiresAtUnix { get; set; }
+    public string State { get; set; } = "active";
 }
 
 internal sealed class PlayerMod
@@ -79,8 +93,8 @@ internal static class ClubStore
             return;
         }
 
-        RepairEmptyXi();
         MigrateCollections();
+        MigrateStaff();
     }
 
     private static readonly HashSet<string> StarterDef = new() { "CB", "RB", "LB", "RWB", "LWB" };
@@ -277,7 +291,7 @@ internal static class ClubStore
         }
     }
 
-    private const int CurrentStaffVersion = 7;
+    private const int CurrentStaffVersion = 8;
     private const int StarterStaffPerKind = 5;
 
     private static void SeedStaff()
@@ -312,9 +326,11 @@ internal static class ClubStore
             if (_data.StaffVersion >= CurrentStaffVersion || Staff.All.Length == 0) return;
             int had = _data.Staff.Count;
             _data.Staff.Clear();
-            GrantStarterStaff(new Random());
+            _data.Staff.AddRange(Staff.All);
+            _data.StaffSeeded = true;
+            _data.StaffVersion = CurrentStaffVersion;
             Save();
-            Console.WriteLine($"[Club] staff reset to starter set: {had} -> {_data.Staff.Count}");
+            Console.WriteLine($"[Club] staff re-seeded from corrected catalog: {had} -> {_data.Staff.Count}");
         }
     }
 
@@ -401,79 +417,6 @@ internal static class ClubStore
             _data.Seeded = true;
             Save();
         }
-    }
-
-    private static void RepairEmptyXi()
-    {
-        lock (_lock)
-        {
-            if (_data.Inventory.Count < 11) return;
-
-            var squad = _data.Squads.FirstOrDefault(s => s.Id == _data.ActiveSquadId)
-                        ?? _data.Squads.FirstOrDefault();
-            if (squad == null)
-            {
-                string clubName = FutProfileStore.Get().Club.Name;
-                squad = new Squad
-                {
-                    Id = 0,
-                    Name = string.IsNullOrWhiteSpace(clubName) ? "Squad 1" : clubName,
-                    Formation = "f442",
-                };
-                _data.Squads.Add(squad);
-                _data.ActiveSquadId = 0;
-            }
-
-            int filled = squad.Slots.Count(s => s.Key < XiSlots && s.Value != 0);
-            int benched = squad.Slots.Count(s => s.Key >= XiSlots && s.Value != 0);
-            int spare = _data.Inventory.Count(c => !_data.Squads.SelectMany(s => s.Slots.Values).Contains(c.ItemId));
-            if (filled >= XiSlots && (benched > 0 || spare == 0)) return;
-
-            var assigned = new HashSet<long>(_data.Squads.SelectMany(s => s.Slots.Values).Where(v => v != 0));
-            int added = 0;
-            for (int i = 0; i < Formation442.Length; i++)
-            {
-                if (squad.Slots.TryGetValue(i, out long have) && have != 0) continue;
-                long pick = PickFromClub(Formation442[i], assigned);
-                if (pick == 0) continue;
-                squad.Slots[i] = pick;
-                assigned.Add(pick);
-                added++;
-            }
-
-            for (int i = 0; i < _data.Inventory.Count; i++)
-            {
-                int want = assigned.Contains(_data.Inventory[i].ItemId) ? 7 : 6;
-                if (_data.Inventory[i].Pile != want)
-                    _data.Inventory[i] = new ClubItem(_data.Inventory[i].ItemId, _data.Inventory[i].Player, want);
-            }
-
-            Save();
-            if (added > 0)
-            {
-                int xi = squad.Slots.Count(s => s.Key < XiSlots && s.Value != 0);
-                int subs = squad.Slots.Count(s => s.Key >= XiSlots && s.Value != 0);
-                Console.WriteLine($"[Club] rebuilt the squad from the club: {added} slot(s) filled, " +
-                                  $"{xi}/{XiSlots} in the XI, {subs} on the bench");
-            }
-        }
-    }
-
-    private static long PickFromClub(string pos, HashSet<long> assigned)
-    {
-        Func<RealPlayer, bool> inGroup =
-            pos == "GK"              ? p => p.Position == "GK" :
-            StarterDef.Contains(pos) ? p => StarterDef.Contains(p.Position) :
-            StarterMid.Contains(pos) ? p => StarterMid.Contains(p.Position) :
-                                       p => StarterAtt.Contains(p.Position);
-
-        var free = _data.Inventory.Where(c => !assigned.Contains(c.ItemId)).ToArray();
-        var pool = free.Where(c => c.Player.Position == pos).ToArray();
-        if (pool.Length == 0) pool = free.Where(c => inGroup(c.Player)).ToArray();
-        if (pool.Length == 0) pool = free.Where(c => c.Player.Position != "GK").ToArray();
-        if (pool.Length == 0) pool = free;
-        if (pool.Length == 0) return 0;
-        return pool.OrderByDescending(c => c.Player.Rating).First().ItemId;
     }
 
     private static void MigrateItemIds()

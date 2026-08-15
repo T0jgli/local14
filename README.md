@@ -27,11 +27,11 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 - TOTW 
 - Tournaments
 - Match Stats
+- Transfermarket (50%)
 
 ## TODO
 
 - legends
-- Transfermarket
 - divisions
 - manager challenges
 - minor bug fixes
@@ -39,7 +39,6 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
   
 ## Known Bugs
 
-- Fitness coaches and Physios crashes the game
 - Tournaments doesn't keep the underway status and reset
 - Divisions is broken
 - Manager quests dont give you rewards like packs
@@ -80,6 +79,6 @@ This project is an unofficial, community-developed backend. It is not affiliated
  
 - MYorderlyHuman on discord (Helped soo much in understanding of the architecture)
 - Toniboi on discord (Helped with tournaments)
-- Draz on discord (Helped with Manager cards and cert bypass and coin fix)
+- Draz on discord (has been a massive help!)
 - [BlazeSDK](https://github.com/Aim4kill/BlazeSDK) By [@Aim4kill](https://github.com/Aim4kill)
 - [Zamboni3](https://github.com/ZamboniDevelopment/Zamboni3) By [@ZamboniDevelopment](https://github.com/ZamboniDevelopment)
