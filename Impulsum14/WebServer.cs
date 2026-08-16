@@ -1607,6 +1607,7 @@ internal sealed class WebServer
         {
             int putId = int.Parse(System.Text.RegularExpressions.Regex.Match(path, @"squad/(\d+)").Groups[1].Value);
             Squad target = null;
+            bool ignoredAutomaticReorder = false;
             ClubStore.Mutate(data =>
             {
                 if (data.Inventory.Count == 0) return;
@@ -1640,10 +1641,12 @@ internal sealed class WebServer
                         target.Name = nameEl.GetString() ?? target.Name;
                     if (root.TryGetProperty("formation", out var formEl) && formEl.ValueKind == System.Text.Json.JsonValueKind.String)
                         target.Formation = formEl.GetString() ?? target.Formation;
-                    if (root.TryGetProperty("chemistry", out var chemEl) && chemEl.ValueKind == System.Text.Json.JsonValueKind.Number)
-                        target.Chemistry = chemEl.GetInt32();
-                    if (root.TryGetProperty("starRating", out var starEl) && starEl.ValueKind == System.Text.Json.JsonValueKind.Number)
-                        target.StarRating = starEl.GetInt32();
+                    int? requestedChemistry = root.TryGetProperty("chemistry", out var chemEl) &&
+                                              chemEl.ValueKind == System.Text.Json.JsonValueKind.Number
+                        ? chemEl.GetInt32() : null;
+                    int? requestedStarRating = root.TryGetProperty("starRating", out var starEl) &&
+                                               starEl.ValueKind == System.Text.Json.JsonValueKind.Number
+                        ? starEl.GetInt32() : null;
                     if (root.TryGetProperty("players", out var playersEl) && playersEl.ValueKind == System.Text.Json.JsonValueKind.Array)
                     {
                         var newSlots = new Dictionary<int, long>();
@@ -1658,16 +1661,37 @@ internal sealed class WebServer
                         }
                         if (newSlots.Count > 0)
                         {
+                            bool sameCards = target.Slots.Count == newSlots.Count &&
+                                target.Slots.Values.OrderBy(id => id).SequenceEqual(newSlots.Values.OrderBy(id => id));
+                            bool orderChanged = sameCards && newSlots.Any(slot =>
+                                !target.Slots.TryGetValue(slot.Key, out long oldItemId) || oldItemId != slot.Value);
+                            if (orderChanged)
+                            {
+                                ignoredAutomaticReorder = true;
+                                _log.LogInformation("[FUT] squad PUT {0}: ignored same-card slot reshuffle from the pre-match client flow", putId);
+                            }
+
                             int had = target.Slots.Count(s => s.Value != 0);
-                            if (newSlots.Count < had)
+                            if (ignoredAutomaticReorder)
+                            {
+                            }
+                            else if (newSlots.Count < had)
                                 _log.LogWarning("[FUT] squad PUT {0} shrinks the squad: {1} slot(s) in, {2} saved - the client dropped entries from our last squad body",
                                     putId, newSlots.Count, had);
                             else
                                 _log.LogInformation("[FUT] squad PUT {0}: {1} slot(s) (was {2})", putId, newSlots.Count, had);
 
-                            target.Slots.Clear();
-                            foreach (var kv in newSlots) target.Slots[kv.Key] = kv.Value;
+                            if (!ignoredAutomaticReorder)
+                            {
+                                target.Slots.Clear();
+                                foreach (var kv in newSlots) target.Slots[kv.Key] = kv.Value;
+                            }
                         }
+                    }
+                    if (!ignoredAutomaticReorder)
+                    {
+                        if (requestedChemistry.HasValue) target.Chemistry = requestedChemistry.Value;
+                        if (requestedStarRating.HasValue) target.StarRating = requestedStarRating.Value;
                     }
                 }
                 catch (Exception ex)
