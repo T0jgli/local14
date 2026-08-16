@@ -255,7 +255,7 @@ internal sealed class WebServer
         }
 
         string status = "200 OK";
-        if ((lp.EndsWith("/user") || lp.EndsWith("/userdata")) && !FutProfileStore.Get().Club.Established)
+        if ((lp.EndsWith("/user") || lp.EndsWith("/userdata")) && !FutProfileStore.Get().Club.Established && !lp.Contains("/delete/game/"))
             status = "465 Tutorial";
 
         if (payloadStr.Length > 0)
@@ -462,12 +462,6 @@ internal sealed class WebServer
             long nucleusId = ParseLong(req.Headers["Easw-Session-Data-Nucleus-Id"], BlazePersonaId);
             return ("application/json; charset=utf-8",
                     "{\"userAccountInfo\":" + UserAccountInfoJson(nucleusId) + "}");
-        }
-
-        if (path.Contains("/delete/auth"))
-        {
-            DeleteClub();
-            return ("application/json; charset=utf-8", "{\"sid\":\"" + SessionId + "\"}");
         }
 
         if (path.EndsWith("/auth") && (path.Contains("rs4") || path.Contains("/ut")))
@@ -1563,6 +1557,9 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8",
                     "{\"squadList\":" + sb + ",\"squad\":" + sb + "}");
         }
+
+        if (path.Contains("/delete/game/") && path.EndsWith("/user"))
+            DeleteClub();
 
         // FUT user profile (/fut/rs4/ut/game/fifa14/user, .../userdata). Data-driven from the
         // profile: isReturningUser=false => NEW player (client state STATE_WELCOME, not
