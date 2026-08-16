@@ -27,7 +27,7 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 - TOTW 
 - Tournaments
 - Match Stats
-- Transfermarket (50%)
+- Transfermarket (100%)
 - Club deletion
 
 ## TODO

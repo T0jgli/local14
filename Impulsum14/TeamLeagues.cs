@@ -32,4 +32,7 @@ internal static class TeamLeagues
     }
 
     internal static int LeagueOf(int teamId) => Map.TryGetValue(teamId, out int lid) ? lid : 0;
+
+    private static readonly int[] Leagues = Map.Values.Distinct().OrderBy(v => v).ToArray();
+    internal static int[] AllLeagues => Leagues;
 }

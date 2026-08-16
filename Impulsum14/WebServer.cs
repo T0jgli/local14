@@ -491,6 +491,17 @@ internal sealed class WebServer
         if (path.Contains("audiodnplist.csv"))
             return ServeFile("audioDNPList.csv", "text/csv; charset=utf-8");
 
+        if (path.EndsWith("/marketfeed"))
+        {
+            long feedNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            SettleBotBuys(feedNow);
+            SettleExpiredListings(feedNow);
+            SettleAcceptedOffers(feedNow);
+            ReconcileBids(feedNow);
+            Market.TryAdvanceFeed(feedNow);
+            return ("application/json; charset=utf-8", Market.FeedJson());
+        }
+
         if (path.Contains("/trusteddevice"))
             return ("application/json; charset=utf-8",
                     "{\"changed\":false,\"exists\":true,\"locked\":false,\"trusted\":true}");
@@ -506,9 +517,17 @@ internal sealed class WebServer
 
         if (path.EndsWith("/hub"))
         {
+            long hubNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            SettleWonBids(hubNow);
+            SettleBotBuys(hubNow);
+            SettleExpiredListings(hubNow);
+            SettleAcceptedOffers(hubNow);
+            ReconcileBids(hubNow);
             var profHub = FutProfileStore.Get();
-            long coinsHub = profHub.Coins;
+            long coinsHub = profHub.Coins - Market.HeldCoins;   // available = balance minus escrowed bids
             string currenciesHub = CurrenciesJson(coinsHub);
+            var wl = Market.WatchlistCounts(hubNow);
+            long liveListings = Market.LiveTotal(hubNow);
             int clubPlayers = ClubStore.Get().Inventory.Count;
             int tradePileCount = ClubStore.Get().Inventory.Count(c => c.Pile == 3);
             string totwHub = ",\"squad\":" + Totw.HubSquadJson();
@@ -522,8 +541,9 @@ internal sealed class WebServer
                     ",\"unassignedPileSize\":0,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0}}" +
                     totwHub +
                     ",\"clubPlayers\":" + clubPlayers +
-                    ",\"auctionCount\":" + Market.Total + ",\"tradePile\":{\"selling\":0,\"sold\":0,\"count\":" + tradePileCount + ",\"notification\":0}" +
-                    ",\"watchlist\":{\"winning\":0,\"count\":0,\"outbid\":0,\"notification\":0}}");
+                    ",\"auctionCount\":" + liveListings + ",\"tradePile\":{\"selling\":0,\"sold\":0,\"count\":" + tradePileCount + ",\"notification\":0}" +
+                    ",\"watchlist\":{\"winning\":" + wl.Winning + ",\"count\":" + wl.Count + ",\"outbid\":" + wl.Outbid +
+                    ",\"notification\":" + wl.Outbid + "}}");
         }
 
         if (path.EndsWith("/clubuser"))
@@ -625,6 +645,7 @@ internal sealed class WebServer
 
             long newTradeId = 0;
             bool owned = false;
+            long ahNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             ClubStore.Mutate(data =>
             {
                 int idx = data.Inventory.FindIndex(c => c.ItemId == auctionItemId);
@@ -635,6 +656,11 @@ internal sealed class WebServer
 
                 newTradeId = data.Listings.TryGetValue(auctionItemId, out var existing)
                     ? existing.TradeId : data.TradeIdSeq++;
+                var listedPlayer = data.Inventory[idx].Player;
+                int effPrice = buyNowPrice > 0 ? buyNowPrice : startingBid;
+                long floor = Market.CheapestLiveBuyNow(listedPlayer, ahNow);
+                long refPrice = floor > 0 ? floor : Market.MarketValue(listedPlayer);
+                long sellDelay = Market.UserSaleDelay(effPrice, refPrice, new Random());
                 data.Listings[auctionItemId] = new Auction
                 {
                     ItemId = auctionItemId,
@@ -642,8 +668,11 @@ internal sealed class WebServer
                     StartingBid = startingBid,
                     BuyNowPrice = buyNowPrice,
                     CurrentBid = 0,
-                    ExpiresAtUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + duration,
+                    ExpiresAtUnix = ahNow + duration,
                     State = "active",
+                    ListedAtUnix = ahNow,
+                    BotBuyAtUnix = sellDelay > 0 ? ahNow + sellDelay : 0,
+                    SoldFor = 0,
                 };
             });
 
@@ -659,6 +688,7 @@ internal sealed class WebServer
         {
             long buyTradeId = long.Parse(mBuy.Groups[1].Value);
             int amount = 0;
+            long offeredId = 0;
             try
             {
                 using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
@@ -666,9 +696,13 @@ internal sealed class WebServer
                 foreach (var key in new[] { "bid", "buyNowPrice", "amount" })
                     if (root.TryGetProperty(key, out var el) && el.ValueKind == System.Text.Json.JsonValueKind.Number)
                     { amount = el.GetInt32(); break; }
+                if (root.TryGetProperty("itemData", out var items) && items.ValueKind == System.Text.Json.JsonValueKind.Array)
+                    foreach (var it in items.EnumerateArray())
+                        if (it.TryGetProperty("id", out var idEl) && idEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+                        { offeredId = idEl.GetInt64(); break; }
             }
             catch (Exception ex) { _log.LogWarning("[FUT] bid body parse failed: {0}", ex.Message); }
-            return MarketBuy(buyTradeId, amount);
+            return MarketBuy(buyTradeId, amount, offeredId);
         }
 
         if (path.Contains("/trade/status") && req.HttpMethod == "GET")
@@ -676,10 +710,22 @@ internal sealed class WebServer
             var wantIds = new HashSet<long>();
             foreach (string part in (req.QueryString["tradeIds"] ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries))
                 if (long.TryParse(part.Trim(), out long tid)) wantIds.Add(tid);
+            if (wantIds.Count == 0)
+            {
+                foreach (var kv in Market.MyBids) wantIds.Add(kv.Key);
+                foreach (var kv in Market.AcceptedOffers) wantIds.Add(kv.Key);
+                foreach (var kv in Market.Watched) wantIds.Add(kv.Key);
+            }
 
             var data = ClubStore.Get();
             var tsRnd = new Random();
             long tsNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            SettleWonBids(tsNow);
+            SettleBotBuys(tsNow);
+            SettleExpiredListings(tsNow);
+            SettleAcceptedOffers(tsNow);
+            ReconcileBids(tsNow);
+            Market.TryAdvanceFeed(tsNow);
             var byTrade = data.Listings.Values.ToDictionary(a => a.TradeId);
             var tsSb = new StringBuilder("[");
             int tsWritten = 0;
@@ -700,16 +746,86 @@ internal sealed class WebServer
                 tsSb.Append(entry);
             }
             tsSb.Append(']');
-            long tsCoins = FutProfileStore.Get().Coins;
+            long tsCoins = FutProfileStore.Get().Coins - Market.HeldCoins;
             return ("application/json; charset=utf-8",
                     "{\"auctionInfo\":" + tsSb + ",\"duplicateItemIdList\":null,\"errorState\":null," +
                     "\"credits\":" + tsCoins + ",\"totalCredits\":" + tsCoins + ",\"coins\":" + tsCoins +
                     ",\"currencies\":" + CurrenciesJson(tsCoins) + ",\"bidTokens\":{}}");
         }
 
+        if (path.Contains("/watchlist") && req.HttpMethod is "PUT" or "DELETE")
+        {
+            long tid = long.TryParse(req.QueryString["tradeId"], out long tq) ? tq : 0;
+            if (tid == 0)
+            {
+                try
+                {
+                    using var doc = System.Text.Json.JsonDocument.Parse(req.Body);
+                    if (doc.RootElement.TryGetProperty("auctionInfo", out var ai)
+                        && ai.ValueKind == System.Text.Json.JsonValueKind.Array)
+                        foreach (var el in ai.EnumerateArray())
+                            if (el.TryGetProperty("id", out var idEl)
+                                && idEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+                            { tid = idEl.GetInt64(); break; }
+                }
+                catch (Exception ex) { _log.LogWarning("[FUT] watchList body parse failed: {0}", ex.Message); }
+            }
+            if (tid >= Market.TradeIdBase)   // sim-market listings only; own listings are watched via the trade pile
+            {
+                if (req.HttpMethod == "PUT")
+                {
+                    Market.Watched.TryAdd(tid, 0);
+                    _log.LogInformation("[Market] WATCH trade {0} added to transfer targets", tid);
+                }
+                else
+                {
+                    Market.Watched.TryRemove(tid, out _);
+                    _log.LogInformation("[Market] WATCH trade {0} removed from transfer targets", tid);
+                }
+            }
+            return ("application/json; charset=utf-8", "{}");
+        }
+
+        if (path.Contains("/watchlist") && req.HttpMethod == "GET")
+        {
+            int wlOffset = int.TryParse(req.QueryString["offset"], out int wof) ? wof : 0;
+            int wlCount = int.TryParse(req.QueryString["count"], out int wcnt) ? wcnt : 50;
+            long wlNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            SettleWonBids(wlNow);
+            SettleBotBuys(wlNow);
+            SettleExpiredListings(wlNow);
+            SettleAcceptedOffers(wlNow);
+            ReconcileBids(wlNow);
+            Market.TryAdvanceFeed(wlNow);
+
+            var watched = new List<long>();
+            foreach (var kv in Market.MyBids) watched.Add(kv.Key);
+            foreach (var kv in Market.AcceptedOffers)
+                if (!watched.Contains(kv.Key)) watched.Add(kv.Key);
+            foreach (var kv in Market.Watched)
+                if (!watched.Contains(kv.Key)) watched.Add(kv.Key);
+
+            var wlSb = new StringBuilder("[");
+            int wlWritten = 0;
+            foreach (long tid in watched.Skip(wlOffset).Take(wlCount))
+            {
+                string entry = Market.EntryByTradeId(tid, wlNow);
+                if (entry == null) continue;
+                if (wlWritten++ > 0) wlSb.Append(',');
+                wlSb.Append(entry);
+            }
+            wlSb.Append(']');
+            long wlCoins = FutProfileStore.Get().Coins - Market.HeldCoins;
+            return ("application/json; charset=utf-8",
+                    "{\"auctionInfo\":" + wlSb + ",\"total\":" + watched.Count +
+                    ",\"duplicateItemIdList\":[],\"errorState\":null,\"credits\":" + wlCoins +
+                    ",\"totalCredits\":" + wlCoins + ",\"coins\":" + wlCoins +
+                    ",\"currencies\":" + CurrenciesJson(wlCoins) + ",\"bidTokens\":{}}");
+        }
+
         if (path.EndsWith("/tradepile"))
         {
-            long coinsTrade = FutProfileStore.Get().Coins;
+            long coinsTrade = FutProfileStore.Get().Coins - Market.HeldCoins;
             var tradeItems = ClubStore.Get().Inventory.Where(c => c.Pile == 3).ToArray();
             var listings = ClubStore.Get().Listings;
             var tpRnd = new Random();
@@ -727,6 +843,30 @@ internal sealed class WebServer
                     ",\"currencies\":" + CurrenciesJson(coinsTrade) +
                     ",\"duplicateItemIdList\":[],\"bidTokens\":null,\"maxAuctionsAllowed\":30," +
                     "\"maximumTradePileSize\":100,\"total\":" + tradeItems.Length + "}");
+        }
+
+        {
+            var mDelTrade = System.Text.RegularExpressions.Regex.Match(path, @"/delete/game/.+/trade/(\d+)$");
+            if (mDelTrade.Success)
+            {
+                long delTradeId = long.Parse(mDelTrade.Groups[1].Value);
+                ClubStore.Mutate(data =>
+                {
+                    foreach (var kv in data.Listings.Where(kv => kv.Value.TradeId == delTradeId).ToList())
+                    {
+                        bool sold = kv.Value.State == "sold";
+                        data.Listings.Remove(kv.Key);
+                        int delIdx = data.Inventory.FindIndex(c => c.ItemId == kv.Key);
+                        if (delIdx < 0) continue;
+                        if (sold)
+                            data.Inventory.RemoveAt(delIdx);   // bot bought it -> card leaves the club
+                        else
+                            data.Inventory[delIdx] = new ClubItem(kv.Key, data.Inventory[delIdx].Player, 6);
+                    }
+                });
+                _log.LogInformation("[FUT] cleared trade {0} from the transfer list", delTradeId);
+                return ("application/json; charset=utf-8", "{}");
+            }
         }
 
         if (path.EndsWith("/club/stats/consumables"))
@@ -852,6 +992,7 @@ internal sealed class WebServer
 
             var inventory = ClubStore.Get().Inventory;
             var matches = inventory
+                .Where(c => c.Pile != 3 && c.Pile != 0)   // transfer list AND unassigned items stay out of the club
                 .Where(c => (posFilter == "any" || posFilter == "" || c.Player.Position == posFilter)
                     && (nationFilter == -1 || c.Player.NationId == nationFilter)
                     && (teamFilter == -1 || c.Player.TeamId == teamFilter)
@@ -885,14 +1026,59 @@ internal sealed class WebServer
             int tmStart = int.TryParse(req.QueryString["start"], out int ts) ? ts : 0;
             int tmCount = int.TryParse(req.QueryString["num"], out int tc) ? tc : 12;
             long tmNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            SettleWonBids(tmNow);
+            SettleBotBuys(tmNow);
+            SettleExpiredListings(tmNow);
+            SettleAcceptedOffers(tmNow);
+            Market.TryAdvanceFeed(tmNow);
 
-            var tmMatch = MarketFilter(req.QueryString);
             int tmMinB = int.TryParse(req.QueryString["minb"], out int tmb) ? tmb : 0;
             int tmMaxB = int.TryParse(req.QueryString["maxb"], out int tmxb) ? tmxb : 0;
             int tmMinC = int.TryParse(req.QueryString["micr"], out int tmc) ? tmc : 0;
             int tmMaxC = int.TryParse(req.QueryString["macr"], out int tmxac) ? tmxac : 0;
-            string page = Market.PageJson(tmStart, tmCount, tmNow, tmMatch, tmMinB, tmMaxB, tmMinC, tmMaxC);
-            long tmCoins = FutProfileStore.Get().Coins;
+            string tmSig = Market.SearchSignature(req.QueryString);
+
+            string tmType = (req.QueryString["type"] ?? "").ToLowerInvariant();
+            string tmCat = req.QueryString["cat"] ?? "";
+            string tmLev = (req.QueryString["lev"] ?? "").ToLowerInvariant();
+            string tmPos = req.QueryString["pos"] ?? "";
+            int tmStyle = int.TryParse(req.QueryString["playStyle"], out int tms) ? tms : 0;
+            long tmCoins = FutProfileStore.Get().Coins - Market.HeldCoins;
+            if (tmType is "clubinfo" or "stadium" or "stadiums" or "ball" or "balls"
+                or "kit" or "kits" or "badge" or "badges" or "custom")
+            {
+                string eCat = tmType == "clubinfo" ? tmCat : tmType;
+                int tmLeag = int.TryParse(req.QueryString["leag"], out int tml) ? tml : 0;
+                int tmTeam = int.TryParse(req.QueryString["team"], out int tmt) ? tmt : 0;
+                string ePage = Market.ClubItemPageJson(tmStart, tmCount, tmNow, eCat, tmLev,
+                    tmLeag, tmTeam, tmMinB, tmMaxB, tmMinC, tmMaxC, tmSig);
+                return ("application/json; charset=utf-8",
+                        "{\"errorState\":null,\"credits\":" + tmCoins + ",\"auctionInfo\":" + ePage +
+                        ",\"duplicateItemIdList\":null,\"bidTokens\":{}}");
+            }
+            if (tmType == "staff")
+            {
+                int tmNat = int.TryParse(req.QueryString["nat"], out int tmn) ? tmn : 0;
+                int tmLeag = int.TryParse(req.QueryString["leag"], out int tml2) ? tml2 : 0;
+                string sPage = Market.StaffPageJson(tmStart, tmCount, tmNow, tmCat, tmLev,
+                    tmNat, tmLeag, tmMinB, tmMaxB, tmMinC, tmMaxC, tmSig);
+                return ("application/json; charset=utf-8",
+                        "{\"errorState\":null,\"credits\":" + tmCoins + ",\"auctionInfo\":" + sPage +
+                        ",\"duplicateItemIdList\":null,\"bidTokens\":{}}");
+            }
+            bool consumableSearch = tmType is "training" or "development"
+                                    || tmType.Length == 0 && Market.IsConsumableCat(tmCat);
+            if (consumableSearch)
+            {
+                string cPage = Market.ConsumablePageJson(tmStart, tmCount, tmNow, tmCat, tmLev, tmPos, tmStyle,
+                    tmMinB, tmMaxB, tmMinC, tmMaxC, tmSig);
+                return ("application/json; charset=utf-8",
+                        "{\"errorState\":null,\"credits\":" + tmCoins + ",\"auctionInfo\":" + cPage +
+                        ",\"duplicateItemIdList\":null,\"bidTokens\":{}}");
+            }
+
+            var tmMatch = MarketFilter(req.QueryString);
+            string page = Market.PageJson(tmStart, tmCount, tmNow, tmMatch, tmMinB, tmMaxB, tmMinC, tmMaxC, tmStyle, tmSig);
             return ("application/json; charset=utf-8",
                     "{\"errorState\":null,\"credits\":" + tmCoins + ",\"auctionInfo\":" + page +
                     ",\"duplicateItemIdList\":null,\"bidTokens\":{}}");
@@ -1492,7 +1678,7 @@ internal sealed class WebServer
                 var assigned = new HashSet<long>(data.Squads.SelectMany(s => s.Slots.Values).Where(v => v != 0));
                 for (int i = 0; i < data.Inventory.Count; i++)
                 {
-                    if (data.Inventory[i].Pile == 3) continue;   // leave transfer-list items on the market
+                    if (data.Inventory[i].Pile is 3 or 0) continue;   // leave transfer-list/unassigned items alone
                     int want = assigned.Contains(data.Inventory[i].ItemId) ? 7 : 6;
                     if (data.Inventory[i].Pile != want)
                         data.Inventory[i] = new ClubItem(data.Inventory[i].ItemId, data.Inventory[i].Player, want);
@@ -1850,6 +2036,9 @@ internal sealed class WebServer
         int maskedDefId = Int("maskedDefId", -1);
         if (maskedDefId > 0) preds.Add(p => p.Id == maskedDefId);
 
+        int defId = Int("definitionId", -1);
+        if (defId > 0) preds.Add(p => p.Id == defId);
+
         string pos = q["pos"];
         if (!string.IsNullOrEmpty(pos)) preds.Add(p => p.Position == pos);
 
@@ -1879,28 +2068,110 @@ internal sealed class WebServer
         return p => preds.All(f => f(p));
     }
 
-    private (string, string) MarketBuy(long tradeId, int amount)
+    private (string, string) MarketBuy(long tradeId, int amount, long offeredItemId = 0)
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        if (tradeId >= Market.StaffTradeIdBase)
+            return StaffBuy(tradeId, amount);
+        if (tradeId >= Market.ClubItemTradeIdBase)
+            return ClubItemBuy(tradeId, amount);
+        if (tradeId >= Market.ConsumableTradeIdBase)
+            return ConsumableBuy(tradeId, amount);
         if (!Market.ResolveTradeId(tradeId, out var card, out int startingBid, out int buyNow))
             return ("application/json; charset=utf-8", "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + "}");
 
         long coins = FutProfileStore.Get().Coins;
         if (amount <= 0) amount = buyNow;
-        if (amount > coins)
-            return ("application/json; charset=utf-8",
-                "{\"reason\":\"INSUFFICIENT_COINS\",\"tradeId\":" + tradeId + ",\"credits\":" + coins +
-                ",\"currencies\":" + CurrenciesJson(coins) + ",\"bidTokens\":{}}");
-
+        long escrowed = Market.EscrowHeld(tradeId);   // coins we already hold for this trade
         bool won = amount >= buyNow;
+        long extraCharge = won ? Math.Max(0, (long)buyNow - escrowed)
+                               : Math.Max(0, (long)amount - escrowed);
+        long available = coins - Market.HeldCoins;    // profile minus coins committed elsewhere
+        if (extraCharge > available)
+            return ("application/json; charset=utf-8",
+                "{\"reason\":\"INSUFFICIENT_COINS\",\"tradeId\":" + tradeId + ",\"credits\":" + available +
+                ",\"currencies\":" + CurrenciesJson(available) + ",\"bidTokens\":{}}");
+
         var rnd = new Random();
+        Market.AcceptedOffers.TryRemove(tradeId, out _);   // fresh terms replace any pending swap
+        Market.MyBids.TryRemove(tradeId, out _);
+        Market.RefundedBids.TryRemove(tradeId, out _);     // fresh terms = fresh escrow
+
+        ClubItem? offeredCard = null;
+        if (!won && offeredItemId != 0)
+        {
+            ClubStore.Mutate(d =>
+            {
+                var hit = d.Inventory.FirstOrDefault(c => c.ItemId == offeredItemId
+                    && !d.Listings.ContainsKey(c.ItemId));
+                if (hit.ItemId != 0) offeredCard = hit;
+            });
+            if (offeredCard != null)
+            {
+                if (escrowed > 0)
+                {
+                    FutProfileStore.Mutate(p => p.Coins += escrowed);
+                    Market.ChangeHeld(-escrowed);
+                }
+                long cardValue = Market.CheapestLiveBuyNow(offeredCard.Value.Player, now);
+                if (cardValue <= 0) cardValue = Market.MarketValue(offeredCard.Value.Player);
+                long total = amount + cardValue;
+                long acceptIn = Market.OfferAcceptDelay(total, buyNow, rnd);
+                if (acceptIn < 0)
+                {
+                    _log.LogInformation("[Market] OFFER declined trade {0}: {1} coins + {2} (worth {3}) vs buy-now {4}",
+                        tradeId, amount, offeredCard.Value.Player.Name, cardValue, buyNow);
+                    return ("application/json; charset=utf-8",
+                        "{\"reason\":\"OFFER_TOO_LOW\",\"tradeId\":" + tradeId + ",\"credits\":" + coins +
+                        ",\"currencies\":" + CurrenciesJson(coins) + ",\"bidTokens\":{}}");
+                }
+                Market.AcceptedOffers[tradeId] = new Market.PendingOffer(amount, offeredItemId, now + acceptIn);
+                var opt = Market.AuctionState(tradeId, now);
+                string offerAuc = "{\"tradeId\":" + tradeId + ",\"itemData\":" +
+                    BuildRealPlayerItem(rnd, card, 3_000_000_000L + (tradeId - 2_000_000_000L), now, 0) +
+                    ",\"tradeState\":\"active\",\"expires\":3600" +
+                    ",\"buyNowPrice\":" + buyNow + ",\"startingBid\":" + startingBid +
+                    ",\"currentBid\":" + opt.CurrentBid + ",\"offers\":" + opt.Offers +
+                    ",\"watched\":true,\"bidState\":\"" + opt.BidState + "\",\"sellerName\":\"FUT\"," +
+                    "\"sellerEstablished\":2013,\"sellerId\":1,\"confidenceValue\":100}";
+                _log.LogInformation("[Market] OFFER on trade {0}: {1} coins + {2} (worth {3}) for buy-now {4} - seller accepts in {5}s",
+                    tradeId, amount, offeredCard.Value.Player.Name, cardValue, buyNow, acceptIn);
+                return ("application/json; charset=utf-8",
+                    "{\"auctionInfo\":[" + offerAuc + "],\"errorState\":null,\"duplicateItemIdList\":[]," +
+                    "\"credits\":" + (coins - Market.HeldCoins) + ",\"totalCredits\":" + (coins - Market.HeldCoins) + ",\"coins\":" + (coins - Market.HeldCoins) +
+                    ",\"currencies\":" + CurrenciesJson(coins - Market.HeldCoins) + ",\"bidTokens\":{}}");
+            }
+            else
+            {
+                _log.LogInformation("[Market] OFFER on trade {0} declined - card {1} not found in the club",
+                    tradeId, offeredItemId);
+                return ("application/json; charset=utf-8",
+                    "{\"reason\":\"OFFER_TOO_LOW\",\"tradeId\":" + tradeId + ",\"credits\":" + coins +
+                    ",\"currencies\":" + CurrenciesJson(coins) + ",\"bidTokens\":{}}");
+            }
+        }
+        var dupes = new List<(long NewId, long OwnedId)>();
         long itemId;
         if (won)
         {
+            Market.MarkBought(tradeId, now);
+            if (escrowed > 0)
+            {
+                FutProfileStore.Mutate(p => p.Coins += escrowed);
+                Market.ChangeHeld(-escrowed);
+            }
             FutProfileStore.Mutate(p => p.Coins -= buyNow);
-            coins -= buyNow;
+            coins = coins + escrowed - buyNow;
             long newId = 0;
-            ClubStore.Mutate(d => { newId = d.MarketBuySeq++; d.Inventory.Add(new ClubItem(newId, card, 6)); });
+            ClubStore.Mutate(d =>
+            {
+                var owned = new Dictionary<int, long>();
+                foreach (var it in d.Inventory)
+                    if (!owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
+                newId = d.MarketBuySeq++;
+                if (owned.TryGetValue(card.CardId, out long ownedId)) dupes.Add((newId, ownedId));
+                d.Inventory.Add(new ClubItem(newId, card, 6));
+            });
             itemId = newId;   // pack-range id -> survives id migration, matches the claim PUT /item id
         }
         else
@@ -1911,31 +2182,402 @@ internal sealed class WebServer
         string item = BuildRealPlayerItem(rnd, card, itemId, now, won ? 6 : 0);
         if (won)
         {
-            lock (_pendingLock) { _pendingPackItems.Add((itemId, item)); }
+            lock (_pendingLock)
+            {
+                _pendingPackItems.Add((itemId, item));
+                _pendingDuplicates.AddRange(dupes);
+            }
             _lastPackItemList = "[" + item + "]";
-            _log.LogInformation("[Market] BUY-NOW asset {0} (rating {1}) for {2} -> club item {3}, balance {4}",
-                card.Id, card.Rating, buyNow, itemId, coins);
+            _log.LogInformation("[Market] BUY-NOW asset {0} (rating {1}) for {2} -> club item {3}, balance {4}{5}",
+                card.Id, card.Rating, buyNow, itemId, coins, dupes.Count > 0 ? " (duplicate)" : "");
         }
         else
         {
+            if (Market.Bought(tradeId, now))   // already sold to someone else this cycle
+                return ("application/json; charset=utf-8",
+                    "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + ",\"credits\":" + (coins - Market.HeldCoins) +
+                    ",\"currencies\":" + CurrenciesJson(coins - Market.HeldCoins) + ",\"bidTokens\":{}}");
+            if (amount > escrowed)
+            {
+                FutProfileStore.Mutate(p => p.Coins -= (amount - escrowed));
+                Market.ChangeHeld(amount - escrowed);
+            }
+            else if (amount < escrowed)
+            {
+                FutProfileStore.Mutate(p => p.Coins += (escrowed - amount));
+                Market.ChangeHeld(-(escrowed - amount));
+            }
+            coins = coins - Math.Max(0, amount - escrowed) + Math.Max(0, escrowed - amount);
             Market.MyBids[tradeId] = amount;   // user's bid becomes the listing's current price
             _log.LogInformation("[Market] BID {0} on asset {1} (rating {2}) - buy-now to purchase now",
                 amount, card.Id, card.Rating);
         }
 
+        var st = Market.AuctionState(tradeId, now);
         string state = won ? "closed" : "active";
-        int offers = won ? 0 : 1;
+        int offers = won ? 0 : st.Offers;
         int expiresOut = won ? -1 : 3600;
         string auction = "{\"tradeId\":" + tradeId + ",\"itemData\":" + item +
             ",\"tradeState\":\"" + state + "\",\"expires\":" + expiresOut +
             ",\"buyNowPrice\":" + buyNow + ",\"startingBid\":" + startingBid +
-            ",\"currentBid\":" + amount + ",\"offers\":" + offers +
-            ",\"watched\":false,\"bidState\":\"highest\",\"sellerName\":\"FUT\"," +
+            ",\"currentBid\":" + (won ? amount : st.CurrentBid) + ",\"offers\":" + offers +
+            ",\"watched\":false,\"bidState\":\"" + (won ? "highest" : st.BidState) + "\",\"sellerName\":\"FUT\"," +
             "\"sellerEstablished\":2013,\"sellerId\":1,\"confidenceValue\":100}";
         return ("application/json; charset=utf-8",
-            "{\"auctionInfo\":[" + auction + "],\"errorState\":null,\"duplicateItemIdList\":null," +
-            "\"credits\":" + coins + ",\"totalCredits\":" + coins + ",\"coins\":" + coins +
-            ",\"currencies\":" + CurrenciesJson(coins) + ",\"bidTokens\":{}}");
+            "{\"auctionInfo\":[" + auction + "],\"errorState\":null,\"duplicateItemIdList\":" + DuplicateListJson(dupes) + "," +
+            "\"credits\":" + (coins - Market.HeldCoins) + ",\"totalCredits\":" + (coins - Market.HeldCoins) + ",\"coins\":" + (coins - Market.HeldCoins) +
+            ",\"currencies\":" + CurrenciesJson(coins - Market.HeldCoins) + ",\"bidTokens\":{}}");
+    }
+
+    private (string, string) ConsumableBuy(long tradeId, int amount)
+    {
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        if (!Market.CResolveTradeId(tradeId, out var item, out int startingBid, out int buyNow))
+            return ("application/json; charset=utf-8", "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + "}");
+
+        long coins = FutProfileStore.Get().Coins;
+        if (amount <= 0) amount = buyNow;
+        if (amount > coins)
+            return ("application/json; charset=utf-8",
+                "{\"reason\":\"INSUFFICIENT_COINS\",\"tradeId\":" + tradeId + ",\"credits\":" + coins +
+                ",\"currencies\":" + CurrenciesJson(coins) + ",\"bidTokens\":{}}");
+        if (amount < buyNow)   // consumables have no bidding wars - placement bids are invalid
+            return ("application/json; charset=utf-8", "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + "}");
+
+        Market.CMarkBought(tradeId, now);
+        FutProfileStore.Mutate(p => p.Coins -= buyNow);
+        coins -= buyNow;
+        long itemId = 0;
+        var dupes = new List<(long NewId, long OwnedId)>();
+        ClubStore.Mutate(d =>
+        {
+            var owned = new Dictionary<long, long>();
+            foreach (var c in d.Consumables)
+                if (!owned.ContainsKey(c.ResourceId)) owned[c.ResourceId] = c.ItemId;
+            itemId = Interlocked.Increment(ref _nextPackExtraId);
+            var inst = item with { ItemId = itemId };
+            if (owned.TryGetValue(inst.ResourceId, out long ownedId)) dupes.Add((itemId, ownedId));
+            d.Consumables.Add(inst);
+        });
+        string itemJson = ConsumableItems.BuildJson(item with { ItemId = itemId }, now);
+        lock (_pendingLock)
+        {
+            _pendingPackItems.Add((itemId, itemJson));
+            _pendingDuplicates.AddRange(dupes);
+        }
+        _lastPackItemList = "[" + itemJson + "]";
+        _log.LogInformation("[Market] BUY consumable res {0} ({1}) for {2} -> club item {3}, balance {4}{5}",
+            item.ResourceId, item.Name, buyNow, itemId, coins, dupes.Count > 0 ? " (duplicate)" : "");
+
+        string seller = Market.CSellerFor(tradeId - Market.ConsumableTradeIdBase, now);
+        string auction = "{\"tradeId\":" + tradeId + ",\"itemData\":" + itemJson +
+            ",\"tradeState\":\"closed\",\"expires\":-1" +
+            ",\"buyNowPrice\":" + buyNow + ",\"startingBid\":" + startingBid +
+            ",\"currentBid\":" + amount + ",\"offers\":0,\"watched\":false,\"bidState\":\"highest\"" +
+            ",\"sellerName\":\"" + seller + "\",\"sellerEstablished\":2013,\"sellerId\":1,\"confidenceValue\":100}";
+        return ("application/json; charset=utf-8",
+            "{\"auctionInfo\":[" + auction + "],\"errorState\":null,\"duplicateItemIdList\":" + DuplicateListJson(dupes) + "," +
+            "\"credits\":" + (coins - Market.HeldCoins) + ",\"totalCredits\":" + (coins - Market.HeldCoins) + ",\"coins\":" + (coins - Market.HeldCoins) +
+            ",\"currencies\":" + CurrenciesJson(coins - Market.HeldCoins) + ",\"bidTokens\":{}}");
+    }
+
+    private (string, string) ClubItemBuy(long tradeId, int amount)
+    {
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        if (!Market.EResolveTradeId(tradeId, out var item, out int startingBid, out int buyNow))
+            return ("application/json; charset=utf-8", "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + "}");
+
+        long coins = FutProfileStore.Get().Coins;
+        if (amount <= 0) amount = buyNow;
+        if (amount > coins)
+            return ("application/json; charset=utf-8",
+                "{\"reason\":\"INSUFFICIENT_COINS\",\"tradeId\":" + tradeId + ",\"credits\":" + coins +
+                ",\"currencies\":" + CurrenciesJson(coins) + ",\"bidTokens\":{}}");
+        if (amount < buyNow)   // no bidding wars on club items - placement bids are invalid
+            return ("application/json; charset=utf-8", "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + "}");
+
+        Market.EMarkBought(tradeId, now);
+        FutProfileStore.Mutate(p => p.Coins -= buyNow);
+        coins -= buyNow;
+        long itemId = 0;
+        var dupes = new List<(long NewId, long OwnedId)>();
+        ClubStore.Mutate(d =>
+        {
+            var owned = new Dictionary<(string, int), long>();
+            foreach (var c in d.Cosmetics)
+                if (!owned.ContainsKey((c.Type, c.AssetId))) owned[(c.Type, c.AssetId)] = c.ItemId;
+            itemId = Interlocked.Increment(ref _nextPackExtraId);
+            var inst = item with { ItemId = itemId };
+            if (owned.TryGetValue((inst.Type, inst.AssetId), out long ownedId)) dupes.Add((itemId, ownedId));
+            d.Cosmetics.Add(inst);
+        });
+        string itemJson = ClubItems.BuildJson(item with { ItemId = itemId }, now);
+        lock (_pendingLock)
+        {
+            _pendingPackItems.Add((itemId, itemJson));
+            _pendingDuplicates.AddRange(dupes);
+        }
+        _lastPackItemList = "[" + itemJson + "]";
+        _log.LogInformation("[Market] BUY club item {0} ({1}) for {2} -> club item {3}, balance {4}{5}",
+            item.AssetId, item.Name, buyNow, itemId, coins, dupes.Count > 0 ? " (duplicate)" : "");
+
+        string seller = Market.ESellerFor(tradeId - Market.ClubItemTradeIdBase, now);
+        string auction = "{\"tradeId\":" + tradeId + ",\"itemData\":" + itemJson +
+            ",\"tradeState\":\"closed\",\"expires\":-1" +
+            ",\"buyNowPrice\":" + buyNow + ",\"startingBid\":" + startingBid +
+            ",\"currentBid\":" + amount + ",\"offers\":0,\"watched\":false,\"bidState\":\"highest\"" +
+            ",\"sellerName\":\"" + seller + "\",\"sellerEstablished\":2013,\"sellerId\":1,\"confidenceValue\":100}";
+        return ("application/json; charset=utf-8",
+            "{\"auctionInfo\":[" + auction + "],\"errorState\":null,\"duplicateItemIdList\":" + DuplicateListJson(dupes) + "," +
+            "\"credits\":" + (coins - Market.HeldCoins) + ",\"totalCredits\":" + (coins - Market.HeldCoins) + ",\"coins\":" + (coins - Market.HeldCoins) +
+            ",\"currencies\":" + CurrenciesJson(coins - Market.HeldCoins) + ",\"bidTokens\":{}}");
+    }
+
+    private (string, string) StaffBuy(long tradeId, int amount)
+    {
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        if (!Market.FResolveTradeId(tradeId, out bool isManager, out Manager mgr, out StaffCard stf,
+                out int startingBid, out int buyNow))
+            return ("application/json; charset=utf-8", "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + "}");
+
+        long coins = FutProfileStore.Get().Coins;
+        if (amount <= 0) amount = buyNow;
+        if (amount > coins)
+            return ("application/json; charset=utf-8",
+                "{\"reason\":\"INSUFFICIENT_COINS\",\"tradeId\":" + tradeId + ",\"credits\":" + coins +
+                ",\"currencies\":" + CurrenciesJson(coins) + ",\"bidTokens\":{}}");
+        if (amount < buyNow)
+            return ("application/json; charset=utf-8", "{\"reason\":\"INVALID_REQUEST\",\"tradeId\":" + tradeId + "}");
+
+        Market.FMarkBought(tradeId, now);
+        FutProfileStore.Mutate(p => p.Coins -= buyNow);
+        coins -= buyNow;
+        long itemId = 0;
+        var dupes = new List<(long NewId, long OwnedId)>();
+        string itemJson = "";
+        ClubStore.Mutate(d =>
+        {
+            itemId = Interlocked.Increment(ref _nextPackExtraId);
+            if (isManager)
+            {
+                int idx = d.Managers.FindIndex(m => m.ResourceId == mgr.ResourceId);
+                if (idx >= 0) dupes.Add((itemId, ManagerItemIdBase + idx));
+                d.Managers.Add(mgr);
+            }
+            else
+            {
+                int idx = d.Staff.FindIndex(s => s.ResourceId == stf.ResourceId);
+                if (idx >= 0) dupes.Add((itemId, StaffItemIdBase + idx));
+                d.Staff.Add(stf);
+            }
+        });
+        if (isManager)
+        {
+            int rareFlag = mgr.Rating >= 80 ? 1 : 0;
+            itemJson = BuildManagerItem(mgr, itemId, now, 6, rareFlag);
+        }
+        else
+            itemJson = BuildStaffItem(stf, itemId, now, 6);
+        lock (_pendingLock)
+        {
+            _pendingPackItems.Add((itemId, itemJson));
+            _pendingDuplicates.AddRange(dupes);
+        }
+        _lastPackItemList = "[" + itemJson + "]";
+        _log.LogInformation("[Market] BUY staff {0} ({1}, {2}) for {3} -> club item {4}, balance {5}{6}",
+            isManager ? mgr.ResourceId : stf.ResourceId,
+            isManager ? mgr.Name : stf.Name,
+            isManager ? mgr.Rating : stf.Rating,
+            buyNow, itemId, coins, dupes.Count > 0 ? " (duplicate)" : "");
+
+        string seller = Market.FSellerFor(tradeId - Market.StaffTradeIdBase, now);
+        string auction = "{\"tradeId\":" + tradeId + ",\"itemData\":" + itemJson +
+            ",\"tradeState\":\"closed\",\"expires\":-1" +
+            ",\"buyNowPrice\":" + buyNow + ",\"startingBid\":" + startingBid +
+            ",\"currentBid\":" + amount + ",\"offers\":0,\"watched\":false,\"bidState\":\"highest\"" +
+            ",\"sellerName\":\"" + seller + "\",\"sellerEstablished\":2013,\"sellerId\":1,\"confidenceValue\":100}";
+        return ("application/json; charset=utf-8",
+            "{\"auctionInfo\":[" + auction + "],\"errorState\":null,\"duplicateItemIdList\":" + DuplicateListJson(dupes) + "," +
+            "\"credits\":" + (coins - Market.HeldCoins) + ",\"totalCredits\":" + (coins - Market.HeldCoins) + ",\"coins\":" + (coins - Market.HeldCoins) +
+            ",\"currencies\":" + CurrenciesJson(coins - Market.HeldCoins) + ",\"bidTokens\":{}}");
+    }
+
+    private void SettleWonBids(long now)
+    {
+        var results = Market.CollectMyBidResults(now);
+        if (results.Count == 0) return;
+        var rnd = new Random();
+        foreach (var r in results)
+        {
+            long esc = Market.EscrowHeld(r.TradeId);   // read before the bid record goes away
+            Market.RemoveMyBid(r.TradeId);
+            if (!r.Won)
+            {
+                if (esc > 0)
+                {
+                    FutProfileStore.Mutate(p => p.Coins += esc);
+                    Market.ChangeHeld(-esc);
+                }
+                _log.LogInformation("[Market] bid {0} on trade {1} ({2}) was outbid when it sold - {3} coins returned",
+                    r.MyBid, r.TradeId, r.Card.Name, esc);
+                continue;
+            }
+            if (esc <= 0)   // pre-escrow bids still pay on win; escrowed bids already paid
+                FutProfileStore.Mutate(p => p.Coins = Math.Max(0, p.Coins - r.MyBid));
+            long itemId = 0;
+            var winDupes = new List<(long NewId, long OwnedId)>();
+            ClubStore.Mutate(d =>
+            {
+                var owned = new Dictionary<int, long>();
+                foreach (var it in d.Inventory)
+                    if (!owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
+                itemId = d.MarketBuySeq++;
+                if (owned.TryGetValue(r.Card.CardId, out long ownedId)) winDupes.Add((itemId, ownedId));
+                d.Inventory.Add(new ClubItem(itemId, r.Card, 6));
+            });
+            string wonItem = BuildRealPlayerItem(rnd, r.Card, itemId, now, 6);
+            lock (_pendingLock)
+            {
+                _pendingPackItems.Add((itemId, wonItem));
+                _pendingDuplicates.AddRange(winDupes);
+            }
+            _log.LogInformation("[Market] WON auction {0}: {1} (rating {2}) for {3} coins -> club item {4}{5}",
+                r.TradeId, r.Card.Name, r.Card.Rating, r.MyBid, itemId, winDupes.Count > 0 ? " (duplicate)" : "");
+        }
+    }
+
+    private void ReconcileBids(long now)
+    {
+        foreach (long tid in Market.CollectRefundableBids(now))
+        {
+            long esc = Market.RefundEscrow(tid);
+            if (esc > 0)
+            {
+                FutProfileStore.Mutate(p => p.Coins += esc);
+                _log.LogInformation("[Market] bid on trade {0} lost - {1} coins returned", tid, esc);
+            }
+        }
+    }
+
+    private void SettleBotBuys(long now)
+    {
+        var sold = new List<Auction>();
+        ClubStore.Mutate(data =>
+        {
+            foreach (var au in data.Listings.Values)
+            {
+                if (au.State != "active" || au.BotBuyAtUnix <= 0) continue;
+                if (now < au.BotBuyAtUnix) continue;
+                if (au.ExpiresAtUnix > 0 && now >= au.ExpiresAtUnix) continue;   // never buy an expired listing
+                int price = au.BuyNowPrice > 0 ? au.BuyNowPrice
+                          : au.CurrentBid > 0 ? au.CurrentBid
+                          : au.StartingBid;
+                if (price <= 0) continue;
+                au.State = "sold";
+                au.SoldFor = price;
+                au.CurrentBid = price;
+                sold.Add(au);
+            }
+        });
+        if (sold.Count == 0) return;
+
+        long totalNet = 0;
+        foreach (var au in sold) totalNet += au.SoldFor * 95 / 100;
+        FutProfileStore.Mutate(p => p.Coins += totalNet);
+
+        var inv = ClubStore.Get().Inventory;
+        foreach (var au in sold)
+        {
+            int idx = inv.FindIndex(c => c.ItemId == au.ItemId);
+            RealPlayer? player = idx >= 0 ? inv[idx].Player : (RealPlayer?)null;
+            string name = player.HasValue ? player.Value.Name : ("item " + au.ItemId);
+            int rating = player.HasValue ? player.Value.Rating : 0;
+            long net = au.SoldFor * 95 / 100;
+            Market.PushUserSale(name, rating, au.SoldFor, au.TradeId);
+            _log.LogInformation("[Market] BOT bought your listing {0} ({1}) for {2} coins, {3} after the 5% cut",
+                au.TradeId, name, au.SoldFor, net);
+        }
+    }
+
+    private void SettleExpiredListings(long now)
+    {
+        var returned = new List<(long ItemId, string Name, int Rating)>();
+        ClubStore.Mutate(data =>
+        {
+            foreach (var kv in data.Listings.ToList())
+            {
+                var au = kv.Value;
+                if (au.State != "active") continue;
+                if (au.ExpiresAtUnix <= 0 || now < au.ExpiresAtUnix) continue;
+                au.State = "expired";
+                data.Listings.Remove(kv.Key);
+                int idx = data.Inventory.FindIndex(c => c.ItemId == kv.Key);
+                if (idx < 0) continue;
+                var p = data.Inventory[idx].Player;
+                data.Inventory[idx] = new ClubItem(kv.Key, p, 6);
+                returned.Add((kv.Key, p.Name, p.Rating));
+            }
+        });
+        foreach (var (itemId, name, rating) in returned)
+            _log.LogInformation("[Market] listing {0} ({1}) expired - card returned to the club",
+                itemId, name);
+        if (returned.Count > 1)
+            _log.LogInformation("[Market] {0} expired listings returned to the club", returned.Count);
+    }
+
+    private void SettleAcceptedOffers(long now)
+    {
+        var due = Market.AcceptedOffers
+            .Where(kv => now >= kv.Value.AcceptAtUnix && kv.Value.SettledAt <= 0)
+            .Select(kv => kv.Key).ToList();
+        if (due.Count > 0)
+        {
+            var rnd = new Random();
+            foreach (long tradeId in due)
+            {
+                if (!Market.AcceptedOffers.TryGetValue(tradeId, out var offer) || offer.SettledAt > 0) continue;
+                var card = Market.ListingCard(tradeId);
+                if (card == null || !Market.LiveAt(tradeId - Market.TradeIdBase, now))
+                {
+                    _log.LogInformation("[Market] OFFER on trade {0} voided - listing gone by accept time", tradeId);
+                    Market.AcceptedOffers.TryRemove(tradeId, out _);
+                    continue;
+                }
+                RealPlayer cp = card.Value;
+                Market.MarkBought(tradeId, now);
+                Market.AcceptedOffers[tradeId] = offer with { SettledAt = now };   // keep rendering the won trade
+                long esc = Market.EscrowHeld(tradeId);
+                if (esc > 0)   // leftover escrowed bid on the same trade: return it, the offer pays in full
+                {
+                    Market.RefundEscrow(tradeId);
+                    FutProfileStore.Mutate(p => p.Coins += esc);
+                }
+                FutProfileStore.Mutate(p => p.Coins = Math.Max(0, p.Coins - offer.Bid));
+                long itemId = 0;
+                var dupes = new List<(long NewId, long OwnedId)>();
+                ClubStore.Mutate(d =>
+                {
+                    var owned = new Dictionary<int, long>();
+                    foreach (var it in d.Inventory)
+                        if (!owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
+                    itemId = d.MarketBuySeq++;
+                    if (owned.TryGetValue(cp.CardId, out long ownedId)) dupes.Add((itemId, ownedId));
+                    d.Inventory.Add(new ClubItem(itemId, cp, 6));
+                    d.Inventory.RemoveAll(c => c.ItemId == offer.OfferedItemId);   // the offered card leaves the club
+                });
+                string wonItem = BuildRealPlayerItem(rnd, cp, itemId, now, 6);
+                lock (_pendingLock)
+                {
+                    _pendingPackItems.Add((itemId, wonItem));
+                    _pendingDuplicates.AddRange(dupes);
+                }
+                _log.LogInformation("[Market] OFFER ACCEPTED trade {0}: sent {1} (rating {2}) for {3} coins + card {4}",
+                    tradeId, cp.Name, cp.Rating, offer.Bid, offer.OfferedItemId);
+            }
+        }
+        foreach (var kv in Market.AcceptedOffers.ToList())
+            if (kv.Value.SettledAt > 0 && !Market.LiveAt(kv.Key - Market.TradeIdBase, now))
+                Market.AcceptedOffers.TryRemove(kv.Key, out _);
     }
 
     private static string TradePileEntryJson(ClubItem it, Auction au, long now, Random rnd)
@@ -1946,10 +2588,16 @@ internal sealed class WebServer
                 ",\"tradeState\":null,\"buyNowPrice\":0,\"currentBid\":0,\"offers\":0,\"watched\":false," +
                 "\"bidState\":\"none\",\"startingBid\":0,\"confidenceValue\":0,\"expires\":-1," +
                 "\"sellerName\":\"\",\"seller\":0,\"tradeOwner\":true}";
+        if (au.State == "sold")
+            return "{\"tradeId\":" + au.TradeId + ",\"itemData\":" + card +
+                ",\"tradeState\":\"closed\",\"buyNowPrice\":" + au.BuyNowPrice +
+                ",\"currentBid\":" + au.SoldFor + ",\"offers\":0,\"watched\":false," +
+                "\"bidState\":\"none\",\"startingBid\":" + au.StartingBid + ",\"confidenceValue\":0," +
+                "\"expires\":-1,\"sellerName\":\"\",\"seller\":0,\"tradeOwner\":true,\"coinsProcessed\":true}";
         long remain = au.ExpiresAtUnix - now;
         bool live = remain > 0;
         string state = live ? "active" : "expired";
-        long expiresOut = live ? remain : 0;
+        long expiresOut = live ? remain : -1;   // -1 = expired/sold (0 would read as "still active, no time left")
         return "{\"tradeId\":" + au.TradeId + ",\"itemData\":" + card +
             ",\"tradeState\":\"" + state + "\",\"buyNowPrice\":" + au.BuyNowPrice +
             ",\"currentBid\":" + au.CurrentBid + ",\"offers\":0,\"watched\":false," +
@@ -1958,7 +2606,10 @@ internal sealed class WebServer
     }
 
     internal static string BuildRealPlayerItem(Random rnd, RealPlayer player, long id, long timestamp, int pile,
-                                               string itemState = "free")
+                                               string itemState = "free",
+                                               int? contractV = null, int? fitnessV = null, int? moraleV = null,
+                                               int? playStyleV = null, string positionV = null, int trainingV = -1,
+                                               int[] attrBoostV = null, string injuryV = "", int injuryGamesV = 0)
     {
         int rating = player.Rating;
         int assetId = player.Id;
@@ -1966,7 +2617,7 @@ internal sealed class WebServer
         int rareflag = player.Rare;
         int[] attrs = { player.Pace, player.Shooting, player.Passing, player.Dribbling, player.Defending, player.Physical };
 
-        int contract = 7, fitness = 99, playStyle = 250, injuryGames = 0, training = 0;
+        int contract = 7, fitness = 99, playStyle = 250, injuryGames = 0, training = 0, morale = 50;
         string position = player.Position, injuryType = "none";
         if (ClubStore.Get().PlayerMods.TryGetValue(id, out var mod) && mod != null)
         {
@@ -1985,6 +2636,21 @@ internal sealed class WebServer
             }
         }
 
+        if (contractV.HasValue) contract = contractV.Value;
+        if (fitnessV.HasValue) fitness = fitnessV.Value;
+        if (moraleV.HasValue) morale = moraleV.Value;
+        if (playStyleV.HasValue) playStyle = playStyleV.Value;
+        if (positionV != null) position = positionV;
+        if (trainingV > 0) training = trainingV;
+        if (attrBoostV != null)
+            for (int a = 0; a < 6 && a < attrBoostV.Length; a++)
+                attrs[a] = Math.Clamp(attrs[a] + attrBoostV[a], 1, 99);
+        if (!string.IsNullOrEmpty(injuryV))
+        {
+            injuryType = injuryV;
+            injuryGames = injuryGamesV;
+        }
+
         var attrList = new StringBuilder("[");
         for (int a = 0; a < 6; a++)
         {
@@ -1997,7 +2663,7 @@ internal sealed class WebServer
             "\"untradeable\":false,\"assetId\":" + assetId + ",\"rating\":" + rating + "," +
             "\"itemType\":\"player\",\"dream\":false,\"resourceId\":" + resourceId + ",\"owners\":1," +
             "\"discardValue\":" + (rating * 4) + ",\"itemState\":\"" + itemState + "\",\"cardsubtypeid\":3," +
-            "\"lastSalePrice\":0,\"morale\":50,\"fitness\":" + fitness + ",\"injuryType\":\"" + injuryType + "\",\"injuryGames\":" + injuryGames + "," +
+            "\"lastSalePrice\":0,\"morale\":" + morale + ",\"fitness\":" + fitness + ",\"injuryType\":\"" + injuryType + "\",\"injuryGames\":" + injuryGames + "," +
             "\"preferredPosition\":\"" + position + "\",\"statsList\":" + zeroStats +
             ",\"lifetimeStats\":" + zeroStats + ",\"training\":" + training + ",\"contract\":" + contract + ",\"suspension\":0," +
             "\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000,\"attributeList\":" + attrList +
@@ -2311,17 +2977,20 @@ internal sealed class WebServer
             ",\"stat\":" + statArr + ",\"entries\":" + statArr + ",\"itemData\":" + itemSb + "}";
     }
 
-    internal static string BuildManagerItem(Manager m, long id, long timestamp, int pile, int rareflag = 1)
+    internal static string BuildManagerItem(Manager m, long id, long timestamp, int pile, int rareflag = 1,
+                                           string itemState = "free", int leagueIdV = -1, int contractV = -1)
     {
+        int league = leagueIdV >= 0 ? leagueIdV : m.LeagueId;
+        int contract = contractV >= 0 ? contractV : 7;
         return "{\"id\":" + id + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
             "\"untradeable\":false,\"assetId\":" + m.ResourceId + ",\"rating\":" + m.Rating + "," +
             "\"itemType\":\"manager\",\"dream\":false,\"resourceId\":" + m.ResourceId + ",\"owners\":1," +
-            "\"discardValue\":" + (m.Rating * 4) + ",\"itemState\":\"free\",\"cardsubtypeid\":4," +
+            "\"discardValue\":" + (m.Rating * 4) + ",\"itemState\":\"" + itemState + "\",\"cardsubtypeid\":4," +
             "\"lastSalePrice\":0,\"morale\":0,\"fitness\":0,\"injuryType\":\"none\",\"injuryGames\":0," +
             "\"preferredPosition\":\"\",\"statsList\":[],\"lifetimeStats\":[],\"training\":0," +
-            "\"contract\":7,\"suspension\":0,\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000," +
+            "\"contract\":" + contract + ",\"suspension\":0,\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000," +
             "\"attributeList\":[],\"teamid\":0,\"rareflag\":" + rareflag + ",\"playStyle\":0," +
-            "\"leagueId\":" + m.LeagueId + ",\"leagueid\":" + m.LeagueId + "," +
+            "\"leagueId\":" + league + ",\"leagueid\":" + league + "," +
             "\"assists\":0,\"lifetimeAssists\":0,\"loyaltyBonus\":1,\"pile\":" + pile + ",\"loans\":0," +
             // nationid = manager card's flag slot (lowercase). Send nation too for other consumers.
             "\"nation\":" + m.NationId + ",\"nationid\":" + m.NationId +
@@ -2354,7 +3023,8 @@ internal sealed class WebServer
         return sb.ToString();
     }
 
-    internal static string BuildStaffItem(StaffCard s, long id, long timestamp, int pile)
+    internal static string BuildStaffItem(StaffCard s, long id, long timestamp, int pile,
+                                           string itemState = "free")
     {
         bool boost = s.ItemType == "physio" || s.ItemType == "fitnessCoach";
         string attrList = "[]";
@@ -2390,7 +3060,7 @@ internal sealed class WebServer
         return "{\"id\":" + id + ",\"timestamp\":" + timestamp + ",\"formation\":\"f442\"," +
             "\"untradeable\":false,\"assetId\":" + s.ResourceId + ",\"rating\":" + s.Rating + "," +
             "\"itemType\":\"" + Esc(s.ItemType) + "\",\"dream\":false,\"resourceId\":" + s.ResourceId + ",\"owners\":1," +
-            "\"discardValue\":" + (s.Rating * 4) + ",\"itemState\":\"free\",\"cardsubtypeid\":" + s.CardSubType + "," +
+            "\"discardValue\":" + (s.Rating * 4) + ",\"itemState\":\"" + itemState + "\",\"cardsubtypeid\":" + s.CardSubType + "," +
             "\"lastSalePrice\":0,\"morale\":0,\"fitness\":0,\"injuryType\":\"none\",\"injuryGames\":0," +
             "\"preferredPosition\":\"\",\"statsList\":[],\"lifetimeStats\":[],\"training\":0," +
             "\"contract\":7,\"suspension\":0,\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000," +

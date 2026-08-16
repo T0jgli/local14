@@ -31,6 +31,9 @@ internal sealed class Auction
     public int CurrentBid { get; set; }
     public long ExpiresAtUnix { get; set; }
     public string State { get; set; } = "active";
+    public long ListedAtUnix { get; set; }   
+    public long BotBuyAtUnix { get; set; }  
+    public long SoldFor { get; set; }   
 }
 
 internal sealed class PlayerMod
@@ -242,6 +245,18 @@ internal static class ClubStore
             if (dropped > 0)
             {
                 Console.WriteLine($"[Club] dropped {dropped} stale club items");
+                Save();
+            }
+            int promoted = 0;
+            for (int i = 0; i < _data.Inventory.Count; i++)
+                if (_data.Inventory[i].Pile == 0)
+                {
+                    _data.Inventory[i] = new ClubItem(_data.Inventory[i].ItemId, _data.Inventory[i].Player, 6);
+                    promoted++;
+                }
+            if (promoted > 0)
+            {
+                Console.WriteLine($"[Club] promoted {promoted} unassigned items into the club");
                 Save();
             }
         }
