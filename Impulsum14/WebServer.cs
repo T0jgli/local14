@@ -464,6 +464,12 @@ internal sealed class WebServer
                     "{\"userAccountInfo\":" + UserAccountInfoJson(nucleusId) + "}");
         }
 
+        if (path.Contains("/delete/auth"))
+        {
+            DeleteClub();
+            return ("application/json; charset=utf-8", "{\"sid\":\"" + SessionId + "\"}");
+        }
+
         if (path.EndsWith("/auth") && (path.Contains("rs4") || path.Contains("/ut")))
             return ("application/json; charset=utf-8", "{\"sid\":\"" + SessionId + "\"}");
 
@@ -1750,6 +1756,17 @@ internal sealed class WebServer
     private static string NoTransactionBody() =>
         "{\"transactionId\":0,\"state\":\"NOTRANSACTION\",\"packId\":0,\"purchasePackType\":\"\"," +
         "\"firstPartyStoreId\":0,\"useAuth\":0,\"useCount\":0,\"useTime\":0}";
+
+    private void DeleteClub()
+    {
+        FutProfileStore.Reset();
+        ClubStore.Wipe();
+        Market.MyBids.Clear();
+        ClientDataStore.Clear();
+        Tournaments.CurrentMatchTournamentId = null;
+        Tournaments.CurrentRound = 1;
+        _log.LogInformation("[FUT] club deleted -> account reset to new player");
+    }
 
     private static string UserAccountInfoJson(long nucleusId)
     {

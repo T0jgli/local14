@@ -22,6 +22,15 @@ internal static class ClientDataStore
         }
     }
 
+    public static void Clear()
+    {
+        lock (_lock)
+        {
+            _data.Clear();
+            Save();
+        }
+    }
+
     private static Dictionary<string, string> Load()
     {
         try

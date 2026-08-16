@@ -396,6 +396,31 @@ internal static class ClubStore
         }
     }
 
+    public static void Wipe()
+    {
+        lock (_lock)
+        {
+            _data.Inventory.Clear();
+            _data.Cosmetics.Clear();
+            _data.Consumables.Clear();
+            _data.Managers.Clear();
+            _data.Staff.Clear();
+            _data.Squads.Clear();
+            _data.ActiveSquadId = 0;
+            _data.Seeded = false;
+            _data.AllPlayersSeeded = false;
+            _data.StaffSeeded = false;
+            _data.StaffVersion = 0;
+            _data.ConsumablesVersion = 0;
+            _data.PlayerMods.Clear();
+            _data.Listings.Clear();
+            _data.TradeIdSeq = 1_000_000_000;
+            _data.MarketBuySeq = 850_000_000;
+            Save();
+        }
+        Console.WriteLine("[Club] wiped (club deleted)");
+    }
+
     public static ClubData Get()
     {
         lock (_lock) return _data;
