@@ -342,6 +342,7 @@ internal sealed class WebServer
             bool isWin  = endReason.Equals("WIN",  StringComparison.OrdinalIgnoreCase);
             bool isDraw = endReason.Equals("DRAW", StringComparison.OrdinalIgnoreCase)
                        || endReason.Equals("TIE",  StringComparison.OrdinalIgnoreCase);
+            bool isDnf = endReason.Equals("DNF", StringComparison.OrdinalIgnoreCase);
             int myGoals = 0;
             var msm = System.Text.RegularExpressions.Regex.Match(req.Body, "\"myMatchStats\"\\s*:\\s*\\{([^}]*)\\}");
             if (msm.Success && int.TryParse(BodyRx(msm.Groups[1].Value, "\"goals\"\\s*:\\s*(\\d+)"), out int g)) myGoals = g;
@@ -354,7 +355,7 @@ internal sealed class WebServer
             long balME = FutProfileStore.Get().Coins;
             if (credited)
             {
-                ApplyMatchConsequences();  
+                if (!isDnf) ApplyMatchConsequences();
                 if (isWin && Tournaments.CurrentMatchTournamentId is int tid && Tournaments.CurrentRound >= Tournaments.NumRounds)
                 {
                     tournamentCoins = Tournaments.AwardCoins(tid);
@@ -377,6 +378,15 @@ internal sealed class WebServer
             return ("application/json; charset=utf-8", MatchEndBody(balME, matchCoins, tournamentCoins));
         }
 
+        if (path.EndsWith("/match/ready") ||
+            (path.EndsWith("/match") && req.HttpMethod == "PUT"))
+        {
+            long tsMR = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var readySquad = ResolveMatchSquad(req.Body);
+            return ("application/json; charset=utf-8",
+                    "{\"startDateTime\":" + tsMR + ",\"squad\":" + BuildFullSquadJson(readySquad) + "}");
+        }
+
         if (path.EndsWith("/match"))
         {
             if (req.HttpMethod == "POST")
@@ -384,7 +394,14 @@ internal sealed class WebServer
                 string t = BodyRx(req.Body, "\"tournamentId\"\\s*:\\s*(\\d+)");
                 Tournaments.CurrentMatchTournamentId = (int.TryParse(t, out int ti) && ti > 0) ? ti : (int?)null;
             }
-            return ("application/json; charset=utf-8", "{}");
+            long tsCM = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            int matchId = System.Threading.Interlocked.Increment(ref _matchIdSeq);
+            var matchSquad = ResolveMatchSquad(req.Body);
+            return ("application/json; charset=utf-8",
+                    "{\"id\":" + matchId + ",\"matchId\":" + matchId +
+                    ",\"matchLengthMin\":6,\"matchlength\":6,\"matchDifficulty\":3" +
+                    ",\"startDateTime\":" + tsCM +
+                    ",\"squad\":" + BuildFullSquadJson(matchSquad) + "}");
         }
 
         if (path.Contains("tournament") || path.EndsWith("/teams"))
@@ -3102,6 +3119,31 @@ internal sealed class WebServer
         }
         var page = all.Skip(offset).Take(countLimit);
         return "[" + string.Join(",", page) + "]";
+    }
+
+    private static int _matchIdSeq = 1000;
+
+    private Squad ResolveMatchSquad(string body)
+    {
+        int? namedId = null;
+        string sq = BodyRx(body ?? "", "\"squadId\"\\s*:\\s*(\\d+)");
+        if (!string.IsNullOrEmpty(sq) && int.TryParse(sq, out int sid)) namedId = sid;
+
+        Squad chosen = null;
+        ClubStore.Mutate(data =>
+        {
+            if (namedId is int want)
+                chosen = data.Squads.FirstOrDefault(s => s.Id == want);
+            chosen ??= data.Squads.FirstOrDefault(s => s.Id == data.ActiveSquadId);
+            chosen ??= data.Squads.FirstOrDefault(s => s.Slots.Count > 0);
+            chosen ??= (data.Squads.Count > 0 ? data.Squads[0] : null);
+            if (chosen != null && data.ActiveSquadId != chosen.Id)
+            {
+                data.ActiveSquadId = chosen.Id;
+                _log.LogInformation("[FUT] match: active squad -> {0} (from create/ready body)", chosen.Id);
+            }
+        });
+        return chosen ?? new Squad { Id = 0 };
     }
 
     private static string BuildFullSquadJson(Squad squad)
