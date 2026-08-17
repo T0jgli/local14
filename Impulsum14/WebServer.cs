@@ -1089,14 +1089,15 @@ internal sealed class WebServer
             if (consumableSearch)
             {
                 string cPage = Market.ConsumablePageJson(tmStart, tmCount, tmNow, tmCat, tmLev, tmPos, tmStyle,
-                    tmMinB, tmMaxB, tmMinC, tmMaxC, tmSig);
+                    tmMinB, tmMaxB, tmMinC, tmMaxC, tmSig, tmType);
                 return ("application/json; charset=utf-8",
                         "{\"errorState\":null,\"credits\":" + tmCoins + ",\"auctionInfo\":" + cPage +
                         ",\"duplicateItemIdList\":null,\"bidTokens\":{}}");
             }
 
             var tmMatch = MarketFilter(req.QueryString);
-            string page = Market.PageJson(tmStart, tmCount, tmNow, tmMatch, tmMinB, tmMaxB, tmMinC, tmMaxC, tmStyle, tmSig);
+            string[] tmWantPos = MarketWantPositions(req.QueryString);
+            string page = Market.PageJson(tmStart, tmCount, tmNow, tmMatch, tmMinB, tmMaxB, tmMinC, tmMaxC, tmStyle, tmSig, tmWantPos);
             return ("application/json; charset=utf-8",
                     "{\"errorState\":null,\"credits\":" + tmCoins + ",\"auctionInfo\":" + page +
                     ",\"duplicateItemIdList\":null,\"bidTokens\":{}}");
@@ -1365,23 +1366,72 @@ internal sealed class WebServer
             foreach (string part in (req.QueryString["idList"] ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries))
                 if (long.TryParse(part.Trim(), out long wid)) wanted.Add(wid);
 
-            var itemInventory = ClubStore.Get().Inventory;
+            var clubData = ClubStore.Get();
+            var itemInventory = clubData.Inventory;
+            var itemCosmetics = clubData.Cosmetics;
             var itemRnd = new Random();
             long itemNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var itemSb = new StringBuilder("[");
             int written = 0;
             foreach (long wid in wanted)
             {
-                RealPlayer player;
-                int pile;
                 int at = itemInventory.FindIndex(c => c.ItemId == wid);
-                if (at >= 0) { player = itemInventory[at].Player; pile = itemInventory[at].Pile; }
-                else if (ItemIds.TryResolve(wid, out player)) { pile = 1; }
-                else continue;
-
-                if (written > 0) itemSb.Append(',');
-                itemSb.Append(BuildRealPlayerItem(itemRnd, player, wid, itemNow, pile));
-                written++;
+                if (at >= 0)
+                {
+                    if (written > 0) itemSb.Append(',');
+                    itemSb.Append(BuildRealPlayerItem(itemRnd, itemInventory[at].Player, wid, itemNow, itemInventory[at].Pile));
+                    written++;
+                    continue;
+                }
+                int cat = itemCosmetics.FindIndex(c => c.ItemId == wid);
+                if (cat >= 0)
+                {
+                    if (written > 0) itemSb.Append(',');
+                    itemSb.Append(ClubItems.BuildJson(itemCosmetics[cat], itemNow));
+                    written++;
+                    continue;
+                }
+                if (wid >= ManagerItemIdBase && wid < StaffItemIdBase)
+                {
+                    int mi = (int)(wid - ManagerItemIdBase);
+                    if (mi >= 0 && mi < clubData.Managers.Count)
+                    {
+                        if (written > 0) itemSb.Append(',');
+                        itemSb.Append(BuildManagerItem(clubData.Managers[mi], wid, itemNow, 6));
+                        written++;
+                        continue;
+                    }
+                }
+                else if (wid >= StaffItemIdBase && wid < StaffItemIdBase + 10_000)
+                {
+                    int si = (int)(wid - StaffItemIdBase);
+                    if (si >= 0 && si < clubData.Staff.Count)
+                    {
+                        if (written > 0) itemSb.Append(',');
+                        itemSb.Append(BuildStaffItem(clubData.Staff[si], wid, itemNow, 6));
+                        written++;
+                        continue;
+                    }
+                }
+                if (ItemIds.TryResolve(wid, out RealPlayer player))
+                {
+                    if (written > 0) itemSb.Append(',');
+                    itemSb.Append(BuildRealPlayerItem(itemRnd, player, wid, itemNow, 1));
+                    written++;
+                    continue;
+                }
+                string pendingJson = null;
+                lock (_pendingLock)
+                {
+                    int pi = _pendingPackItems.FindIndex(p => p.Id == wid);
+                    if (pi >= 0) pendingJson = _pendingPackItems[pi].Json;
+                }
+                if (pendingJson != null)
+                {
+                    if (written > 0) itemSb.Append(',');
+                    itemSb.Append(pendingJson);
+                    written++;
+                }
             }
             itemSb.Append(']');
             return ("application/json; charset=utf-8", "{\"itemData\":" + itemSb + "}");
@@ -2057,21 +2107,6 @@ internal sealed class WebServer
         int defId = Int("definitionId", -1);
         if (defId > 0) preds.Add(p => p.Id == defId);
 
-        string pos = q["pos"];
-        if (!string.IsNullOrEmpty(pos)) preds.Add(p => p.Position == pos);
-
-        static string[] Group(string zone) => zone switch
-        {
-            "gk" or "goal" or "goalkeeper" => new[] { "GK" },
-            "defense" or "defence" or "defenders" => new[] { "CB", "RB", "LB", "RWB", "LWB" },
-            "midfield" or "midfielders" => new[] { "CDM", "CM", "CAM", "RM", "LM" },
-            "attack" or "attacker" or "forwards" or "strikers" => new[] { "ST", "CF", "RW", "LW", "RF", "LF" },
-            _ => Array.Empty<string>(),
-        };
-        string zone = (q["zone"] ?? "").ToLowerInvariant();
-        string[] group = Group(zone);
-        if (group.Length > 0)
-            preds.Add(p => group.Contains(p.Position));
 
         string lev = (q["lev"] ?? "").ToLowerInvariant();
         if (lev is "bronze" or "silver" or "gold")
@@ -2084,6 +2119,21 @@ internal sealed class WebServer
 
         if (preds.Count == 0) return null;
         return p => preds.All(f => f(p));
+    }
+
+    private static string[] MarketWantPositions(NameValueCollection q)
+    {
+        string pos = (q["pos"] ?? "").Trim();
+        if (pos.Length > 0) return new[] { pos };
+        string zone = (q["zone"] ?? "").ToLowerInvariant();
+        return zone switch
+        {
+            "gk" or "goal" or "goalkeeper" => new[] { "GK" },
+            "defense" or "defence" or "defenders" => new[] { "CB", "RB", "LB", "RWB", "LWB" },
+            "midfield" or "midfielders" => new[] { "CDM", "CM", "CAM", "RM", "LM" },
+            "attack" or "attacker" or "forwards" or "strikers" => new[] { "ST", "CF", "RW", "LW", "RF", "LF" },
+            _ => Array.Empty<string>(),
+        };
     }
 
     private (string, string) MarketBuy(long tradeId, int amount, long offeredItemId = 0)
@@ -2323,12 +2373,12 @@ internal sealed class WebServer
         var dupes = new List<(long NewId, long OwnedId)>();
         ClubStore.Mutate(d =>
         {
-            var owned = new Dictionary<(string, int), long>();
+            var owned = new Dictionary<(string, long), long>();
             foreach (var c in d.Cosmetics)
-                if (!owned.ContainsKey((c.Type, c.AssetId))) owned[(c.Type, c.AssetId)] = c.ItemId;
+                if (!owned.ContainsKey((c.Type, c.ResourceId))) owned[(c.Type, c.ResourceId)] = c.ItemId;
             itemId = Interlocked.Increment(ref _nextPackExtraId);
             var inst = item with { ItemId = itemId };
-            if (owned.TryGetValue((inst.Type, inst.AssetId), out long ownedId)) dupes.Add((itemId, ownedId));
+            if (owned.TryGetValue((inst.Type, inst.ResourceId), out long ownedId)) dupes.Add((itemId, ownedId));
             d.Cosmetics.Add(inst);
         });
         string itemJson = ClubItems.BuildJson(item with { ItemId = itemId }, now);
@@ -2338,8 +2388,8 @@ internal sealed class WebServer
             _pendingDuplicates.AddRange(dupes);
         }
         _lastPackItemList = "[" + itemJson + "]";
-        _log.LogInformation("[Market] BUY club item {0} ({1}) for {2} -> club item {3}, balance {4}{5}",
-            item.AssetId, item.Name, buyNow, itemId, coins, dupes.Count > 0 ? " (duplicate)" : "");
+        _log.LogInformation("[Market] BUY club item res:{0} ({1}) for {2} -> club item {3}, balance {4}{5}",
+            item.ResourceId, item.Name, buyNow, itemId, coins, dupes.Count > 0 ? " (duplicate)" : "");
 
         string seller = Market.ESellerFor(tradeId - Market.ClubItemTradeIdBase, now);
         string auction = "{\"tradeId\":" + tradeId + ",\"itemData\":" + itemJson +
