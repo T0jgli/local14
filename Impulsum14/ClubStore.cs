@@ -46,8 +46,10 @@ internal sealed class PlayerMod
     public int Fitness { get; set; } = -1;  
     public int[] AttrBoost { get; set; } = new int[6]; 
     public int TrainingFlag { get; set; } = 0;    
-    public string Injury { get; set; } = "";      
-    public int InjuryGames { get; set; } = 0;      
+    public string Injury { get; set; } = "";
+    public int InjuryGames { get; set; } = 0;
+    public int Suspension { get; set; } = 0;       
+    public int YellowCards { get; set; } = 0;    
 }
 
 internal static class ClubStore

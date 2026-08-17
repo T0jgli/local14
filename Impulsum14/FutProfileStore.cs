@@ -5,6 +5,7 @@ namespace Impulsum14;
 internal sealed class FutClub
 {
     public bool Established { get; set; } = false;   // false => new player, no club yet
+    public long EstablishedAt { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();   // unix seconds when the club was created
     public long TeamId { get; set; } = 1;
     public string Name { get; set; } = "";
     public string Abbr { get; set; } = "";
@@ -60,10 +61,13 @@ internal sealed class FutSeason
 
 internal sealed class SavedTournament
 {
-    public int Round { get; set; } = 1;
+    public int Round { get; set; } = 1;             
+    public int DataVersion { get; set; } = 1;
     public string TournamentData { get; set; } = "";
     public int ProgressDataVersion { get; set; } = 1;
     public string ProgressData { get; set; } = "";
+    public bool Active { get; set; } = false;         
+    public bool Won { get; set; } = false;         
 }
 
 internal sealed class FutProfile
@@ -77,6 +81,9 @@ internal sealed class FutProfile
     public int OfflineDivision { get; set; } = 1;   
     public int OnlineDivision { get; set; } = 1;         
     public int TrophiesWon { get; set; } = 0;            // FUT offline tournament cups won (unlocks higher cups)
+    public int Wins { get; set; } = 0;        
+    public int Draws { get; set; } = 0;
+    public int Losses { get; set; } = 0;
     public FutSeason Season { get; set; } = new();
     public string SeasonSaveBlob { get; set; } = "";     // client's encoded season save (captured, never advertised back)
     // In-progress offline tournaments, keyed by tournament id -> the client's saved bracket state.

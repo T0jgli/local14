@@ -383,18 +383,23 @@ internal sealed class WebServer
             long balME = FutProfileStore.Get().Coins;
             if (credited)
             {
-                if (!isDnf) ApplyMatchConsequences();
-                if (isWin && Tournaments.CurrentMatchTournamentId is int tid && Tournaments.CurrentRound >= Tournaments.NumRounds)
+                if (!isDnf) ApplyMatchConsequences(req.Body);
+                if (Tournaments.CurrentMatchTournamentId is int tid)
                 {
-                    tournamentCoins = Tournaments.AwardCoins(tid);
-                    awardedCup = tid;
-                    Tournaments.CurrentMatchTournamentId = null;   // guard against a double-award
-                    Tournaments.CurrentRound = 1;
-                    Tournaments.ClearProgress(tid);                // cup finished - no longer "underway"
+                    var (prize, wonFinal) = Tournaments.SettleTournamentMatch(tid, endReason);
+                    tournamentCoins = prize;
+                    if (wonFinal) awardedCup = tid;
+                    Tournaments.CurrentMatchTournamentId = null;   // guard against a double-settle
                 }
                 int total = matchCoins + tournamentCoins;
                 bool trophy = tournamentCoins > 0;
-                FutProfileStore.Mutate(p => { p.Coins += total; if (trophy) p.TrophiesWon++; balME = p.Coins; });
+                FutProfileStore.Mutate(p =>
+                {
+                    p.Coins += total;
+                    if (trophy) p.TrophiesWon++;
+                    if (!isDnf) { if (isWin) p.Wins++; else if (isDraw) p.Draws++; else p.Losses++; }   // hub W-D-L record
+                    balME = p.Coins;
+                });
             }
 
             if (awardedCup is int wonId)
@@ -446,15 +451,15 @@ internal sealed class WebServer
                 if (int.TryParse(tail, out int tid))
                 {
                     Tournaments.ActiveTournamentId = tid;
-                    if (req.HttpMethod is "POST" or "PUT")           // saving bracket progress
+                    if (req.HttpMethod is "POST" or "PUT")           // client saving its own bracket
                     {
-                        int round = int.TryParse(BodyRx(req.Body, "\"round\"\\s*:\\s*(\\d+)"), out int rd) && rd > 0 ? rd : 0;
-                        if (round > 0) Tournaments.CurrentRound = round;
-                        Tournaments.SaveProgress(tid, round,
-                            BodyRx(req.Body, "\"tournamentData\"\\s*:\\s*\"([^\"]*)\""),
-                            int.TryParse(BodyRx(req.Body, "\"progressDataVersion\"\\s*:\\s*(\\d+)"), out int pv) ? pv : 0,
+                        int round = int.TryParse(BodyRx(req.Body, "\"round\"\\s*:\\s*(\\d+)"), out int rd) ? rd : 1;
+                        int dv = int.TryParse(BodyRx(req.Body, "\"dataVersion\"\\s*:\\s*(\\d+)"), out int d) ? d : 1;
+                        int pdv = int.TryParse(BodyRx(req.Body, "\"progressDataVersion\"\\s*:\\s*(\\d+)"), out int pv) ? pv : 1;
+                        string echo = Tournaments.SaveProgress(tid, round, dv,
+                            BodyRx(req.Body, "\"tournamentData\"\\s*:\\s*\"([^\"]*)\""), pdv,
                             BodyRx(req.Body, "\"progressData\"\\s*:\\s*\"([^\"]*)\""));
-                        return ("application/json; charset=utf-8", "{}");
+                        return ("application/json; charset=utf-8", echo);
                     }
                     return ("application/json; charset=utf-8", Tournaments.UserTournamentJson(tid));
                 }
@@ -562,20 +567,26 @@ internal sealed class WebServer
             string currenciesHub = CurrenciesJson(coinsHub);
             var wl = Market.WatchlistCounts(hubNow);
             long liveListings = Market.LiveTotal(hubNow);
-            int clubPlayers = ClubStore.Get().Inventory.Count;
-            int tradePileCount = ClubStore.Get().Inventory.Count(c => c.Pile == 3);
+            var hubClub = ClubStore.Get();
+            int clubPlayers = hubClub.Inventory.Count;
+            int tradePileCount = hubClub.Inventory.Count(c => c.Pile == 3);
+            int tradeSelling = hubClub.Listings.Values.Count(au => au.State == "active");
+            int tradeSold = hubClub.Listings.Values.Count(au => au.State == "sold");
+            int tradeNotification = tradeSold + wl.Outbid;
             string totwHub = ",\"squad\":" + Totw.HubSquadJson();
             return ("application/json; charset=utf-8",
                     "{\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
                     ",\"divisionOnline\":" + profHub.OnlineDivision +
                     ",\"divisionOffline\":" + profHub.OfflineDivision +
                     ",\"userInfo\":{\"personaId\":" + BlazePersonaId + ",\"clubName\":\"" + Esc(profHub.Club.Name) +
-                    "\",\"assetId\":" + profHub.Club.BadgeId + ",\"badgeId\":" + profHub.Club.BadgeId +
-                    "\",\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
+                    "\",\"clubAbbr\":\"" + Esc(profHub.Club.Abbr) + "\",\"assetId\":" + profHub.Club.BadgeId + ",\"badgeId\":" + profHub.Club.BadgeId +
+                    ",\"won\":" + profHub.Wins + ",\"draw\":" + profHub.Draws + ",\"loss\":" + profHub.Losses +
+                    ",\"established\":" + profHub.Club.EstablishedAt + ",\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
                     ",\"unassignedPileSize\":0,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0}}" +
                     totwHub +
                     ",\"clubPlayers\":" + clubPlayers +
-                    ",\"auctionCount\":" + liveListings + ",\"tradePile\":{\"selling\":0,\"sold\":0,\"count\":" + tradePileCount + ",\"notification\":0}" +
+                    ",\"auctionCount\":" + liveListings + ",\"tradePile\":{\"selling\":" + tradeSelling +
+                    ",\"sold\":" + tradeSold + ",\"count\":" + tradePileCount + ",\"notification\":" + tradeNotification + "}" +
                     ",\"watchlist\":{\"winning\":" + wl.Winning + ",\"count\":" + wl.Count + ",\"outbid\":" + wl.Outbid +
                     ",\"notification\":" + wl.Outbid + "}}");
         }
@@ -1013,10 +1024,11 @@ internal sealed class WebServer
             string levelFilter = (req.QueryString["level"] ?? "").ToLowerInvariant();
             int leagueFilter = int.TryParse(req.QueryString["league"], out int lf) ? lf : -1;
 
-            var inventory = ClubStore.Get().Inventory;
+            var clubData = ClubStore.Get();
+            var inventory = clubData.Inventory;
             var matches = inventory
                 .Where(c => c.Pile != 3 && c.Pile != 0)   // transfer list AND unassigned items stay out of the club
-                .Where(c => (posFilter == "any" || posFilter == "" || c.Player.Position == posFilter)
+                .Where(c => (posFilter == "any" || posFilter == "" || EffectivePosition(clubData, c.ItemId, c.Player.Position) == posFilter)
                     && (nationFilter == -1 || c.Player.NationId == nationFilter)
                     && (teamFilter == -1 || c.Player.TeamId == teamFilter)
                     && (leagueFilter == -1 || TeamLeagues.LeagueOf(c.Player.TeamId) == leagueFilter)
@@ -1525,7 +1537,7 @@ internal sealed class WebServer
                 {
                     var ownedByCard = new Dictionary<int, long>();
                     foreach (var c in data.Inventory)
-                        if (!ownedByCard.ContainsKey(c.Player.CardId))
+                        if (OwnedInClub(data, c.ItemId) && !ownedByCard.ContainsKey(c.Player.CardId))
                             ownedByCard[c.Player.CardId] = c.ItemId;
 
                     long nextPackItemId = data.Inventory.Where(c => ItemIds.IsPackItem(c.ItemId))
@@ -1828,6 +1840,7 @@ internal sealed class WebServer
                 {
                     p.IsReturningUser = true;
                     p.Club.Established = true;
+                    if (firstTime) p.Club.EstablishedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();   // stamp the founding date once
                     var nm = System.Text.RegularExpressions.Regex.Match(req.Body, "\"clubName\"\\s*:\\s*\"([^\"]*)\"");
                     if (nm.Success) p.Club.Name = nm.Groups[1].Value;
                     var ab = System.Text.RegularExpressions.Regex.Match(req.Body, "\"clubAbbr\"\\s*:\\s*\"([^\"]*)\"");
@@ -1846,6 +1859,7 @@ internal sealed class WebServer
                     ",\"coins\":" + prof.Coins + ",\"credits\":" + prof.Coins +
                     ",\"currencies\":" + CurrenciesJson(prof.Coins) +
                     ",\"clubName\":\"" + Esc(prof.Club.Name) + "\",\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\"" +
+                    ",\"won\":" + prof.Wins + ",\"draw\":" + prof.Draws + ",\"loss\":" + prof.Losses +
                     ",\"userAccountInfo\":" + UserAccountInfoJson(BlazePersonaId) + "}");
         }
 
@@ -1976,7 +1990,17 @@ internal sealed class WebServer
     private static long _nextPackExtraId = 970_000_000L;
 
 
-    private static string DuplicateListJson(IEnumerable<(long NewId, long OwnedId)> dupes)
+    private static bool OwnedInClub(ClubData data, long itemId)
+        => !data.Listings.TryGetValue(itemId, out var au) || au.State != "sold";
+
+    private static string EffectivePosition(ClubData data, long itemId, string basePosition)
+    {
+        if (data.PlayerMods.TryGetValue(itemId, out var mod) && mod != null
+            && !string.IsNullOrEmpty(mod.Position)) return mod.Position;
+        return basePosition;
+    }
+
+    private string DuplicateListJson(IEnumerable<(long NewId, long OwnedId)> dupes)
     {
         var sb = new StringBuilder("[");
         bool first = true;
@@ -2015,7 +2039,6 @@ internal sealed class WebServer
         Market.MyBids.Clear();
         ClientDataStore.Clear();
         Tournaments.CurrentMatchTournamentId = null;
-        Tournaments.CurrentRound = 1;
         _log.LogInformation("[FUT] club deleted -> account reset to new player");
     }
 
@@ -2030,7 +2053,7 @@ internal sealed class WebServer
             ",\"teamName\":\"" + Esc(prof.Club.Name) + "\",\"clubName\":\"" + Esc(prof.Club.Name) + "\"," +
             "\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\",\"clubId\":" + prof.Club.TeamId +
             ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
-            ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + est + ",\"divisionOnline\":" + prof.OnlineDivision +
+            ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + prof.Club.EstablishedAt + ",\"divisionOnline\":" + prof.OnlineDivision +
             ",\"divisionOffline\":" + prof.OfflineDivision + ",\"lastAccessTime\":1400000000," +
             "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
         string clubListEntries = prof.Club.Established ? clubList : "";
@@ -2235,7 +2258,7 @@ internal sealed class WebServer
             {
                 var owned = new Dictionary<int, long>();
                 foreach (var it in d.Inventory)
-                    if (!owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
+                    if (OwnedInClub(d, it.ItemId) && !owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
                 newId = d.MarketBuySeq++;
                 if (owned.TryGetValue(card.CardId, out long ownedId)) dupes.Add((newId, ownedId));
                 d.Inventory.Add(new ClubItem(newId, card, 6));
@@ -2500,7 +2523,7 @@ internal sealed class WebServer
             {
                 var owned = new Dictionary<int, long>();
                 foreach (var it in d.Inventory)
-                    if (!owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
+                    if (OwnedInClub(d, it.ItemId) && !owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
                 itemId = d.MarketBuySeq++;
                 if (owned.TryGetValue(r.Card.CardId, out long ownedId)) winDupes.Add((itemId, ownedId));
                 d.Inventory.Add(new ClubItem(itemId, r.Card, 6));
@@ -2668,7 +2691,7 @@ internal sealed class WebServer
                 {
                     var owned = new Dictionary<int, long>();
                     foreach (var it in d.Inventory)
-                        if (!owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
+                        if (OwnedInClub(d, it.ItemId) && !owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
                     itemId = d.MarketBuySeq++;
                     if (owned.TryGetValue(cp.CardId, out long ownedId)) dupes.Add((itemId, ownedId));
                     d.Inventory.Add(new ClubItem(itemId, cp, 6));
@@ -2749,7 +2772,7 @@ internal sealed class WebServer
         int rareflag = player.Rare;
         int[] attrs = { player.Pace, player.Shooting, player.Passing, player.Dribbling, player.Defending, player.Physical };
 
-        int contract = 7, fitness = 99, playStyle = 250, injuryGames = 0, training = 0, morale = 50;
+        int contract = 7, fitness = 99, playStyle = 250, injuryGames = 0, training = 0, morale = 50, suspension = 0;
         string position = player.Position, injuryType = "none";
         if (ClubStore.Get().PlayerMods.TryGetValue(id, out var mod) && mod != null)
         {
@@ -2766,6 +2789,7 @@ internal sealed class WebServer
                 injuryType = mod.Injury;
                 injuryGames = mod.InjuryGames;
             }
+            if (mod.Suspension > 0) suspension = mod.Suspension;
         }
 
         if (contractV.HasValue) contract = contractV.Value;
@@ -2797,7 +2821,7 @@ internal sealed class WebServer
             "\"discardValue\":" + (rating * 4) + ",\"itemState\":\"" + itemState + "\",\"cardsubtypeid\":3," +
             "\"lastSalePrice\":0,\"morale\":" + morale + ",\"fitness\":" + fitness + ",\"injuryType\":\"" + injuryType + "\",\"injuryGames\":" + injuryGames + "," +
             "\"preferredPosition\":\"" + position + "\",\"statsList\":" + zeroStats +
-            ",\"lifetimeStats\":" + zeroStats + ",\"training\":" + training + ",\"contract\":" + contract + ",\"suspension\":0," +
+            ",\"lifetimeStats\":" + zeroStats + ",\"training\":" + training + ",\"contract\":" + contract + ",\"suspension\":" + suspension + "," +
             "\"marketDataMinPrice\":150,\"marketDataMaxPrice\":15000000,\"attributeList\":" + attrList +
             ",\"teamid\":" + player.TeamId + ",\"rareflag\":" + rareflag + ",\"playStyle\":" + playStyle + "," +
             "\"playstyle\":" + playStyle + "," +
@@ -2998,13 +3022,45 @@ internal sealed class WebServer
         ("Foot",      new[] { "ankle", "toe", "foot" }),
     };
 
-    private static void ApplyMatchConsequences()
+    private sealed class MatchItemReport
+    {
+        public int Fitness = -1;
+        public string Injury = "";
+        public int InjuryGames = 0;
+        public int Yellow = 0;
+        public int Red = 0;
+    }
+
+    private static Dictionary<long, MatchItemReport> ParseMatchItems(string body)
+    {
+        var map = new Dictionary<long, MatchItemReport>();
+        var items = System.Text.RegularExpressions.Regex.Match(body ?? "", "\"items\"\\s*:\\s*\\[(.*?)\\]",
+            System.Text.RegularExpressions.RegexOptions.Singleline);
+        if (!items.Success) return map;
+        foreach (System.Text.RegularExpressions.Match obj in
+                 System.Text.RegularExpressions.Regex.Matches(items.Groups[1].Value, "\\{([^}]*)\\}"))
+        {
+            string o = obj.Groups[1].Value;
+            if (!long.TryParse(BodyRx(o, "\"id\"\\s*:\\s*(\\d+)"), out long id)) continue;
+            var r = new MatchItemReport();
+            if (int.TryParse(BodyRx(o, "\"fitness\"\\s*:\\s*(\\d+)"), out int f)) r.Fitness = f;
+            if (int.TryParse(BodyRx(o, "\"injuryGames\"\\s*:\\s*(\\d+)"), out int ig)) r.InjuryGames = ig;
+            r.Injury = BodyRx(o, "\"injuryType\"\\s*:\\s*\"([^\"]*)\"");
+            if (int.TryParse(BodyRx(o, "\"yellowCards\"\\s*:\\s*(\\d+)"), out int yc)) r.Yellow = yc;
+            if (int.TryParse(BodyRx(o, "\"redCards\"\\s*:\\s*(\\d+)"), out int rc)) r.Red = rc;
+            map[id] = r;
+        }
+        return map;
+    }
+
+    private static void ApplyMatchConsequences(string body)
     {
         var xi = ActiveSquadStarterIds();
         var bench = ActiveSquadBenchIds();
         if (xi.Count == 0 && bench.Count == 0) return;
+        var reports = ParseMatchItems(body);
         var rnd = new Random();
-        int played = 0, benched = 0;
+        int played = 0, benched = 0, injuries = 0, bans = 0;
         ClubStore.Mutate(data =>
         {
             PlayerMod ModFor(long tid)
@@ -3017,13 +3073,38 @@ internal sealed class WebServer
                 }
                 return m;
             }
+
+            foreach (var m in data.PlayerMods.Values)
+            {
+                if (m == null) continue;
+                if (m.InjuryGames > 0 && --m.InjuryGames <= 0) { m.InjuryGames = 0; m.Injury = ""; }
+                if (m.Suspension > 0) m.Suspension--;
+            }
+
+            void ApplyReport(PlayerMod mod, long tid)
+            {
+                if (!reports.TryGetValue(tid, out var r) || r == null) return;
+                if (r.Fitness >= 0) mod.Fitness = r.Fitness;
+                if (r.InjuryGames > 0 && !string.IsNullOrEmpty(r.Injury) && r.Injury != "none")
+                {
+                    mod.Injury = r.Injury;
+                    mod.InjuryGames = r.InjuryGames;
+                    injuries++;
+                }
+                if (r.Yellow > 0) mod.YellowCards += r.Yellow;
+                if (r.Red > 0) { mod.Suspension += 1; mod.YellowCards = 0; bans++; }
+                while (mod.YellowCards >= 5) { mod.Suspension += 1; mod.YellowCards -= 5; bans++; }
+            }
+
             foreach (long tid in xi)
             {
                 var mod = ModFor(tid);
                 if (mod == null) continue;
                 mod.Contract = Math.Max(0, (mod.Contract >= 0 ? mod.Contract : 7) - 1);
-                mod.Fitness = Math.Max(0, (mod.Fitness >= 0 ? mod.Fitness : 99) - rnd.Next(8, 13));
+                if (reports.TryGetValue(tid, out var r) && r.Fitness >= 0) mod.Fitness = r.Fitness;
+                else mod.Fitness = Math.Max(0, (mod.Fitness >= 0 ? mod.Fitness : 99) - rnd.Next(8, 13)); // fallback if not reported
                 if (mod.TrainingFlag > 0) { System.Array.Clear(mod.AttrBoost, 0, mod.AttrBoost.Length); mod.TrainingFlag = 0; }
+                ApplyReport(mod, tid);
                 played++;
             }
             foreach (long tid in bench)
@@ -3031,10 +3112,11 @@ internal sealed class WebServer
                 var mod = ModFor(tid);
                 if (mod == null) continue;
                 mod.Contract = Math.Max(0, (mod.Contract >= 0 ? mod.Contract : 7) - 1);   // rostered -> contract only
+                ApplyReport(mod, tid);                                                    // a sub can still be carded/hurt
                 benched++;
             }
         });
-        Console.WriteLine($"[FUT] match consequences: {played} played (fitness+contract), {benched} subs (contract)");
+        Console.WriteLine($"[FUT] match consequences: {played} played, {benched} subs, {injuries} injuries, {bans} bans");
     }
 
     private static bool InjuryMatches(string injury, string cardKind)
