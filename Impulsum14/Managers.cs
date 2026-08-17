@@ -29,7 +29,6 @@ internal static class Managers
                     int.TryParse(c[3], out int nat) ? nat : 0,
                     int.TryParse(c[4], out int lg) ? lg : 0));
             }
-            Console.WriteLine($"[Managers] loaded {list.Count} from {path}");
         }
         catch (Exception ex) { Console.WriteLine($"[Managers] failed: {ex.Message}"); }
         return list.ToArray();

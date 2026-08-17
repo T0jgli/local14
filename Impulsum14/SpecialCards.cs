@@ -23,7 +23,6 @@ internal static class SpecialCards
 
     private static void LoadFile(string path, List<RealPlayer> list, Dictionary<int, RealPlayer> bases)
     {
-        int before = list.Count;
         try
         {
             int lineNo = 1;
@@ -53,7 +52,6 @@ internal static class SpecialCards
                     Set = c[0],
                 });
             }
-            Console.WriteLine($"[Specials] loaded {list.Count - before} special cards from {path}");
         }
         catch (FileNotFoundException)
         {

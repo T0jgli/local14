@@ -39,7 +39,6 @@ internal static class ConsumableItems
                     long.Parse(c[2]), c.Length > 4 && c[4].Length > 0 ? int.Parse(c[4]) : 0,
                     c.Length > 3 ? c[3] : c[0]));
             }
-            Console.WriteLine($"[Consumables] loaded {list.Count} from {path}");
         }
         catch (FileNotFoundException)
         {
@@ -93,7 +92,6 @@ internal static class ConsumableItems
                     int.TryParse(c[6], out int go) ? go : 0,
                     int.TryParse(c[7], out int st) ? st : 0);
             }
-            Console.WriteLine($"[Consumables] loaded {dict.Count} modifier defs from {path}");
         }
         catch (FileNotFoundException)
         {

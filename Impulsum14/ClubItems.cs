@@ -61,7 +61,6 @@ internal static class ClubItems
                 list.Add(new CosmeticItem(id++, type, assetId, resId, subType, name,
                     F(4, 75), F(5, 0), F(6, 0), F(7, 0)));
             }
-            Console.WriteLine($"[Items] loaded {list.Count} club items from {path}");
         }
         catch (FileNotFoundException)
         {

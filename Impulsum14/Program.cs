@@ -61,7 +61,8 @@ internal static class Program
             loggerFactory.CreateLogger<BlazeServer>());
 
         log.LogInformation("Impulsum14 starting: redirector :{0} -> blaze :{1}, web :{2}", RedirPort, BlazePort, WebPort);
-        Market.WarmUp();   
+        Market.WarmUp();
+        webServer.StartBotMarketLoop();
         await Task.WhenAll(redirServer.StartAsync(), blazeServer.StartAsync(), webServer.StartAsync());
         await Task.Delay(Timeout.Infinite);
     }

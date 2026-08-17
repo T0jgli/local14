@@ -33,6 +33,8 @@ internal sealed class Auction
     public string State { get; set; } = "active";
     public long ListedAtUnix { get; set; }   
     public long BotBuyAtUnix { get; set; }  
+    public long BotBidCeiling { get; set; }   
+    public int Offers { get; set; }   
     public long SoldFor { get; set; }   
 }
 

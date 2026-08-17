@@ -39,7 +39,6 @@ internal static class Staff
                     PosBonus:    int.TryParse(c[7], out int pb)   ? pb   : 0,
                     FieldPos:    int.TryParse(c[8], out int fp)   ? fp   : 0));
             }
-            Console.WriteLine($"[Staff] loaded {list.Count} from {path}");
         }
         catch (FileNotFoundException)
         {

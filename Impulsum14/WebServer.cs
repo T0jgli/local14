@@ -41,6 +41,34 @@ internal sealed class WebServer
         return Path.Combine(AppContext.BaseDirectory, "web");
     }
 
+    public void StartBotMarketLoop()
+    {
+        var th = new Thread(() =>
+        {
+            while (true)
+            {
+                try
+                {
+                    long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    SettleWonBids(now);
+                    SettleBotBuys(now);
+                    SettleExpiredListings(now);
+                    SettleAcceptedOffers(now);
+                    ReconcileBids(now);
+                    Market.TryAdvanceFeed(now);
+                    Market.RefreshLiveTotal(now);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError("bot market tick failed: {0}", ex.Message);
+                }
+                Thread.Sleep(1000);
+            }
+        })
+        { IsBackground = true, Name = "BotMarketSim" };
+        th.Start();
+    }
+
     public async Task StartAsync()
     {
         _listener = new TcpListener(IPAddress.Loopback, _port);
@@ -510,12 +538,6 @@ internal sealed class WebServer
 
         if (path.EndsWith("/marketfeed"))
         {
-            long feedNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            SettleBotBuys(feedNow);
-            SettleExpiredListings(feedNow);
-            SettleAcceptedOffers(feedNow);
-            ReconcileBids(feedNow);
-            Market.TryAdvanceFeed(feedNow);
             return ("application/json; charset=utf-8", Market.FeedJson());
         }
 
@@ -535,11 +557,6 @@ internal sealed class WebServer
         if (path.EndsWith("/hub"))
         {
             long hubNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            SettleWonBids(hubNow);
-            SettleBotBuys(hubNow);
-            SettleExpiredListings(hubNow);
-            SettleAcceptedOffers(hubNow);
-            ReconcileBids(hubNow);
             var profHub = FutProfileStore.Get();
             long coinsHub = profHub.Coins - Market.HeldCoins;   // available = balance minus escrowed bids
             string currenciesHub = CurrenciesJson(coinsHub);
@@ -688,7 +705,8 @@ internal sealed class WebServer
                     ExpiresAtUnix = ahNow + duration,
                     State = "active",
                     ListedAtUnix = ahNow,
-                    BotBuyAtUnix = sellDelay > 0 ? ahNow + sellDelay : 0,
+                    BotBuyAtUnix = buyNowPrice > 0 && sellDelay > 0 ? ahNow + sellDelay : 0,
+                    BotBidCeiling = buyNowPrice <= 0 ? Math.Max(0, refPrice) : 0,   // pure auction: bots bid up to the card's market price
                     SoldFor = 0,
                 };
             });
@@ -737,12 +755,6 @@ internal sealed class WebServer
             var data = ClubStore.Get();
             var tsRnd = new Random();
             long tsNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            SettleWonBids(tsNow);
-            SettleBotBuys(tsNow);
-            SettleExpiredListings(tsNow);
-            SettleAcceptedOffers(tsNow);
-            ReconcileBids(tsNow);
-            Market.TryAdvanceFeed(tsNow);
             var byTrade = data.Listings.Values.ToDictionary(a => a.TradeId);
             var tsSb = new StringBuilder("[");
             int tsWritten = 0;
@@ -808,12 +820,6 @@ internal sealed class WebServer
             int wlOffset = int.TryParse(req.QueryString["offset"], out int wof) ? wof : 0;
             int wlCount = int.TryParse(req.QueryString["count"], out int wcnt) ? wcnt : 50;
             long wlNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            SettleWonBids(wlNow);
-            SettleBotBuys(wlNow);
-            SettleExpiredListings(wlNow);
-            SettleAcceptedOffers(wlNow);
-            ReconcileBids(wlNow);
-            Market.TryAdvanceFeed(wlNow);
 
             var watched = new List<long>();
             foreach (var kv in Market.MyBids) watched.Add(kv.Key);
@@ -1043,11 +1049,6 @@ internal sealed class WebServer
             int tmStart = int.TryParse(req.QueryString["start"], out int ts) ? ts : 0;
             int tmCount = int.TryParse(req.QueryString["num"], out int tc) ? tc : 12;
             long tmNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            SettleWonBids(tmNow);
-            SettleBotBuys(tmNow);
-            SettleExpiredListings(tmNow);
-            SettleAcceptedOffers(tmNow);
-            Market.TryAdvanceFeed(tmNow);
 
             int tmMinB = int.TryParse(req.QueryString["minb"], out int tmb) ? tmb : 0;
             int tmMaxB = int.TryParse(req.QueryString["maxb"], out int tmxb) ? tmxb : 0;
@@ -2188,6 +2189,8 @@ internal sealed class WebServer
                 newId = d.MarketBuySeq++;
                 if (owned.TryGetValue(card.CardId, out long ownedId)) dupes.Add((newId, ownedId));
                 d.Inventory.Add(new ClubItem(newId, card, 6));
+                var listMod = Market.ListingMods(tradeId, card, now);
+                if (listMod != null) d.PlayerMods[newId] = listMod;
             });
             itemId = newId;   // pack-range id -> survives id migration, matches the claim PUT /item id
         }
@@ -2451,6 +2454,8 @@ internal sealed class WebServer
                 itemId = d.MarketBuySeq++;
                 if (owned.TryGetValue(r.Card.CardId, out long ownedId)) winDupes.Add((itemId, ownedId));
                 d.Inventory.Add(new ClubItem(itemId, r.Card, 6));
+                var winMod = Market.ListingMods(r.TradeId, r.Card, now);
+                if (winMod != null) d.PlayerMods[itemId] = winMod;
             });
             string wonItem = BuildRealPlayerItem(rnd, r.Card, itemId, now, 6);
             lock (_pendingLock)
@@ -2483,7 +2488,19 @@ internal sealed class WebServer
         {
             foreach (var au in data.Listings.Values)
             {
-                if (au.State != "active" || au.BotBuyAtUnix <= 0) continue;
+                if (au.State != "active") continue;
+                if (au.BuyNowPrice <= 0)
+                {
+                    int bidIdx = data.Inventory.FindIndex(c => c.ItemId == au.ItemId);
+                    if (bidIdx >= 0)
+                    {
+                        var (cur, offers) = UserAuctionBids(au, data.Inventory[bidIdx].Player, now);
+                        au.CurrentBid = cur;
+                        au.Offers = offers;
+                    }
+                    continue;
+                }
+                if (au.BotBuyAtUnix <= 0) continue;
                 if (now < au.BotBuyAtUnix) continue;
                 if (au.ExpiresAtUnix > 0 && now >= au.ExpiresAtUnix) continue;   // never buy an expired listing
                 int price = au.BuyNowPrice > 0 ? au.BuyNowPrice
@@ -2519,6 +2536,7 @@ internal sealed class WebServer
     private void SettleExpiredListings(long now)
     {
         var returned = new List<(long ItemId, string Name, int Rating)>();
+        var sold = new List<Auction>();
         ClubStore.Mutate(data =>
         {
             foreach (var kv in data.Listings.ToList())
@@ -2526,6 +2544,13 @@ internal sealed class WebServer
                 var au = kv.Value;
                 if (au.State != "active") continue;
                 if (au.ExpiresAtUnix <= 0 || now < au.ExpiresAtUnix) continue;
+                if (au.CurrentBid > 0)   // auction with bids: the highest bidder wins at expiry
+                {
+                    au.State = "sold";
+                    au.SoldFor = au.CurrentBid;
+                    sold.Add(au);
+                    continue;
+                }
                 au.State = "expired";
                 data.Listings.Remove(kv.Key);
                 int idx = data.Inventory.FindIndex(c => c.ItemId == kv.Key);
@@ -2540,6 +2565,23 @@ internal sealed class WebServer
                 itemId, name);
         if (returned.Count > 1)
             _log.LogInformation("[Market] {0} expired listings returned to the club", returned.Count);
+        if (sold.Count == 0) return;
+
+        long totalNet = 0;
+        foreach (var au in sold) totalNet += au.SoldFor * 95 / 100;
+        FutProfileStore.Mutate(p => p.Coins += totalNet);
+
+        var inv = ClubStore.Get().Inventory;
+        foreach (var au in sold)
+        {
+            int idx = inv.FindIndex(c => c.ItemId == au.ItemId);
+            string name = idx >= 0 ? inv[idx].Player.Name : ("item " + au.ItemId);
+            int rating = idx >= 0 ? inv[idx].Player.Rating : 0;
+            long net = au.SoldFor * 95 / 100;
+            Market.PushUserSale(name, rating, au.SoldFor, au.TradeId);
+            _log.LogInformation("[Market] auction {0} ({1}) ended at the top bid of {2} - {3} coins after the 5% cut",
+                au.TradeId, name, au.SoldFor, net);
+        }
     }
 
     private void SettleAcceptedOffers(long now)
@@ -2580,6 +2622,8 @@ internal sealed class WebServer
                     itemId = d.MarketBuySeq++;
                     if (owned.TryGetValue(cp.CardId, out long ownedId)) dupes.Add((itemId, ownedId));
                     d.Inventory.Add(new ClubItem(itemId, cp, 6));
+                    var offerMod = Market.ListingMods(tradeId, cp, now);
+                    if (offerMod != null) d.PlayerMods[itemId] = offerMod;
                     d.Inventory.RemoveAll(c => c.ItemId == offer.OfferedItemId);   // the offered card leaves the club
                 });
                 string wonItem = BuildRealPlayerItem(rnd, cp, itemId, now, 6);
@@ -2595,6 +2639,26 @@ internal sealed class WebServer
         foreach (var kv in Market.AcceptedOffers.ToList())
             if (kv.Value.SettledAt > 0 && !Market.LiveAt(kv.Key - Market.TradeIdBase, now))
                 Market.AcceptedOffers.TryRemove(kv.Key, out _);
+    }
+
+    private static (int CurrentBid, int Offers) UserAuctionBids(Auction au, RealPlayer p, long now)
+    {
+        if (au.State != "active" || au.BuyNowPrice > 0) return (au.CurrentBid, au.Offers);
+        if (au.BotBidCeiling <= au.StartingBid) return (0, 0);   // listed above market - nobody bids
+        if (now < au.ListedAtUnix) return (0, 0);
+        bool hot = p.Rating >= 85 || p.IsSpecial || (p.Rating >= 80 && p.Rare != 0);
+        uint s = (uint)au.TradeId;
+        s ^= (uint)au.StartingBid * 0x9E3779B1u;
+        s ^= (uint)(au.ListedAtUnix & 0x7FFFFFFF) * 0x85EBCA6Bu;
+        s ^= s >> 16;
+        long firstDelay = hot ? 30 + (s % 150) : 60 + (s % 540);
+        long gap = hot ? 40 + ((s >> 8) % 120) : 120 + ((s >> 8) % 480);
+        long bidStart = au.ListedAtUnix + firstDelay;
+        if (now < bidStart) return (0, 0);
+        long k = (now - bidStart) / gap + 1;
+        long incr = Math.Max(50, Market.Step(au.StartingBid));
+        long bid = Math.Min(au.BotBidCeiling, Market.Snap(au.StartingBid + k * incr));
+        return ((int)bid, (int)Math.Min(k, 99));
     }
 
     private static string TradePileEntryJson(ClubItem it, Auction au, long now, Random rnd)
@@ -2615,9 +2679,10 @@ internal sealed class WebServer
         bool live = remain > 0;
         string state = live ? "active" : "expired";
         long expiresOut = live ? remain : -1;   // -1 = expired/sold (0 would read as "still active, no time left")
+        var (curBid, offers) = UserAuctionBids(au, it.Player, now);
         return "{\"tradeId\":" + au.TradeId + ",\"itemData\":" + card +
             ",\"tradeState\":\"" + state + "\",\"buyNowPrice\":" + au.BuyNowPrice +
-            ",\"currentBid\":" + au.CurrentBid + ",\"offers\":0,\"watched\":false," +
+            ",\"currentBid\":" + curBid + ",\"offers\":" + offers + ",\"watched\":false," +
             "\"bidState\":\"none\",\"startingBid\":" + au.StartingBid + ",\"confidenceValue\":0," +
             "\"expires\":" + expiresOut + ",\"sellerName\":\"\",\"seller\":0,\"tradeOwner\":true}";
     }

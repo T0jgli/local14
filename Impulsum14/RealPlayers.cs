@@ -52,7 +52,6 @@ internal static class RealPlayers
                     int.Parse(c[12]),
                     Col(13), Col(14), Col(15), Col(16), Col(17)));
             }
-            Console.WriteLine($"[RealPlayers] loaded {list.Count} players from {path}");
         }
         catch (Exception ex)
         {
