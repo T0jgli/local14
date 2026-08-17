@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Specialized;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -581,7 +581,7 @@ internal sealed class WebServer
                     ",\"userInfo\":{\"personaId\":" + BlazePersonaId + ",\"clubName\":\"" + Esc(profHub.Club.Name) +
                     "\",\"clubAbbr\":\"" + Esc(profHub.Club.Abbr) + "\",\"assetId\":" + profHub.Club.BadgeId + ",\"badgeId\":" + profHub.Club.BadgeId +
                     ",\"won\":" + profHub.Wins + ",\"draw\":" + profHub.Draws + ",\"loss\":" + profHub.Losses +
-                    ",\"established\":" + profHub.Club.EstablishedAt + ",\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
+                    ",\"established\":\"" + profHub.Club.EstablishedAt + "\",\"credits\":" + coinsHub + ",\"currencies\":" + currenciesHub +
                     ",\"unassignedPileSize\":0,\"unopenedPacks\":{\"preOrderPacks\":0,\"recoveredPacks\":0}}" +
                     totwHub +
                     ",\"clubPlayers\":" + clubPlayers +
@@ -1853,7 +1853,7 @@ internal sealed class WebServer
             var prof = FutProfileStore.Get();
             return ("application/json; charset=utf-8",
                     "{\"isReturningUser\":" + (prof.IsReturningUser ? "true" : "false") +
-                    ",\"established\":" + (prof.Club.Established ? "true" : "false") +
+                    ",\"established\":\"" + prof.Club.EstablishedAt + "\"" +
                     ",\"divisionOnline\":" + prof.OnlineDivision +
                     ",\"divisionOffline\":" + prof.OfflineDivision +
                     ",\"coins\":" + prof.Coins + ",\"credits\":" + prof.Coins +
@@ -2053,7 +2053,7 @@ internal sealed class WebServer
             ",\"teamName\":\"" + Esc(prof.Club.Name) + "\",\"clubName\":\"" + Esc(prof.Club.Name) + "\"," +
             "\"clubAbbr\":\"" + Esc(prof.Club.Abbr) + "\",\"clubId\":" + prof.Club.TeamId +
             ",\"platform\":\"pc\",\"assetId\":" + prof.Club.BadgeId + ",\"badgeId\":" + prof.Club.BadgeId +
-            ",\"seasonId\":1,\"status\":" + est + ",\"established\":" + prof.Club.EstablishedAt + ",\"divisionOnline\":" + prof.OnlineDivision +
+            ",\"seasonId\":1,\"status\":" + est + ",\"established\":\"" + prof.Club.EstablishedAt + "\",\"divisionOnline\":" + prof.OnlineDivision +
             ",\"divisionOffline\":" + prof.OfflineDivision + ",\"lastAccessTime\":1400000000," +
             "\"skuAccessList\":{\"" + Sku + "\":1,\"FFA14PS3\":1,\"FFA14XBX\":1}}";
         string clubListEntries = prof.Club.Established ? clubList : "";
