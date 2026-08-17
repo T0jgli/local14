@@ -122,6 +122,9 @@ internal static class FutProfileStore
             _profile.OfflineDivision = 1; 
             _profile.OnlineDivision = 1;    
             _profile.TrophiesWon = 0;
+            _profile.Wins = 0;
+            _profile.Draws = 0;
+            _profile.Losses = 0;
             _profile.Season = new FutSeason();
             _profile.SeasonSaveBlob = "";
             _profile.SavedTournaments = new();
