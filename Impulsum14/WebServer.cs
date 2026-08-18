@@ -1023,15 +1023,19 @@ internal sealed class WebServer
             int teamFilter = int.TryParse(req.QueryString["team"], out int tf) ? tf : -1;
             string levelFilter = (req.QueryString["level"] ?? "").ToLowerInvariant();
             int leagueFilter = int.TryParse(req.QueryString["league"], out int lf) ? lf : -1;
+            int playStyleFilter = int.TryParse(req.QueryString["playStyle"], out int psf) ? psf : 0;
 
             var clubData = ClubStore.Get();
             var inventory = clubData.Inventory;
+            int EffectivePlayStyle(ClubData d, long id) =>
+                d.PlayerMods.TryGetValue(id, out var pm) && pm != null && pm.PlayStyle >= 0 ? pm.PlayStyle : 250;
             var matches = inventory
                 .Where(c => c.Pile != 3 && c.Pile != 0)   // transfer list AND unassigned items stay out of the club
                 .Where(c => (posFilter == "any" || posFilter == "" || EffectivePosition(clubData, c.ItemId, c.Player.Position) == posFilter)
                     && (nationFilter == -1 || c.Player.NationId == nationFilter)
                     && (teamFilter == -1 || c.Player.TeamId == teamFilter)
                     && (leagueFilter == -1 || TeamLeagues.LeagueOf(c.Player.TeamId) == leagueFilter)
+                    && (playStyleFilter <= 0 || EffectivePlayStyle(clubData, c.ItemId) == playStyleFilter)
                     && levelFilter switch
                     {
                         "bronze" => c.Player.Rating < 65,
