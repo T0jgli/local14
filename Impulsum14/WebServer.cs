@@ -14,6 +14,7 @@ internal sealed class WebServer
     private TcpListener _listener = null!;
 
     private string _lastPackItemList = "";
+    private string _lastPurchaseResponseBody = "";
 
     private readonly object _pendingLock = new();
     private readonly List<(long Id, string Json)> _pendingPackItems = new();
@@ -906,6 +907,9 @@ internal sealed class WebServer
         if (path.EndsWith("/club/stats/consumables"))
             return ("application/json; charset=utf-8", ConsumableStatsJson());
 
+        if (path.EndsWith("/club/stats/year"))
+            return ("application/json; charset=utf-8", ClubStatBlockJson(2, 2014));
+
         if (path.Contains("/club/consumables"))
         {
             int cCount = int.TryParse(req.QueryString["count"], out int ccl) ? ccl : 500;
@@ -1121,8 +1125,11 @@ internal sealed class WebServer
 
         if (path.Contains("/club/stats/newcards"))
         {
-            string nc = _lastPackItemList.Length > 0 ? _lastPackItemList : "[]";
-            return ("application/json; charset=utf-8", "{\"itemList\":" + nc + "}");
+            string ncStats = ClubStatBlockJson(5, 0);
+            string ncPurchase = _lastPurchaseResponseBody.Length > 0 ? _lastPurchaseResponseBody
+                : _lastPackItemList.Length > 0 ? "{\"itemList\":" + _lastPackItemList + "}"
+                : "{}";
+            return ("application/json; charset=utf-8", ncStats[..^1] + "," + ncPurchase[1..]);
         }
 
         if ((req.HttpMethod == "POST" || req.HttpMethod == "PUT") &&
@@ -1627,6 +1634,7 @@ internal sealed class WebServer
                     "\"entitlementQuantities\":null,\"awardSetIds\":[]" +
                     ",\"coins\":" + coinsAfter + ",\"credits\":" + coinsAfter +
                     ",\"currencies\":" + CurrenciesJson(coinsAfter) + "}";
+                _lastPurchaseResponseBody = purchasedBody;
                 return ("application/json; charset=utf-8", purchasedBody);
             }
             var pending = new StringBuilder("[");
@@ -3196,6 +3204,43 @@ internal sealed class WebServer
             ",\"consumableCount\":" + total + ",\"totalResults\":" + total +
             ",\"hasConsumables\":" + (total > 0 ? "true" : "false") +
             ",\"stat\":" + statArr + ",\"entries\":" + statArr + ",\"itemData\":" + itemSb + "}";
+    }
+
+    private static string ClubStatBlockJson(int contextId, int contextValue)
+    {
+        var data = ClubStore.Get();
+        var inClub = data.Inventory.Where(c => c.Pile != 3 && c.Pile != 0).ToArray();
+        int players = inClub.Length;
+        int managers = data.Managers.Count;
+        int staff = managers + data.Staff.Count;
+        int numberItems = players + data.Consumables.Count + data.Cosmetics.Count + staff;
+        var members = new (string Key, int Val)[]
+        {
+            ("playerCount", players),
+            ("totalPlayers", players),
+            ("players", players),
+            ("rarePlayers", inClub.Count(c => c.Player.Rare > 0)),
+            ("playersBronze", inClub.Count(c => c.Player.Rating < 65)),
+            ("playersSilver", inClub.Count(c => c.Player.Rating is >= 65 and < 75)),
+            ("playersGold", inClub.Count(c => c.Player.Rating >= 75)),
+            ("staff", staff),
+            ("numberItems", numberItems),
+            ("staffManager", managers),
+            ("staffHeadCoach", data.Staff.Count(s => s.ItemType == "headCoach")),
+            ("staffGKCoach", data.Staff.Count(s => s.ItemType == "gkCoach")),
+            ("staffFitnessCoach", data.Staff.Count(s => s.ItemType == "fitnessCoach")),
+            ("staffPhysio", data.Staff.Count(s => s.ItemType == "physio")),
+            ("stadia", data.Cosmetics.Count(c => c.Type == "stadium")),
+            ("balls", data.Cosmetics.Count(c => c.Type == "ball")),
+            ("kits", data.Cosmetics.Count(c => c.Type == "kit")),
+            ("badges", data.Cosmetics.Count(c => c.Type == "badge")),
+            ("trophies", 0),
+        };
+        var scalars = string.Join(",", members.Select(x => "\"" + x.Key + "\":" + x.Val));
+        var statArr = "[" + string.Join(",", members.Select(x =>
+            "{\"contextId\":" + contextId + ",\"contextValue\":" + contextValue +
+            ",\"type\":\"" + x.Key + "\",\"typeValue\":" + x.Val + "}")) + "]";
+        return "{" + scalars + ",\"stat\":" + statArr + ",\"entries\":" + statArr + "}";
     }
 
     internal static string BuildManagerItem(Manager m, long id, long timestamp, int pile, int rareflag = 1,
