@@ -1551,10 +1551,7 @@ internal sealed class WebServer
                         if (OwnedInClub(data, c.ItemId) && !ownedByCard.ContainsKey(c.Player.CardId))
                             ownedByCard[c.Player.CardId] = c.ItemId;
 
-                    long nextPackItemId = data.Inventory.Where(c => ItemIds.IsPackItem(c.ItemId))
-                                                        .Select(c => c.ItemId)
-                                                        .DefaultIfEmpty(ItemIds.PackItemBase - 1)
-                                                        .Max() + 1;
+                    long nextPackItemId = ClubStore.NextPlayerItemId(data);
 
                     foreach (var pick in picks)
                     {
@@ -1604,6 +1601,7 @@ internal sealed class WebServer
                             }
                         }
                     }
+                    if (nextPackItemId > data.MarketBuySeq) data.MarketBuySeq = nextPackItemId;
                 });
 
                 var itemIds = new StringBuilder("[");
@@ -2271,7 +2269,7 @@ internal sealed class WebServer
                 var owned = new Dictionary<int, long>();
                 foreach (var it in d.Inventory)
                     if (OwnedInClub(d, it.ItemId) && !owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
-                newId = d.MarketBuySeq++;
+                newId = ClubStore.NextPlayerItemId(d);
                 if (owned.TryGetValue(card.CardId, out long ownedId)) dupes.Add((newId, ownedId));
                 d.Inventory.Add(new ClubItem(newId, card, 6));
                 var listMod = Market.ListingMods(tradeId, card, now);
@@ -2539,7 +2537,7 @@ internal sealed class WebServer
                 var owned = new Dictionary<int, long>();
                 foreach (var it in d.Inventory)
                     if (OwnedInClub(d, it.ItemId) && !owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
-                itemId = d.MarketBuySeq++;
+                itemId = ClubStore.NextPlayerItemId(d);
                 if (owned.TryGetValue(r.Card.CardId, out long ownedId)) winDupes.Add((itemId, ownedId));
                 d.Inventory.Add(new ClubItem(itemId, r.Card, 6));
                 var winMod = Market.ListingMods(r.TradeId, r.Card, now);
@@ -2707,7 +2705,7 @@ internal sealed class WebServer
                     var owned = new Dictionary<int, long>();
                     foreach (var it in d.Inventory)
                         if (OwnedInClub(d, it.ItemId) && !owned.ContainsKey(it.Player.CardId)) owned[it.Player.CardId] = it.ItemId;
-                    itemId = d.MarketBuySeq++;
+                    itemId = ClubStore.NextPlayerItemId(d);
                     if (owned.TryGetValue(cp.CardId, out long ownedId)) dupes.Add((itemId, ownedId));
                     d.Inventory.Add(new ClubItem(itemId, cp, 6));
                     var offerMod = Market.ListingMods(tradeId, cp, now);

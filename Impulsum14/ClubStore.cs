@@ -463,28 +463,59 @@ internal static class ClubStore
         }
     }
 
+    public static long NextPlayerItemId(ClubData data)
+    {
+        long highest = data.Inventory.Where(c => ItemIds.IsPackItem(c.ItemId))
+                                     .Select(c => c.ItemId)
+                                     .DefaultIfEmpty(ItemIds.PackItemBase - 1)
+                                     .Max();
+        long id = Math.Max(data.MarketBuySeq, highest + 1);
+        data.MarketBuySeq = id + 1;
+        return id;
+    }
+
     private static void MigrateItemIds()
     {
         lock (_lock)
         {
             var remap = new Dictionary<long, long>();
-            var at = new Dictionary<long, int>();
+            var occupant = new Dictionary<long, int>();   // canonical id -> index into kept
             var kept = new List<ClubItem>();
+            int dupCopies = 0, collisionsSplit = 0;
+
+            long idFloor = Math.Max(_data.MarketBuySeq,
+                _data.Inventory.Where(c => ItemIds.IsPackItem(c.ItemId))
+                               .Select(c => c.ItemId)
+                               .DefaultIfEmpty(ItemIds.PackItemBase - 1)
+                               .Max() + 1);
+            long nextFreeId = idFloor;
+
             foreach (var item in _data.Inventory)
             {
-                long itemId = ItemIds.IsPackItem(item.ItemId) ? item.ItemId : ItemIds.For(item.Player);
-                if (item.ItemId != itemId) remap[item.ItemId] = itemId;
-                if (at.TryGetValue(itemId, out int seen))
+                long canonical = ItemIds.IsPackItem(item.ItemId) ? item.ItemId : ItemIds.For(item.Player);
+                if (item.ItemId != canonical) remap[item.ItemId] = canonical;
+
+                if (occupant.TryGetValue(canonical, out int keptIdx))
                 {
-                    if (item.Pile > kept[seen].Pile)
-                        kept[seen] = new ClubItem(itemId, item.Player, item.Pile);
+                    if (kept[keptIdx].Player.CardId == item.Player.CardId)
+                    {
+                        if (item.Pile > kept[keptIdx].Pile)
+                            kept[keptIdx] = new ClubItem(canonical, item.Player, item.Pile);
+                        dupCopies++;
+                        continue;
+                    }
+                    long freshId = nextFreeId++;
+                    occupant[freshId] = kept.Count;
+                    kept.Add(new ClubItem(freshId, item.Player, item.Pile));
+                    collisionsSplit++;
                     continue;
                 }
-                at[itemId] = kept.Count;
-                kept.Add(new ClubItem(itemId, item.Player, item.Pile));
+                occupant[canonical] = kept.Count;
+                kept.Add(new ClubItem(canonical, item.Player, item.Pile));
             }
 
-            bool changed = remap.Count > 0 || kept.Count != _data.Inventory.Count;
+            bool changed = remap.Count > 0 || collisionsSplit > 0 || dupCopies > 0
+                           || kept.Count != _data.Inventory.Count;
             foreach (var squad in _data.Squads)
                 foreach (int idx in squad.Slots.Keys.ToList())
                 {
@@ -502,8 +533,10 @@ internal static class ClubStore
                     }
                 }
 
+            long target = Math.Max(idFloor, nextFreeId);
+            if (target > _data.MarketBuySeq) { _data.MarketBuySeq = target; changed = true; }
+
             if (!changed) return;
-            int dropped = _data.Inventory.Count - kept.Count;
             _data.Inventory.Clear();
             _data.Inventory.AddRange(kept);
 
@@ -519,7 +552,8 @@ internal static class ClubStore
 
             Save();
             Console.WriteLine($"[Club] player item IDs migrated: {remap.Count} remapped" +
-                              (dropped > 0 ? $", {dropped} duplicate copies collapsed" : ""));
+                              (collisionsSplit > 0 ? $", {collisionsSplit} ID collision(s) split (both players kept)" : "") +
+                              (dupCopies > 0 ? $", {dupCopies} true duplicate copy/copies collapsed" : ""));
         }
     }
 
