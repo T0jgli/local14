@@ -2308,8 +2308,8 @@ internal static (long CurrentBid, int Offers, string BidState) AuctionState(long
     {
         ("ST", "CF"), ("CF", "ST"), ("LW", "LF"), ("LF", "LW"), ("RW", "RF"), ("RF", "RW"),
         ("LM", "LW"), ("LW", "LM"), ("RM", "RW"), ("RW", "RM"), ("CM", "CAM"), ("CAM", "CM"),
-        ("CDM", "CM"), ("CM", "CDM"), ("CAM", "CDM"), ("CDM", "CAM"), ("RB", "CB"), ("CB", "RB"),
-        ("LB", "CB"), ("CB", "LB"), ("RWB", "RB"), ("RB", "RWB"), ("LWB", "LB"), ("LB", "LWB"),
+        ("CDM", "CM"), ("CM", "CDM"), ("CAM", "CDM"), ("CDM", "CAM"), ("RWB", "RB"), ("RB", "RWB"),
+        ("LWB", "LB"), ("LB", "LWB"),
     };
 
     private static string MktPlayerItem(RealPlayer card, long g, long k, long itemId, long now)

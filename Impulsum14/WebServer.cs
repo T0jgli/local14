@@ -2285,6 +2285,9 @@ internal sealed class WebServer
                 _pendingDuplicates.AddRange(dupes);
             }
             _lastPackItemList = "[" + item + "]";
+            Market.Watched.TryRemove(tradeId, out _);
+            Market.MyBids.TryRemove(tradeId, out _);
+            Market.AcceptedOffers.TryRemove(tradeId, out _);
             _log.LogInformation("[Market] BUY-NOW asset {0} (rating {1}) for {2} -> club item {3}, balance {4}{5}",
                 card.Id, card.Rating, buyNow, itemId, coins, dupes.Count > 0 ? " (duplicate)" : "");
         }
