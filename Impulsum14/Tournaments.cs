@@ -103,32 +103,85 @@ internal static class Tournaments
                ",\"totalResults\":" + ids.Length + "}";
     }
 
-    internal static bool IsResumable(int round, string? progressData)
+    internal static string EscapeJson(string s)
     {
-        if (round > 1) return true;
-        var raw = (progressData ?? "").Trim();
-        if (raw.Length == 0) return false;
-        try { return Convert.FromBase64String(raw).Any(b => b != 0); }
-        catch { return false; }
+        if (string.IsNullOrEmpty(s)) return "";
+        var sb = new System.Text.StringBuilder(s.Length);
+        foreach (char c in s)
+            switch (c)
+            {
+                case '"':  sb.Append("\\\""); break;
+                case '\\': sb.Append("\\\\"); break;
+                case '\b': sb.Append("\\b"); break;
+                case '\f': sb.Append("\\f"); break;
+                case '\n': sb.Append("\\n"); break;
+                case '\r': sb.Append("\\r"); break;
+                case '\t': sb.Append("\\t"); break;
+                default:
+                    if (c < ' ') sb.Append("\\u").Append(((int)c).ToString("x4"));
+                    else sb.Append(c);
+                    break;
+            }
+        return sb.ToString();
+    }
+
+    internal static string UnescapeJson(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return "";
+        var sb = new System.Text.StringBuilder(s.Length);
+        for (int i = 0; i < s.Length; i++)
+        {
+            char c = s[i];
+            if (c == '\\' && i + 1 < s.Length)
+            {
+                char n = s[++i];
+                switch (n)
+                {
+                    case '"':  sb.Append('"'); break;
+                    case '\\': sb.Append('\\'); break;
+                    case '/':  sb.Append('/'); break;
+                    case 'b':  sb.Append('\b'); break;
+                    case 'f':  sb.Append('\f'); break;
+                    case 'n':  sb.Append('\n'); break;
+                    case 'r':  sb.Append('\r'); break;
+                    case 't':  sb.Append('\t'); break;
+                    case 'u' when i + 4 < s.Length &&
+                                   int.TryParse(s.Substring(i + 1, 4),
+                                       System.Globalization.NumberStyles.HexNumber,
+                                       System.Globalization.CultureInfo.InvariantCulture, out int uv):
+                        sb.Append((char)uv);
+                        i += 4;
+                        break;
+                    default:   sb.Append(n); break;
+                }
+            }
+            else sb.Append(c);
+        }
+        return sb.ToString();
+    }
+
+    internal static string CaptureString(string body, string field)
+    {
+        var m = System.Text.RegularExpressions.Regex.Match(body ?? "",
+            "\"" + field + "\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
+        return m.Success ? UnescapeJson(m.Groups[1].Value) : "";
     }
 
     internal static string UserTournamentJson(int id)
     {
         var s = FutProfileStore.Get().SavedTournaments.GetValueOrDefault(id);
-        if (s is null || !IsResumable(s.Round, s.ProgressData))
+        if (s is null)
             return "{\"tournamentId\":" + id + "}";
         return "{\"tournamentId\":" + id + ",\"round\":" + s.Round +
-               ",\"dataVersion\":2" +
-               ",\"tournamentData\":\"" + s.TournamentData + "\"" +
-               ",\"progressDataVersion\":2" +
-               ",\"progressData\":\"" + s.ProgressData + "\"}";
+               ",\"dataVersion\":" + s.DataVersion +
+               ",\"tournamentData\":\"" + EscapeJson(s.TournamentData) + "\"" +
+               ",\"progressDataVersion\":" + s.ProgressDataVersion +
+               ",\"progressData\":\"" + EscapeJson(s.ProgressData) + "\"}";
     }
 
     internal static string UserListJson()
     {
-        var ids = FutProfileStore.Get().SavedTournaments
-            .Where(kv => IsResumable(kv.Value.Round, kv.Value.ProgressData))
-            .Select(kv => kv.Key).OrderBy(k => k);
+        var ids = FutProfileStore.Get().SavedTournaments.Keys.OrderBy(k => k);
         return "{\"tournamentId\":[" + string.Join(",", ids) + "]}";
     }
 
@@ -137,23 +190,20 @@ internal static class Tournaments
     {
         tournamentData ??= "";
         progressData ??= "";
-        bool resumable = IsResumable(round, progressData);
         FutProfileStore.Mutate(p =>
         {
             var s = p.SavedTournaments.TryGetValue(id, out var e) ? e : new SavedTournament();
-            s.Round = resumable ? round : 1;
+            s.Round = round;
             s.DataVersion = dataVersion;
-            s.TournamentData = resumable ? tournamentData : "";
+            s.TournamentData = tournamentData;
             s.ProgressDataVersion = progressDataVersion;
-            s.ProgressData = resumable ? progressData : "";
-            s.Active = resumable || s.Active;
+            s.ProgressData = progressData;
+            s.Active = true;
             p.SavedTournaments[id] = s;
         });
-        int echoDv = resumable ? 2 : dataVersion;
-        int echoPdv = resumable ? 2 : progressDataVersion;
-        return "{\"tournamentId\":" + id + ",\"round\":" + round + ",\"dataVersion\":" + echoDv +
-               ",\"tournamentData\":\"" + tournamentData + "\",\"progressDataVersion\":" + echoPdv +
-               ",\"progressData\":\"" + progressData + "\"}";
+        return "{\"tournamentId\":" + id + ",\"round\":" + round + ",\"dataVersion\":" + dataVersion +
+               ",\"tournamentData\":\"" + EscapeJson(tournamentData) + "\",\"progressDataVersion\":" +
+               progressDataVersion + ",\"progressData\":\"" + EscapeJson(progressData) + "\"}";
     }
 
     internal static (int Prize, bool WonFinal) SettleTournamentMatch(int id, string? endReason)
@@ -169,24 +219,25 @@ internal static class Tournaments
             {
                 if (cur < NumRounds)
                 {
-                    s.Round = cur + 1;                 // advance; round>1 => now shows as underway
+                    // Do NOT advance s.Round here. The client is the sole bracket authority —
+                    // it will PUT the updated round + new blobs on re-entry. If we bumped round
+                    // here the GET on re-entry would return round=N+1 but tournamentData/progressData
+                    // would still be the old round-N blobs, causing a round-vs-blob mismatch that
+                    // crashes the game client.
+                    s.Active = true;
+                    p.SavedTournaments[id] = s;
                 }
                 else
                 {
                     prize = AwardCoins(id);            // final-round win: award the cup prize once
                     wonFinal = true;
-                    s.Won = true;
-                    s.Round = 1;                       // reset -> replayable, no longer underway
+                    p.SavedTournaments.Remove(id);     // run complete -> replayable, no longer underway
                 }
-                s.Active = true;
-                s.TournamentData = ""; s.ProgressData = "";   // server owns the round now
             }
             else if (r is "LOSS" or "DNF" or "QUIT")
             {
-                s.Round = 1; s.Active = true;
-                s.TournamentData = ""; s.ProgressData = "";
+                p.SavedTournaments.Remove(id);         // run over -> cup can be entered again
             }
-            p.SavedTournaments[id] = s;
         });
         return (prize, wonFinal);
     }

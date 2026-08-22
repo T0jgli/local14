@@ -446,10 +446,13 @@ internal sealed class WebServer
                 return ("application/json; charset=utf-8", Tournaments.TeamsJson(gid));
             }
 
-            if (path.Contains("tournament/user/"))
+            if (path.Contains("tournament/user"))
             {
                 string tail = path[(path.LastIndexOf('/') + 1)..];
-                if (int.TryParse(tail, out int tid))
+                bool haveId = int.TryParse(tail, out int tid) ||
+                              (req.HttpMethod is "POST" or "PUT" &&
+                               int.TryParse(BodyRx(req.Body, "\"tournamentId\"\\s*:\\s*(\\d+)"), out tid));
+                if (haveId)
                 {
                     Tournaments.ActiveTournamentId = tid;
                     if (req.HttpMethod is "POST" or "PUT")           // client saving its own bracket
@@ -458,8 +461,8 @@ internal sealed class WebServer
                         int dv = int.TryParse(BodyRx(req.Body, "\"dataVersion\"\\s*:\\s*(\\d+)"), out int d) ? d : 1;
                         int pdv = int.TryParse(BodyRx(req.Body, "\"progressDataVersion\"\\s*:\\s*(\\d+)"), out int pv) ? pv : 1;
                         string echo = Tournaments.SaveProgress(tid, round, dv,
-                            BodyRx(req.Body, "\"tournamentData\"\\s*:\\s*\"([^\"]*)\""), pdv,
-                            BodyRx(req.Body, "\"progressData\"\\s*:\\s*\"([^\"]*)\""));
+                            Tournaments.CaptureString(req.Body, "tournamentData"), pdv,
+                            Tournaments.CaptureString(req.Body, "progressData"));
                         return ("application/json; charset=utf-8", echo);
                     }
                     return ("application/json; charset=utf-8", Tournaments.UserTournamentJson(tid));

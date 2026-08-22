@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <Content Include="Content\Impulsum14.ico" />
+    <Content Include="certs\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="web\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
