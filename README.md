@@ -34,13 +34,11 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 
 - legends
 - divisions
-- manager challenges
-- minor bug fixes
-- missing small features
+- manager challenges rewards
   
 ## Known Bugs
 
-- Tournaments doesn't keep the underway status and reset
+- Tournaments crashes the game when underway
 - Divisions is broken
 - Manager quests dont give you rewards like packs
 
