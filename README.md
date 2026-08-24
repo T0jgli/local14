@@ -38,10 +38,18 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
   
 ## Known Bugs
 
-- Tournaments crashes the game when underway
-- Divisions is broken
-- Manager quests dont give you rewards like packs
+- Tournamnets crash when underway 
+- Divisions are broken and not implemented completely
+- TransferMarket crashes when you buy from squad builder or compare price 
+- extra club info missing
 
+## How to play?
+
+Download the launcher from [Here](https://github.com/MarvelcoCode/Impulsum14/releases) and follow the steps in the installer
+
+## Contributions
+
+Contributions are always welcome! If you have ideas, improvements, bug fixes, or new features, feel free to open an issue or submit a pull request. Every contribution helps make the project better, and all developers are encouraged to participate.
 
 ## SDK
 
@@ -56,7 +64,7 @@ A backend server for a game called "FIFA 14" PC's online mode to access Ultimate
 
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-## Build & Run
+## Build & Run (Developer)
 
 ```sh
 dotnet restore
