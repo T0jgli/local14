@@ -75,7 +75,7 @@ internal sealed class FutProfile
     public long NucleusId { get; set; } = 1000;
     public string PersonaName { get; set; } = UserConfig.Username;
     public bool IsReturningUser { get; set; } = false;   // new player by default
-    public long Coins { get; set; } = 10000000;
+    public long Coins { get; set; } = 0;
     public long FifaPoints { get; set; } = 0;
     public FutClub Club { get; set; } = new();
     public int OfflineDivision { get; set; } = 1;   
