@@ -17,6 +17,7 @@ public partial class MainWindow : Window
     private readonly LauncherConfig _config;
     private readonly GameService _gameService;
     private readonly ServerService _serverService;
+    private readonly HostsTrafficRedirector _trafficRedirector;
     private readonly DispatcherTimer _statusTimer;
     private Process? _gameProcess;
     private bool _gameLaunching;
@@ -35,6 +36,7 @@ public partial class MainWindow : Window
         _config = LauncherConfig.Load();
         _gameService = new GameService();
         _serverService = new ServerService();
+        _trafficRedirector = new HostsTrafficRedirector();
 
         _serverService.StatusChanged += OnServerStatusChanged;
 
@@ -177,6 +179,15 @@ public partial class MainWindow : Window
         try
         {
             processes.AddRange(Process.GetProcessesByName(processName));
+        }
+        catch { }
+    }
+
+    private void DisableTrafficRedirect()
+    {
+        try
+        {
+            _trafficRedirector.Disable();
         }
         catch { }
     }
@@ -534,6 +545,7 @@ public partial class MainWindow : Window
         {
             _gameLaunching = false;
             StopGameProcesses();
+            DisableTrafficRedirect();
             try
             {
                 _serverService.Stop();
@@ -560,6 +572,21 @@ public partial class MainWindow : Window
 
         _displayConfigService.EnsureDefaultsExist();
 
+        try
+        {
+            _trafficRedirector.Enable();
+        }
+        catch (Exception ex)
+        {
+            _gameLaunching = false;
+            PlayBtn.IsEnabled = true;
+            PlayBtn.Opacity = 1.0;
+            MessageBox.Show(this,
+                "Could not enable local traffic redirection. Run the launcher as administrator.\n\n" + ex.Message,
+                "Redirection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
         if (!_serverService.IsRunning)
         {
             ServerStatusDot.Fill = (Brush)FindResource("AccentBrush");
@@ -567,6 +594,7 @@ public partial class MainWindow : Window
             if (_isClosing) return;
             if (!updateOk)
             {
+                DisableTrafficRedirect();
                 MessageBox.Show(this,
                     "Failed to download or build the server, and no existing version was found. Check your connection.",
                     "Update Failed", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -582,6 +610,7 @@ public partial class MainWindow : Window
             if (_isClosing) return;
             if (!serverResult.Success)
             {
+                DisableTrafficRedirect();
                 _gameLaunching = false;
                 PlayBtn.IsEnabled = true;
                 PlayBtn.Opacity = 1.0;
@@ -593,6 +622,7 @@ public partial class MainWindow : Window
         var patchError = _gameService.ApplyDllPatches(_currentGamePath);
         if (!string.IsNullOrEmpty(patchError))
         {
+            DisableTrafficRedirect();
             _gameLaunching = false;
             PlayBtn.IsEnabled = true;
             PlayBtn.Opacity = 1.0;
@@ -625,6 +655,7 @@ public partial class MainWindow : Window
                 Dispatcher.Invoke(() =>
                 {
                     _gameLaunching = false;
+                    DisableTrafficRedirect();
                     PlayBtn.IsEnabled = true;
                     PlayBtn.Opacity = 1.0;
                     CheckProcesses();
@@ -638,6 +669,7 @@ public partial class MainWindow : Window
         }
         else
         {
+            DisableTrafficRedirect();
             _gameLaunching = false;
             PlayBtn.IsEnabled = true;
             PlayBtn.Opacity = 1.0;
@@ -662,6 +694,7 @@ public partial class MainWindow : Window
         _isClosing = true;
         _launchCancellation.Cancel();
         StopGameProcesses();
+        DisableTrafficRedirect();
         _serverService.Stop();
         SaveConfig();
         Close();
@@ -672,6 +705,7 @@ public partial class MainWindow : Window
         _isClosing = true;
         _launchCancellation.Cancel();
         StopGameProcesses();
+        DisableTrafficRedirect();
         _serverService.Stop();
         _launchCancellation.Dispose();
         SaveConfig();

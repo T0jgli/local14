@@ -7,6 +7,7 @@ namespace ImpulsumLauncher14.Services;
 public class GameService
 {
     private const string GameExe = "fifa14.exe";
+    private const string ConfigExe = "fifasetup\\fifaconfig.exe";
 
     public string DetectedGameExe { get; private set; } = GameExe;
 
@@ -147,7 +148,7 @@ public class GameService
             CopyDirectory(dir, Path.Combine(targetDir, Path.GetFileName(dir)));
     }
 
-    public Task<ProcessResult> LaunchGameAsync(string gamePath)
+    public async Task<ProcessResult> LaunchGameAsync(string gamePath)
     {
         var result = new ProcessResult();
 
@@ -155,31 +156,50 @@ public class GameService
         {
             result.Success = false;
             result.ErrorMessage = "FIFA 14 not found at the specified path.";
-            return Task.FromResult(result);
+            return result;
         }
 
         try
         {
-            var exePath = GetGameExePath(gamePath);
-            var psi = new ProcessStartInfo
-            {
-                FileName = exePath,
-                WorkingDirectory = gamePath,
-                UseShellExecute = true,
-                Verb = "open",
-            };
-
-            var process = Process.Start(psi);
-            if (process != null)
-            {
-                result.Success = true;
-                result.ProcessId = process.Id;
-            }
-            else
+            var configPath = Path.Combine(gamePath, ConfigExe);
+            if (!File.Exists(configPath))
             {
                 result.Success = false;
-                result.ErrorMessage = "Failed to start the game process.";
+                result.ErrorMessage = "FIFA configuration executable not found at " + configPath;
+                return result;
             }
+
+            using (var configProcess = Process.Start(new ProcessStartInfo
+            {
+                FileName = configPath,
+                WorkingDirectory = Path.GetDirectoryName(configPath)!,
+                UseShellExecute = true,
+                Verb = "open",
+            }))
+            {
+                if (configProcess == null)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Failed to start FIFA configuration.";
+                    return result;
+                }
+
+                while (!configProcess.HasExited)
+                {
+                    var gameProcess = FindGameProcess(gamePath);
+                    if (gameProcess != null)
+                    {
+                        result.Success = true;
+                        result.ProcessId = gameProcess.Id;
+                        return result;
+                    }
+
+                    await Task.Delay(250);
+                }
+            }
+
+            result.Success = false;
+            result.ErrorMessage = "FIFA configuration closed without starting fifa14.exe.";
         }
         catch (Exception ex)
         {
@@ -187,7 +207,29 @@ public class GameService
             result.ErrorMessage = ex.Message;
         }
 
-        return Task.FromResult(result);
+        return result;
+    }
+
+    private static Process? FindGameProcess(string gamePath)
+    {
+        var expectedPath = Path.GetFullPath(Path.Combine(gamePath, GameExe));
+
+        foreach (var process in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(GameExe)))
+        {
+            try
+            {
+                if (string.Equals(process.MainModule?.FileName, expectedPath, StringComparison.OrdinalIgnoreCase))
+                    return process;
+            }
+            catch
+            {
+                process.Dispose();
+            }
+
+            process.Dispose();
+        }
+
+        return null;
     }
 }
 

@@ -8,6 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>ImpulsumLauncher14</AssemblyName>
     <RootNamespace>ImpulsumLauncher14</RootNamespace>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
     <!-- <ApplicationIcon>Resources\icon.ico</ApplicationIcon> -->
   </PropertyGroup>
 
@@ -24,6 +26,10 @@
     <None Include="patches\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
