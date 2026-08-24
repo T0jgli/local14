@@ -264,7 +264,16 @@ public class ServerService
                 }
 
                 statusCallback("Compiling server...");
-                
+
+                var projectPath = Directory.GetFiles(sourceDir, "*.csproj", SearchOption.AllDirectories)
+                    .FirstOrDefault(path => string.Equals(
+                        Path.GetFileNameWithoutExtension(path), "Impulsum14", StringComparison.OrdinalIgnoreCase));
+                if (projectPath == null)
+                {
+                    LogReceived?.Invoke("[ERR] Downloaded server project file was not found.");
+                    return false;
+                }
+
                 var jsonBackups = new System.Collections.Generic.Dictionary<string, string>();
                 if (Directory.Exists(serverDir))
                 {
@@ -274,9 +283,35 @@ public class ServerService
                     }
                 }
 
-                var publishPsi = new ProcessStartInfo("dotnet", $"publish -c Release -o \"{serverDir}\"") { WorkingDirectory = sourceDir, CreateNoWindow = true, UseShellExecute = false };
+                var publishPsi = new ProcessStartInfo("dotnet", $"publish \"{projectPath}\" -c Release -o \"{serverDir}\" --nologo")
+                {
+                    WorkingDirectory = Path.GetDirectoryName(projectPath)!,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                };
                 var publishProc = Process.Start(publishPsi);
-                if (publishProc != null) await publishProc.WaitForExitAsync();
+                if (publishProc == null)
+                {
+                    LogReceived?.Invoke("[ERR] Could not start dotnet publish.");
+                    return false;
+                }
+
+                var outputTask = publishProc.StandardOutput.ReadToEndAsync();
+                var errorTask = publishProc.StandardError.ReadToEndAsync();
+                await publishProc.WaitForExitAsync();
+                var output = await outputTask;
+                var errors = await errorTask;
+                if (!string.IsNullOrWhiteSpace(output))
+                    LogReceived?.Invoke("[SERVER] " + output.Trim());
+                if (!string.IsNullOrWhiteSpace(errors))
+                    LogReceived?.Invoke("[ERR] " + errors.Trim());
+                if (publishProc.ExitCode != 0)
+                {
+                    LogReceived?.Invoke($"[ERR] dotnet publish failed with exit code {publishProc.ExitCode}.");
+                    return false;
+                }
 
                 foreach (var kvp in jsonBackups)
                 {
