@@ -274,12 +274,14 @@ public class ServerService
                     return false;
                 }
 
-                var jsonBackups = new System.Collections.Generic.Dictionary<string, string>();
-                if (Directory.Exists(serverDir))
+                var profileBackups = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+                var profileDir = Path.Combine(serverDir, "Profile");
+                if (Directory.Exists(profileDir))
                 {
-                    foreach (var file in Directory.GetFiles(serverDir, "*.json"))
+                    foreach (var file in Directory.GetFiles(profileDir, "*", SearchOption.AllDirectories))
                     {
-                        jsonBackups[Path.GetFileName(file)] = File.ReadAllText(file);
+                        var relativePath = Path.GetRelativePath(profileDir, file);
+                        profileBackups[relativePath] = await File.ReadAllBytesAsync(file);
                     }
                 }
 
@@ -294,6 +296,7 @@ public class ServerService
                 var publishProc = Process.Start(publishPsi);
                 if (publishProc == null)
                 {
+                    RestoreProfile(profileDir, profileBackups);
                     LogReceived?.Invoke("[ERR] Could not start dotnet publish.");
                     return false;
                 }
@@ -309,14 +312,12 @@ public class ServerService
                     LogReceived?.Invoke("[ERR] " + errors.Trim());
                 if (publishProc.ExitCode != 0)
                 {
+                    RestoreProfile(profileDir, profileBackups);
                     LogReceived?.Invoke($"[ERR] dotnet publish failed with exit code {publishProc.ExitCode}.");
                     return false;
                 }
 
-                foreach (var kvp in jsonBackups)
-                {
-                    File.WriteAllText(Path.Combine(serverDir, kvp.Key), kvp.Value);
-                }
+                RestoreProfile(profileDir, profileBackups);
 
                 if (!string.IsNullOrEmpty(currentHash))
                 {
@@ -337,6 +338,19 @@ public class ServerService
                 return true;
             }
             return false;
+        }
+    }
+
+    private static void RestoreProfile(string profileDir, Dictionary<string, byte[]> backups)
+    {
+        if (backups.Count == 0) return;
+
+        Directory.CreateDirectory(profileDir);
+        foreach (var backup in backups)
+        {
+            var path = Path.Combine(profileDir, backup.Key);
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllBytes(path, backup.Value);
         }
     }
 }
