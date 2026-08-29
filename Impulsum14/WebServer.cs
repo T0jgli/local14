@@ -489,13 +489,15 @@ internal sealed class WebServer
             if (path.Contains("/squad/unlock"))
                 return ("application/json; charset=utf-8", "{}");
 
+            string ladder = req.QueryString["type"] ?? (path.Contains("online") ? "online" : "offline");
+
             if (path.Contains("reset"))
             {
                 int nd = Seasons.ParseResetDivision(path);
                 FutProfileStore.Mutate(p =>
                 {
                     if (nd >= 0) p.OfflineDivision = nd;
-                    Seasons.ClearSave(p);   // stale save would contradict the fresh ladder position
+                    Seasons.ClearSave(p, ladder);   // stale save would contradict the fresh ladder position
                 });
                 return ("application/json; charset=utf-8",
                         Seasons.ResetJson(nd >= 0 ? nd : FutProfileStore.Get().OfflineDivision));
@@ -507,12 +509,12 @@ internal sealed class WebServer
             if (path.EndsWith("/user") || path.Contains("season/user"))
             {
                 if (req.HttpMethod is "PUT" or "POST")
-                    FutProfileStore.Mutate(p => Seasons.CaptureSave(p, req.Body));
-                return ("application/json; charset=utf-8", Seasons.UserJson(FutProfileStore.Get()));
+                    FutProfileStore.Mutate(p => Seasons.CaptureSave(p, req.Body, ladder));
+                return ("application/json; charset=utf-8", Seasons.UserJson(FutProfileStore.Get(), ladder));
             }
 
             // The division ladder catalog (season/list, and any other season GET).
-            return ("application/json; charset=utf-8", Seasons.ListJson());
+            return ("application/json; charset=utf-8", Seasons.ListJson(req.QueryString["type"]));
         }
 
         if (path.EndsWith("/accountinfo"))

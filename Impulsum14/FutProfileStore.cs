@@ -85,7 +85,10 @@ internal sealed class FutProfile
     public int Draws { get; set; } = 0;
     public int Losses { get; set; } = 0;
     public FutSeason Season { get; set; } = new();
-    public string SeasonUserJson { get; set; } = "";     // last season/user document the client saved, echoed back verbatim
+    // Last season/user document the client saved, echoed back on the next GET. Kept per ladder so an
+    // online read can never hand back the offline save (or vice versa).
+    public string SeasonUserOffline { get; set; } = "";
+    public string SeasonUserOnline { get; set; } = "";
     // In-progress offline tournaments, keyed by tournament id -> the client's saved bracket state.
     public Dictionary<int, SavedTournament> SavedTournaments { get; set; } = new();
     public Dictionary<int, int> PacksSinceSpecial { get; set; } = new();
@@ -126,7 +129,8 @@ internal static class FutProfileStore
             _profile.Draws = 0;
             _profile.Losses = 0;
             _profile.Season = new FutSeason();
-            _profile.SeasonUserJson = "";
+            _profile.SeasonUserOffline = "";
+            _profile.SeasonUserOnline = "";
             _profile.SavedTournaments = new();
             Save();
         }
