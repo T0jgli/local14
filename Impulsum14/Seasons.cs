@@ -77,8 +77,11 @@ internal static class Seasons
           .Append(",\"count\":1}]}]}");
     }
 
+    // The client is the sole authority on season progress. Whatever document it PUTs has to come
+    // straight back on the next GET - a round/division that disagrees with the save blob it just
+    // wrote makes the game crash on the way back to the hub.
     internal static string UserJson(FutProfile p) =>
-        "{\"divisionId\":1,\"round\":1,\"seasonId\":-1}";
+        p.SeasonUserJson.Length > 0 ? p.SeasonUserJson : "{\"divisionId\":1,\"round\":1,\"seasonId\":-1}";
 
     internal static string TrophyJson(int entryId)
     {
@@ -99,11 +102,11 @@ internal static class Seasons
 
     internal static void CaptureSave(FutProfile p, string body)
     {
-        string blob = BodyRx(body, "\"progressData\"\\s*:\\s*\"([^\"]*)\"");
-        if (string.IsNullOrEmpty(blob))
-            blob = BodyRx(body, "\"progressdata\"\\s*:\\s*\"([^\"]*)\"");
-        if (!string.IsNullOrEmpty(blob)) p.SeasonSaveBlob = blob;
+        string doc = (body ?? "").Trim();
+        if (doc.Length > 1 && doc[0] == '{' && doc[^1] == '}') p.SeasonUserJson = doc;
     }
+
+    internal static void ClearSave(FutProfile p) => p.SeasonUserJson = "";
 
     internal static int ParseResetDivision(string path)
     {
@@ -114,12 +117,5 @@ internal static class Seasons
         int end = start;
         while (end < path.Length && char.IsDigit(path[end])) end++;
         return end > start && int.TryParse(path[start..end], out int d) ? d : -1;
-    }
-
-    private static string BodyRx(string body, string pattern)
-    {
-        if (string.IsNullOrEmpty(body)) return "";
-        var m = System.Text.RegularExpressions.Regex.Match(body, pattern);
-        return m.Success ? m.Groups[1].Value : "";
     }
 }

@@ -492,7 +492,11 @@ internal sealed class WebServer
             if (path.Contains("reset"))
             {
                 int nd = Seasons.ParseResetDivision(path);
-                if (nd >= 0) FutProfileStore.Mutate(p => p.OfflineDivision = nd);
+                FutProfileStore.Mutate(p =>
+                {
+                    if (nd >= 0) p.OfflineDivision = nd;
+                    Seasons.ClearSave(p);   // stale save would contradict the fresh ladder position
+                });
                 return ("application/json; charset=utf-8",
                         Seasons.ResetJson(nd >= 0 ? nd : FutProfileStore.Get().OfflineDivision));
             }

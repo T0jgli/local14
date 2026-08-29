@@ -85,7 +85,7 @@ internal sealed class FutProfile
     public int Draws { get; set; } = 0;
     public int Losses { get; set; } = 0;
     public FutSeason Season { get; set; } = new();
-    public string SeasonSaveBlob { get; set; } = "";     // client's encoded season save (captured, never advertised back)
+    public string SeasonUserJson { get; set; } = "";     // last season/user document the client saved, echoed back verbatim
     // In-progress offline tournaments, keyed by tournament id -> the client's saved bracket state.
     public Dictionary<int, SavedTournament> SavedTournaments { get; set; } = new();
     public Dictionary<int, int> PacksSinceSpecial { get; set; } = new();
@@ -126,7 +126,7 @@ internal static class FutProfileStore
             _profile.Draws = 0;
             _profile.Losses = 0;
             _profile.Season = new FutSeason();
-            _profile.SeasonSaveBlob = "";
+            _profile.SeasonUserJson = "";
             _profile.SavedTournaments = new();
             Save();
         }
