@@ -2,15 +2,25 @@ namespace Impulsum14;
 internal static class Seasons
 {
     private const int Rounds = 10;   // a season is 10 matches against a fixed fixture list
+    private const int TopDivision = 1;
+    private const int BottomDivision = 10;
+    private const int OnlineIdBase = 100;
 
-    internal static string ListJson()
+    internal static string ListJson(string type)
     {
+        bool online = IsOnline(type);
+        bool offlineOnly = string.Equals(type, "offline", System.StringComparison.OrdinalIgnoreCase);
+
         var sb = new System.Text.StringBuilder();
-        AppendLadder(sb, "offline", idBase: 0);
-        AppendLadder(sb, "online", idBase: 100);
+        int n = 0;
+        if (!online) n += AppendLadder(sb, online: false, idBase: 0);
+        if (!offlineOnly) n += AppendLadder(sb, online: true, idBase: OnlineIdBase);
         string arr = sb.ToString();
-        return "{\"seasons\":[" + arr + "],\"seasonData\":[" + arr + "],\"season\":[" + arr + "],\"totalResults\":24}";
+        return "{\"seasons\":[" + arr + "],\"seasonData\":[" + arr + "],\"season\":[" + arr + "],\"totalResults\":" + n + "}";
     }
+
+    private static bool IsOnline(string type) =>
+        string.Equals(type, "online", System.StringComparison.OrdinalIgnoreCase);
 
     private static readonly (int titlePts, int promoPts, int relPts,
                              int titleCoins, int promoCoins, int holdCoins)[] DivRewards =
@@ -28,25 +38,24 @@ internal static class Seasons
         (12,  9,  6, 1900, 1500,  300),       // Division 10 (bottom)
     };
 
-    private static void AppendLadder(System.Text.StringBuilder sb, string type, int idBase)
+    private static int AppendLadder(System.Text.StringBuilder sb, bool online, int idBase)
     {
-        bool online = type == "online";
         string typeWire = online ? "ONLINE" : "OFFLINE";
+        int count = 0;
 
-        for (int div = 11; div >= 0; div--)
+        for (int div = BottomDivision; div >= TopDivision; div--)
         {
-            int realDiv = System.Math.Clamp(div, 1, 10);
-            var d = DivRewards[realDiv];
+            var d = DivRewards[div];
             int id = idBase + div;
-            int title = div == 1 ? 1 : 0;
-            // Season Difficulty stars scale with the displayed division: bottom (10) = 1, top (1) = 5.
-            int difficulty = System.Math.Clamp(6 - (realDiv + 1) / 2, 1, 5);
+            int title = div == TopDivision ? 1 : 0;
+            // Season Difficulty stars scale with the division: bottom (10) = 1, top (1) = 5.
+            int difficulty = System.Math.Clamp(6 - (div + 1) / 2, 1, 5);
 
             if (sb.Length > 0) sb.Append(',');
             sb.Append("{\"id\":").Append(id).Append(",\"seasonId\":").Append(id)
               .Append(",\"divisionId\":").Append(div).Append(",\"divisionOffline\":").Append(div)
               .Append(",\"divisionOnline\":").Append(div).Append(",\"leagueId\":").Append(div)
-              .Append(",\"name\":\"").Append(online ? "Online " : "").Append("Division ").Append(realDiv)
+              .Append(",\"name\":\"").Append(online ? "Online " : "").Append("Division ").Append(div)
               .Append("\",\"title\":").Append(title).Append(",\"type\":\"").Append(typeWire).Append("\",\"active\":true")
               .Append(",\"tournamentId\":").Append(8202000 + id).Append(",\"tournamentType\":0")
               .Append(",\"trophyResourceId\":").Append(8202000 + id)
@@ -66,7 +75,9 @@ internal static class Seasons
             AppendPrize(sb, "PROMOTION",    d.promoPts, d.promoCoins, first: false);
             AppendPrize(sb, "MAINTENANCE",  d.relPts,   d.holdCoins,  first: false);
             sb.Append("]}");
+            count++;
         }
+        return count;
     }
 
     private static void AppendPrize(System.Text.StringBuilder sb, string level, int threshold, int coins, bool first)
@@ -77,8 +88,36 @@ internal static class Seasons
           .Append(",\"count\":1}]}]}");
     }
 
-    internal static string UserJson(FutProfile p) =>
-        "{\"divisionId\":1,\"round\":1,\"seasonId\":-1}";
+    // The client is the sole authority on season progress, but it saves only the mutable half
+    // (round + blobs) and expects the server to hand the season's identity back with it. Without
+    // seasonId/divisionId on the GET the hub can't bind the save to a ladder entry and the game
+    // hard-crashes on the way back from a match.
+    internal static string UserJson(FutProfile p, string type)
+    {
+        bool online = IsOnline(type);
+        string doc = online ? p.SeasonUserOnline : p.SeasonUserOffline;
+        int div = System.Math.Clamp(online ? p.OnlineDivision : p.OfflineDivision, TopDivision, BottomDivision);
+
+        if (doc.Length == 0)
+            return "{\"divisionId\":" + div + ",\"round\":1,\"seasonId\":-1}";
+
+        var identity = new System.Text.StringBuilder();
+        Add(identity, doc, "seasonId", ((online ? OnlineIdBase : 0) + div).ToString());
+        Add(identity, doc, "divisionId", div.ToString());
+        Add(identity, doc, "leagueId", div.ToString());
+        Add(identity, doc, "type", "\"" + (online ? "ONLINE" : "OFFLINE") + "\"");
+        if (identity.Length == 0) return doc;
+
+        string rest = doc[(doc.IndexOf('{') + 1)..].TrimStart();
+        if (rest.StartsWith("}")) identity.Length--;   // client sent an empty object - no trailing comma
+        return "{" + identity + rest;
+
+        static void Add(System.Text.StringBuilder sb, string doc, string key, string value)
+        {
+            if (doc.Contains("\"" + key + "\"", System.StringComparison.Ordinal)) return;
+            sb.Append('"').Append(key).Append("\":").Append(value).Append(',');
+        }
+    }
 
     internal static string TrophyJson(int entryId)
     {
@@ -97,12 +136,24 @@ internal static class Seasons
 
     internal static string ResetJson(int div) => "{\"offlineDivision\":" + div + "}";
 
-    internal static void CaptureSave(FutProfile p, string body)
+    internal static void CaptureSave(FutProfile p, string body, string type)
     {
-        string blob = BodyRx(body, "\"progressData\"\\s*:\\s*\"([^\"]*)\"");
-        if (string.IsNullOrEmpty(blob))
-            blob = BodyRx(body, "\"progressdata\"\\s*:\\s*\"([^\"]*)\"");
-        if (!string.IsNullOrEmpty(blob)) p.SeasonSaveBlob = blob;
+        string doc = (body ?? "").Trim();
+        if (doc.Length < 2 || doc[0] != '{' || doc[^1] != '}') return;
+
+        bool online = IsOnline(type);
+        if (online) p.SeasonUserOnline = doc; else p.SeasonUserOffline = doc;
+
+        var m = System.Text.RegularExpressions.Regex.Match(doc, "\"divisionId\"\\s*:\\s*(\\d+)");
+        if (m.Success && int.TryParse(m.Groups[1].Value, out int div) && div >= TopDivision && div <= BottomDivision)
+        {
+            if (online) p.OnlineDivision = div; else p.OfflineDivision = div;
+        }
+    }
+
+    internal static void ClearSave(FutProfile p, string type)
+    {
+        if (IsOnline(type)) p.SeasonUserOnline = ""; else p.SeasonUserOffline = "";
     }
 
     internal static int ParseResetDivision(string path)
@@ -114,12 +165,5 @@ internal static class Seasons
         int end = start;
         while (end < path.Length && char.IsDigit(path[end])) end++;
         return end > start && int.TryParse(path[start..end], out int d) ? d : -1;
-    }
-
-    private static string BodyRx(string body, string pattern)
-    {
-        if (string.IsNullOrEmpty(body)) return "";
-        var m = System.Text.RegularExpressions.Regex.Match(body, pattern);
-        return m.Success ? m.Groups[1].Value : "";
     }
 }
